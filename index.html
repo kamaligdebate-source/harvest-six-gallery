@@ -12,21 +12,15 @@
             --gold-grain: #b89d5d;
             --batch1-tape: rgba(184, 157, 93, 0.4);
             --batch-tape: rgba(141, 160, 128, 0.3);
-            --paper: #faf9f6;
-            --bg: #f0ede4;
+            --paper: #ffffff; /* Removed texture, pure white for clean look */
+            --bg: #f5f5f0;
         }
 
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #444; display: flex; justify-content: center; }
 
         .gallery-container {
-            max-width: 950px; width: 100%; background: var(--paper); border: 1px solid #d1cdbc; border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; position: relative;
-        }
-
-        .gallery-container::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-            opacity: 0.25; pointer-events: none; z-index: 20;
+            max-width: 950px; width: 100%; background: var(--paper); border: 1px solid #e0ddd0; border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04); overflow: hidden; position: relative;
         }
 
         header { background-color: var(--primary); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px double #b5c4a3; }
@@ -36,43 +30,63 @@
         .stat-number { display: block; font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; text-align: center; }
         .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #888; }
 
-        .regional-hub { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px 40px; background: rgba(253, 252, 247, 0.5); border-bottom: 1px dashed #d1cdbc; text-align: center; }
-        .region-card { padding: 10px; border: 1px solid #eee; border-radius: 8px; background: white; }
-        .region-name { font-size: 10px; font-weight: 700; color: var(--accent); letter-spacing: 1px; }
-
         .countdown-box { background: var(--accent); color: white; padding: 15px; margin: 20px auto; max-width: 400px; border-radius: 12px; text-align: center; border: 1px dashed rgba(255,255,255,0.4); }
         #timer { font-size: 1.4rem; font-weight: 700; }
 
         .search-container { text-align: center; padding: 20px; }
-        #scholarSearch { width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-size: 13px; }
+        #scholarSearch { width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-size: 13px; font-family: 'Poppins', sans-serif;}
 
         .batch-section { padding-bottom: 40px; }
         .batch-title { text-align: center; font-weight: 700; margin-top: 40px; letter-spacing: 2px; font-size: 13px; text-transform: uppercase; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 15px 30px; }
 
+        /* SCHOLAR CARD & WIND EFFECT */
         .scholar-card {
-            background: white; padding: 22px 15px; border: 1px solid #e0ddd0; text-align: center;
-            transform: rotate(var(--rot)); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            position: relative; min-height: 110px; display: flex; flex-direction: column; justify-content: center; z-index: 21;
+            background: white; padding: 22px 15px; border: 1px solid #eee; text-align: center;
+            transform: rotate(var(--rot)); 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            position: relative; min-height: 115px; display: flex; flex-direction: column; justify-content: center; z-index: 21;
+            animation: windSway 6s infinite ease-in-out;
+            animation-delay: var(--delay);
         }
 
-        .scholar-card:hover { transform: translateY(-12px) rotate(0deg) !important; z-index: 25; box-shadow: 0 15px 35px rgba(92, 107, 83, 0.2); }
+        @keyframes windSway {
+            0%, 100% { transform: rotate(var(--rot)) translateY(0px); }
+            50% { transform: rotate(calc(var(--rot) + 1.5deg)) translateY(-3px); }
+        }
+
+        .scholar-card:hover { 
+            transform: translateY(-12px) rotate(0deg) !important; 
+            z-index: 25; 
+            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.15);
+            animation-play-state: paused;
+        }
 
         .name { font-family: 'Poppins', sans-serif; font-weight: 500; font-style: italic; font-size: 0.95rem; line-height: 1.2; color: #2c3e2d; }
 
-        .card-batch-1 { background: #fffef2; border: 1.5px solid var(--gold-grain); animation: goldGlow 4s infinite alternate ease-in-out; }
+        /* ACCOLADE GLOW */
+        .accolade-icon { 
+            display: inline-block; font-size: 12px; margin-bottom: 5px; 
+            animation: grainGlow 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes grainGlow {
+            from { text-shadow: 0 0 2px #fff, 0 0 5px var(--gold-grain); transform: scale(1); }
+            to { text-shadow: 0 0 5px #fff, 0 0 12px var(--gold-grain); transform: scale(1.15); }
+        }
+
+        /* BATCH 1 SPECIAL TREATMENT */
+        .card-batch-1 { background: #fffef2; border: 1.5px solid var(--gold-grain); }
         .card-batch-1 .name { color: var(--gold-grain); font-weight: 600; }
         .card-batch-1::before { background: var(--batch1-tape); }
 
-        @keyframes goldGlow { from { box-shadow: 0 0 5px rgba(184, 157, 93, 0.15); } to { box-shadow: 0 0 20px rgba(184, 157, 93, 0.35); } }
-
         .scholar-card::before { content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; background: var(--batch-tape); }
 
-        .accolade { font-size: 9px; color: #777; margin-top: 8px; font-weight: 400; }
-        .cohort-label { font-size: 8px; color: var(--accent); font-weight: 600; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
+        .accolade { font-size: 9px; color: #777; margin-top: 5px; font-weight: 400; font-style: normal; line-height: 1.3;}
+        .cohort-label { font-size: 8px; color: var(--accent); font-weight: 600; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
         .batch-tag { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 10px; opacity: 0.4; letter-spacing: 1px; }
 
-        footer { background: #efeee7; padding: 30px; text-align: center; border-top: 1px solid #d1cdbc; font-size: 10px; }
+        footer { background: #fdfdfb; padding: 40px; text-align: center; border-top: 1px solid #eee; font-size: 10px; }
     </style>
 </head>
 <body>
@@ -87,15 +101,9 @@
         <div class="stat-tag"><span class="stat-number" id="scholarCount">0</span><span class="stat-label">Scholars Cultivated</span></div>
     </div>
 
-    <div class="regional-hub">
-        <div class="region-card"><div class="region-name">LUZON 🏔️</div></div>
-        <div class="region-card"><div class="region-name">VISAYAS 🌊</div></div>
-        <div class="region-card"><div class="region-name">MINDANAO 🌴</div></div>
-    </div>
-
     <div class="countdown-box"><div style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px;">🌱 Session 0 Countdown</div><div id="timer">Calculating...</div></div>
 
-    <div class="search-container"><input type="text" id="scholarSearch" placeholder="🔍 Search the harvest..." onkeyup="searchScholars()"></div>
+    <div class="search-container"><input type="text" id="scholarSearch" placeholder="🔍 Search name, batch, or cohort..." onkeyup="searchScholars()"></div>
 
     <div id="dynamicGrids"></div>
 
@@ -129,6 +137,7 @@
                     name: cols[0].replace(/"/g, '').trim(),
                     batch: bNum,
                     accolade: cols[2] ? cols[2].replace(/"/g, '').trim() : "",
+                    batchName: bName,
                     cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : ""
                 };
             }).filter(s => s && s.name);
@@ -140,12 +149,27 @@
     function renderGrids(filter = "") {
         const container = document.getElementById('dynamicGrids');
         container.innerHTML = "";
-        const filtered = allScholars.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
+        const f = filter.toLowerCase();
+
+        const filtered = allScholars.filter(s => 
+            s.name.toLowerCase().includes(f) || 
+            s.cohort.toLowerCase().includes(f) || 
+            (s.batchName && s.batchName.toLowerCase().includes(f)) ||
+            `batch ${s.batch}`.includes(f)
+        );
+
         const uniqueBatches = [...new Set(allScholars.map(s => s.batch))].sort((a,b) => a - b);
 
         uniqueBatches.forEach(batchNum => {
             const batchScholars = filtered.filter(s => s.batch === batchNum);
             if (batchScholars.length === 0) return;
+
+            // Sort by Cohort grouping (Pagtabi-tabi)
+            batchScholars.sort((a, b) => {
+                if (a.cohort < b.cohort) return -1;
+                if (a.cohort > b.cohort) return 1;
+                return a.name.localeCompare(b.name);
+            });
 
             const section = document.createElement('div');
             section.className = "batch-section";
@@ -159,11 +183,18 @@
             container.appendChild(section);
 
             const grid = document.getElementById(`grid-batch-${batchNum}`);
-            batchScholars.forEach(s => {
+            batchScholars.forEach((s, index) => {
                 const card = document.createElement('div');
                 card.className = `scholar-card card-batch-${s.batch}`;
-                card.style.setProperty('--rot', `${(Math.random() * 3 - 1.5).toFixed(2)}deg`);
+                
+                // Random rotations and animation delays for the wind effect
+                const randomRot = (Math.random() * 3 - 1.5).toFixed(2);
+                const randomDelay = (Math.random() * 5).toFixed(2);
+                card.style.setProperty('--rot', `${randomRot}deg`);
+                card.style.setProperty('--delay', `${randomDelay}s`);
+
                 card.innerHTML = `
+                    ${s.accolade ? `<span class="accolade-icon">✨</span>` : ''}
                     <span class="name">${s.name}</span>
                     ${s.accolade ? `<span class="accolade">${s.accolade}</span>` : ''}
                     ${s.cohort ? `<span class="cohort-label">${s.cohort}</span>` : ''}
@@ -172,6 +203,13 @@
                 grid.appendChild(card);
             });
         });
+
+        if (filtered.length === 0 && filter !== "") {
+            container.innerHTML = `<div style="padding: 100px 20px; text-align: center; color: #999; font-style: italic;">
+                🌾 No records found for "${filter}".
+            </div>`;
+        }
+
         document.getElementById('scholarCount').innerText = allScholars.length;
     }
 
