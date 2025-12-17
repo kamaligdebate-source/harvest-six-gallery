@@ -12,6 +12,7 @@
             --gold: #b89d5d;
             --tape-color: rgba(141, 160, 128, 0.2);
             --tape-gold: rgba(184, 157, 93, 0.3);
+            --highlight: rgba(184, 157, 93, 0.2);
         }
 
         body { font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; }
@@ -20,12 +21,15 @@
         header h1 { font-size: 3rem; margin: 0; font-weight: 700; }
         header p { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
+        /* GOAL PROGRESS BAR */
+        .goal-container { width: 100%; max-width: 400px; margin: 15px auto 0; background: rgba(255,255,255,0.2); height: 6px; border-radius: 10px; overflow: hidden; }
+        #goalProgress { background: #fff; width: 0%; height: 100%; transition: width 1.5s ease-out; }
+
         .stats-bar { display: flex; justify-content: center; margin: -30px auto 30px; position: relative; z-index: 10; }
         .stat-tag { background: #fff; padding: 12px 35px; border: 2px solid var(--primary-green); border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center; }
         .stat-number { display: block; font-size: 28px; font-weight: 700; color: var(--primary-green); line-height: 1; }
         .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #999; }
 
-        /* STICKY NAVIGATION WRAPPER */
         .sticky-controls {
             position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px); border-bottom: 1px solid #eee; padding: 10px 0;
@@ -34,7 +38,6 @@
         .search-container { display: flex; justify-content: center; margin: 10px auto; }
         #scholarSearch { width: 90%; max-width: 450px; padding: 12px 25px; border-radius: 50px; border: 1px solid #ddd; outline: none; font-size: 14px; }
 
-        /* BATCH JUMP LINKS */
         #batchNav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 5px 20px; }
         .nav-link { font-size: 10px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; border-radius: 4px; transition: background 0.3s; }
         .nav-link:hover { background: rgba(141, 160, 128, 0.1); }
@@ -53,10 +56,9 @@
             position: relative; transition: all 0.4s ease;
             animation: windSway 8s infinite ease-in-out;
             animation-delay: var(--delay);
-            overflow: hidden; /* Fixes text/icon overflow issues */
+            overflow: hidden;
         }
 
-        /* GOLDEN SPOTLIGHT ON HOVER */
         .scholar-card:hover { 
             transform: translateY(-10px) rotate(0deg) !important; 
             border-color: var(--primary-green); 
@@ -79,7 +81,9 @@
         .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; display: block; margin-bottom: 8px; white-space: normal; overflow-wrap: break-word; }
         .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; display: block; min-height: 30px; white-space: normal; overflow-wrap: break-word; }
 
-        /* ANIMATED GRAIN ICON */
+        /* HIGHLIGHT STYLE */
+        .highlight { background-color: var(--highlight); border-radius: 2px; color: #333; padding: 0 2px; }
+
         .grain-icon { 
             display: inline-block; font-size: 18px; margin-bottom: 5px; 
             animation: grainGrowSway 3s infinite ease-in-out;
@@ -101,6 +105,10 @@
 <header>
     <h1>Scholars Gallery</h1>
     <p>Harvest Six, Kamalig Debate's Cultivation Arm</p>
+    <div class="goal-container">
+        <div id="goalProgress"></div>
+    </div>
+    <p style="font-size: 8px; opacity: 0.7; letter-spacing: 2px; margin-top: 8px;">Goal: 100 Scholars</p>
 </header>
 
 <div class="stats-bar">
@@ -144,9 +152,16 @@
             }).filter(item => item !== null);
 
             animateCount(allData.length);
+            updateGoal(allData.length);
             render(allData);
             generateBatchNav();
         } catch (err) { console.error("Load failed", err); }
+    }
+
+    function updateGoal(count) {
+        const goal = 100;
+        const percent = Math.min((count / goal) * 100, 100);
+        document.getElementById('goalProgress').style.width = percent + "%";
     }
 
     function generateBatchNav() {
@@ -168,7 +183,14 @@
         }, 30);
     }
 
-    function render(data) {
+    // HELPER TO HIGHLIGHT SEARCH TERM
+    function highlightText(text, term) {
+        if (!term) return text;
+        const re = new RegExp(`(${term})`, "gi");
+        return text.replace(re, `<span class="highlight">$1</span>`);
+    }
+
+    function render(data, term = "") {
         const gallery = document.getElementById('gallery');
         gallery.innerHTML = "";
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
@@ -207,9 +229,9 @@
                 
                 card.innerHTML = `
                     ${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}
-                    <span class="name">${item.name}</span>
-                    ${item.accolade ? `<span class="accolade">${item.accolade}</span>` : ''}
-                    ${item.cohort ? `<span class="cohort-pill">${item.cohort}</span>` : ''}
+                    <span class="name">${highlightText(item.name, term)}</span>
+                    ${item.accolade ? `<span class="accolade">${highlightText(item.accolade, term)}</span>` : ''}
+                    ${item.cohort ? `<span class="cohort-pill">${highlightText(item.cohort, term)}</span>` : ''}
                 `;
                 grid.appendChild(card);
             });
@@ -223,7 +245,7 @@
             s.cohort.toLowerCase().includes(term) || 
             s.batchName.toLowerCase().includes(term)
         );
-        render(filtered);
+        render(filtered, term);
     }
 
     loadGallery();
