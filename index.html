@@ -10,106 +10,112 @@
             --primary: #8da080;
             --accent: #5c6b53;
             --gold-grain: #b89d5d;
-            --batch1-tape: rgba(184, 157, 93, 0.4);
-            --batch-tape: rgba(141, 160, 128, 0.3);
-            --paper: #ffffff; /* Removed texture, pure white for clean look */
-            --bg: #f5f5f0;
+            --bg: #f8f8f5;
+            --card-border: #eeede8;
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; padding: 15px; color: #444; display: flex; justify-content: center; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg);
+            margin: 0; padding: 0; color: #444; 
+        }
 
         .gallery-container {
-            max-width: 950px; width: 100%; background: var(--paper); border: 1px solid #e0ddd0; border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04); overflow: hidden; position: relative;
+            max-width: 1100px; width: 92%; background: white; border-radius: 20px;
+            margin: 50px auto; box-shadow: 0 20px 50px rgba(0,0,0,0.03); 
+            position: relative; overflow: hidden;
         }
 
-        header { background-color: var(--primary); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px double #b5c4a3; }
+        header { 
+            background: var(--primary); color: white; padding: 70px 20px; text-align: center; 
+        }
 
-        .stats-bar { display: flex; justify-content: center; margin: -25px auto 20px; position: relative; z-index: 25; }
-        .stat-tag { background: #fff; padding: 10px 25px; border: 2px solid var(--accent); border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .stat-number { display: block; font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; text-align: center; }
-        .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #888; }
+        .search-wrapper {
+            position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); padding: 15px; border-bottom: 1px solid var(--card-border);
+            display: flex; justify-content: center;
+        }
 
-        .countdown-box { background: var(--accent); color: white; padding: 15px; margin: 20px auto; max-width: 400px; border-radius: 12px; text-align: center; border: 1px dashed rgba(255,255,255,0.4); }
-        #timer { font-size: 1.4rem; font-weight: 700; }
+        #scholarSearch { 
+            width: 100%; max-width: 450px; padding: 12px 25px; border-radius: 50px; 
+            border: 1.5px solid #ddd; outline: none; font-family: 'Poppins'; font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        #scholarSearch:focus { border-color: var(--primary); box-shadow: 0 5px 15px rgba(141, 160, 128, 0.1); }
 
-        .search-container { text-align: center; padding: 20px; }
-        #scholarSearch { width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-size: 13px; font-family: 'Poppins', sans-serif;}
+        /* BATCH SECTIONS */
+        .batch-section { padding-bottom: 50px; }
+        .batch-title { 
+            text-align: center; font-weight: 700; font-size: 13px; text-transform: uppercase; 
+            letter-spacing: 3px; color: #bbb; margin: 50px 0 25px;
+        }
 
-        .batch-section { padding-bottom: 40px; }
-        .batch-title { text-align: center; font-weight: 700; margin-top: 40px; letter-spacing: 2px; font-size: 13px; text-transform: uppercase; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 15px 30px; }
+        .cohort-header {
+            grid-column: 1 / -1; font-size: 10px; font-weight: 700; letter-spacing: 2px;
+            color: var(--accent); margin: 30px 40px 10px; display: flex; align-items: center;
+            text-transform: uppercase;
+        }
+        .cohort-header::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 15px; }
 
-        /* SCHOLAR CARD & WIND EFFECT */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; padding: 0 40px; }
+
+        /* THE SCHOLAR CARD */
         .scholar-card {
-            background: white; padding: 22px 15px; border: 1px solid #eee; text-align: center;
-            transform: rotate(var(--rot)); 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            position: relative; min-height: 115px; display: flex; flex-direction: column; justify-content: center; z-index: 21;
-            animation: windSway 6s infinite ease-in-out;
-            animation-delay: var(--delay);
+            background: #fff; padding: 30px 20px; border: 1px solid var(--card-border); text-align: center;
+            border-radius: 8px; position: relative;
+            animation: windSway 7s infinite ease-in-out;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-
+        
         @keyframes windSway {
-            0%, 100% { transform: rotate(var(--rot)) translateY(0px); }
+            0%, 100% { transform: rotate(var(--rot)) translateY(0); }
             50% { transform: rotate(calc(var(--rot) + 1.5deg)) translateY(-3px); }
         }
 
         .scholar-card:hover { 
-            transform: translateY(-12px) rotate(0deg) !important; 
-            z-index: 25; 
-            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.15);
-            animation-play-state: paused;
+            transform: translateY(-10px) rotate(0deg) !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--primary);
+            z-index: 10;
         }
 
-        .name { font-family: 'Poppins', sans-serif; font-weight: 500; font-style: italic; font-size: 0.95rem; line-height: 1.2; color: #2c3e2d; }
-
-        /* ACCOLADE GLOW */
-        .accolade-icon { 
-            display: inline-block; font-size: 12px; margin-bottom: 5px; 
-            animation: grainGlow 2s infinite alternate ease-in-out;
+        .name { font-weight: 500; font-style: italic; font-size: 0.95rem; color: #333; display: block; }
+        
+        /* ACCOLADE STYLING */
+        .accolade-icon { font-size: 12px; margin-bottom: 8px; display: block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
+        
+        .accolade { font-size: 10px; color: #777; margin-top: 8px; line-height: 1.4; font-weight: 400; }
+        
+        /* UNIFORM COHORT LABEL */
+        .cohort-tag { 
+            display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: 4px;
+            font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            background: #f0f0f0; color: #888; border: 1px solid #e8e8e8;
         }
 
-        @keyframes grainGlow {
-            from { text-shadow: 0 0 2px #fff, 0 0 5px var(--gold-grain); transform: scale(1); }
-            to { text-shadow: 0 0 5px #fff, 0 0 12px var(--gold-grain); transform: scale(1.15); }
-        }
-
-        /* BATCH 1 SPECIAL TREATMENT */
-        .card-batch-1 { background: #fffef2; border: 1.5px solid var(--gold-grain); }
+        /* GOLD BATCH 1 */
+        .card-batch-1 { border: 1px solid rgba(184, 157, 93, 0.4); background: #fffefb; }
         .card-batch-1 .name { color: var(--gold-grain); font-weight: 600; }
-        .card-batch-1::before { background: var(--batch1-tape); }
 
-        .scholar-card::before { content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; background: var(--batch-tape); }
-
-        .accolade { font-size: 9px; color: #777; margin-top: 5px; font-weight: 400; font-style: normal; line-height: 1.3;}
-        .cohort-label { font-size: 8px; color: var(--accent); font-weight: 600; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; }
-        .batch-tag { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 10px; opacity: 0.4; letter-spacing: 1px; }
-
-        footer { background: #fdfdfb; padding: 40px; text-align: center; border-top: 1px solid #eee; font-size: 10px; }
+        footer { padding: 60px 20px; text-align: center; font-size: 11px; opacity: 0.6; }
     </style>
 </head>
 <body>
 
 <div class="gallery-container">
     <header>
-        <h1 style="font-size: 2.2rem; margin:0;">Scholars Gallery</h1>
-        <div style="font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px;">The Harvest Legacy</div>
+        <h1 style="font-size: 2.5rem; margin:0;">Scholars Gallery</h1>
+        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 4px; margin-top: 8px; opacity: 0.8;">Harvest Six, Kamalig Debate's Cultivation Arm</p>
     </header>
 
-    <div class="stats-bar">
-        <div class="stat-tag"><span class="stat-number" id="scholarCount">0</span><span class="stat-label">Scholars Cultivated</span></div>
+    <div class="search-wrapper">
+        <input type="text" id="scholarSearch" placeholder="Search scholars, cohorts, or batches..." onkeyup="searchScholars()">
     </div>
-
-    <div class="countdown-box"><div style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px;">🌱 Session 0 Countdown</div><div id="timer">Calculating...</div></div>
-
-    <div class="search-container"><input type="text" id="scholarSearch" placeholder="🔍 Search name, batch, or cohort..." onkeyup="searchScholars()"></div>
 
     <div id="dynamicGrids"></div>
 
     <footer>
-        <p style="font-weight: 700; color: var(--accent); margin: 0; font-size: 13px;">Kamalig Debate Cultivation Arm</p>
-        <p style="margin-top: 5px; letter-spacing: 2px; font-size: 9px; opacity: 0.7;">LUZON • VISAYAS • MINDANAO</p>
+        <p>© 2025 Kamalig Harvest • Luzon • Visayas • Mindanao</p>
     </footer>
 </div>
 
@@ -128,22 +134,17 @@
             allScholars = rows.map(row => {
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (cols.length < 2) return null;
-                
-                const bNum = cols[1].replace(/"/g, '').trim();
-                const bName = cols[3] ? cols[3].replace(/"/g, '').trim() : "";
-                if (bName) batchNames[bNum] = bName;
-
                 return {
                     name: cols[0].replace(/"/g, '').trim(),
-                    batch: bNum,
+                    batch: cols[1].replace(/"/g, '').trim(),
                     accolade: cols[2] ? cols[2].replace(/"/g, '').trim() : "",
-                    batchName: bName,
+                    batchName: cols[3] ? cols[3].replace(/"/g, '').trim() : "",
                     cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : ""
                 };
             }).filter(s => s && s.name);
 
             renderGrids();
-        } catch (e) { console.error("Data load failed", e); }
+        } catch (e) { console.error("Archive connection failed", e); }
     }
 
     function renderGrids(filter = "") {
@@ -154,8 +155,7 @@
         const filtered = allScholars.filter(s => 
             s.name.toLowerCase().includes(f) || 
             s.cohort.toLowerCase().includes(f) || 
-            (s.batchName && s.batchName.toLowerCase().includes(f)) ||
-            `batch ${s.batch}`.includes(f)
+            (s.batchName && s.batchName.toLowerCase().includes(f))
         );
 
         const uniqueBatches = [...new Set(allScholars.map(s => s.batch))].sort((a,b) => a - b);
@@ -165,70 +165,46 @@
             if (batchScholars.length === 0) return;
 
             // Sort by Cohort grouping (Pagtabi-tabi)
-            batchScholars.sort((a, b) => {
-                if (a.cohort < b.cohort) return -1;
-                if (a.cohort > b.cohort) return 1;
-                return a.name.localeCompare(b.name);
-            });
+            batchScholars.sort((a, b) => a.cohort.localeCompare(b.cohort) || a.name.localeCompare(b.name));
 
             const section = document.createElement('div');
             section.className = "batch-section";
-            let titleText = batchNames[batchNum] || `Batch ${batchNum}`;
-            const titlePrefix = batchNum === "1" ? "✨ Unang Ani: " : "🌿 ";
-            
+            const bName = batchScholars[0].batchName || `Batch ${batchNum}`;
             section.innerHTML = `
-                <div class="batch-title" style="color: ${batchNum === "1" ? "var(--gold-grain)" : "var(--accent)"}">${titlePrefix}${titleText}</div>
-                <div class="grid" id="grid-batch-${batchNum}"></div>
+                <div class="batch-title">🌿 ${bName}</div>
+                <div class="grid" id="grid-${batchNum}"></div>
             `;
             container.appendChild(section);
 
-            const grid = document.getElementById(`grid-batch-${batchNum}`);
-            batchScholars.forEach((s, index) => {
+            const grid = document.getElementById(`grid-${batchNum}`);
+            let lastCohort = "";
+
+            batchScholars.forEach((s, i) => {
+                if (s.cohort && s.cohort !== lastCohort) {
+                    const header = document.createElement('div');
+                    header.className = "cohort-header";
+                    header.innerText = s.cohort;
+                    grid.appendChild(header);
+                    lastCohort = s.cohort;
+                }
+
                 const card = document.createElement('div');
                 card.className = `scholar-card card-batch-${s.batch}`;
+                card.style.setProperty('--rot', `${(Math.random() * 2 - 1).toFixed(2)}deg`);
                 
-                // Random rotations and animation delays for the wind effect
-                const randomRot = (Math.random() * 3 - 1.5).toFixed(2);
-                const randomDelay = (Math.random() * 5).toFixed(2);
-                card.style.setProperty('--rot', `${randomRot}deg`);
-                card.style.setProperty('--delay', `${randomDelay}s`);
-
                 card.innerHTML = `
-                    ${s.accolade ? `<span class="accolade-icon">✨</span>` : ''}
+                    ${s.accolade ? '<span class="accolade-icon">✨</span>' : ''}
                     <span class="name">${s.name}</span>
                     ${s.accolade ? `<span class="accolade">${s.accolade}</span>` : ''}
-                    ${s.cohort ? `<span class="cohort-label">${s.cohort}</span>` : ''}
-                    <span class="batch-tag">${s.batch === "1" ? 'Founder' : 'Scholar'}</span>
+                    ${s.cohort ? `<span class="cohort-tag">${s.cohort}</span>` : ''}
                 `;
                 grid.appendChild(card);
             });
         });
-
-        if (filtered.length === 0 && filter !== "") {
-            container.innerHTML = `<div style="padding: 100px 20px; text-align: center; color: #999; font-style: italic;">
-                🌾 No records found for "${filter}".
-            </div>`;
-        }
-
-        document.getElementById('scholarCount').innerText = allScholars.length;
-    }
-
-    function startCountdown() {
-        const target = new Date("December 30, 2025 20:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const diff = target - now;
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById("timer").innerHTML = diff < 0 ? "LIVE 🌱" : `${d}d ${h}h ${m}m ${s}s`;
-        }, 1000);
     }
 
     function searchScholars() { renderGrids(document.getElementById('scholarSearch').value); }
     loadScholars();
-    startCountdown();
 </script>
 </body>
 </html>
