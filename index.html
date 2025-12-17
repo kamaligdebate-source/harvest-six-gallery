@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harvest Six | Scholars Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Indie+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #8da080;
@@ -37,13 +37,13 @@
             position: relative;
         }
 
-        /* TEXTURE OVERLAY */
+        /* TEXTURE OVERLAY - Conservative opacity */
         .gallery-container::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-            opacity: 0.3;
+            opacity: 0.25;
             pointer-events: none;
             z-index: 20;
         }
@@ -70,35 +70,36 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px 30px 40px; }
 
-        /* SCHOLAR CARDS */
         .scholar-card {
             background: white;
-            padding: 25px 15px;
+            padding: 22px 15px;
             border: 1px solid #e0ddd0;
             text-align: center;
             transform: rotate(var(--rot));
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
             position: relative;
-            min-height: 110px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             z-index: 21;
         }
 
+        /* CLEAN TYPOGRAPHY */
         .name {
-            font-family: 'Indie Flower', cursive;
-            font-size: 1.3rem; /* Much more readable than Reenie */
-            line-height: 1.1;
-            color: #333;
-            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-style: italic; /* Keeps it feeling "curated" */
+            font-size: 0.95rem;
+            line-height: 1.2;
+            color: #2c3e2d;
+            letter-spacing: 0.2px;
         }
 
-        /* LIFT & SHADOW HOVER */
         .scholar-card:hover {
             transform: translateY(-12px) rotate(0deg) !important;
             z-index: 25;
-            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.25);
+            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.2);
         }
 
         /* BATCH 1: GOLD GRAIN GLOW */
@@ -107,18 +108,18 @@
             border: 1.5px solid var(--gold-grain);
             animation: goldGlow 4s infinite alternate ease-in-out;
         }
-        .card-batch1 .name { color: var(--gold-grain); }
+        .card-batch1 .name { color: var(--gold-grain); font-weight: 600; }
 
         @keyframes goldGlow {
-            from { box-shadow: 0 0 5px rgba(184, 157, 93, 0.2); }
-            to { box-shadow: 0 0 20px rgba(184, 157, 93, 0.4); }
+            from { box-shadow: 0 0 5px rgba(184, 157, 93, 0.15); }
+            to { box-shadow: 0 0 20px rgba(184, 157, 93, 0.35); }
         }
 
         .card-batch1::before { background: var(--batch1-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; }
         .card-batch2::before { background: var(--batch2-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; }
 
-        .accolade { font-size: 10px; color: #777; margin-top: 8px; font-style: italic; line-height: 1.2; }
-        .batch-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; margin-top: 12px; opacity: 0.4; letter-spacing: 1px; }
+        .accolade { font-size: 9px; color: #777; margin-top: 8px; font-style: normal; line-height: 1.3; font-weight: 400; }
+        .batch-tag { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 10px; opacity: 0.4; letter-spacing: 1px; font-style: normal; }
 
         footer { background: #efeee7; padding: 30px; text-align: center; border-top: 1px solid #d1cdbc; font-size: 10px; }
     </style>
@@ -127,8 +128,8 @@
 
 <div class="gallery-container">
     <header>
-        <h1 style="font-size: 2.5rem; margin:0;">Scholars Gallery</h1>
-        <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px;">The Harvest Legacy</div>
+        <h1 style="font-size: 2.2rem; margin:0; font-weight: 700;">Scholars Gallery</h1>
+        <div style="font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px;">The Harvest Legacy</div>
     </header>
 
     <div class="stats-bar">
@@ -151,40 +152,70 @@
 
     <div class="search-container" style="text-align:center; padding: 20px;">
         <input type="text" id="scholarSearch" placeholder="🔍 Search the harvest..." onkeyup="searchScholars()" 
-               style="width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-family: 'Poppins', sans-serif;">
+               style="width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-family: 'Poppins', sans-serif; font-size: 13px;">
     </div>
 
-    <div class="section-title" style="text-align: center; color: var(--accent); font-weight: 700; margin-top: 20px; letter-spacing: 2px; font-size: 14px; text-transform: uppercase;">Harvest Six: Batch 2</div>
+    <div id="loadingMessage" style="text-align:center; padding: 20px; font-style: italic; color: #999; font-size: 12px;">Connecting to archive...</div>
+
+    <div class="section-title" style="text-align: center; color: var(--accent); font-weight: 700; margin-top: 20px; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">🌿 Batch 2: The Sown Seeds</div>
     <div class="grid" id="batch2Grid"></div>
 
-    <div class="section-title" style="text-align: center; color: var(--gold-grain); font-weight: 700; margin-top: 40px; letter-spacing: 2px; font-size: 14px; text-transform: uppercase;">Harvest Six: Unang Ani</div>
+    <div class="section-title" style="text-align: center; color: var(--gold-grain); font-weight: 700; margin-top: 40px; letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">✨ Unang Ani: The Founding Harvest</div>
     <div class="grid" id="batch1Grid"></div>
 
     <footer>
-        <p style="font-weight: 700; color: var(--accent); margin: 0; font-size: 14px;">Kamalig Debate Cultivation Arm</p>
-        <p style="margin-top: 5px; letter-spacing: 2px;">LUZON • VISAYAS • MINDANAO</p>
+        <p style="font-weight: 700; color: var(--accent); margin: 0; font-size: 13px;">Kamalig Debate Cultivation Arm</p>
+        <p style="margin-top: 5px; letter-spacing: 2px; font-size: 9px; opacity: 0.7;">LUZON • VISAYAS • MINDANAO</p>
     </footer>
 </div>
 
 <script>
-    const breakScholars = ["Czarina Elizette Altobano", "Jayson S. Perez"];
-    const accolades = {
-        "Czarina Elizette Altobano": "Ana Alano Cup Quarterfinalist (PSDC 2025)",
-        "Jayson S. Perez": "National Octofinalist (PSDC 2025)"
-    };
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
+    
+    let allBatch1 = [];
+    let allBatch2 = [];
+    let allAccolades = {};
 
-    const batch1 = ["Czarina Elizette Altobano", "Azis Shannon S. Matnao", "Jun Railey S. Santos", "Jayson S. Perez", "John Michael Dawal", "Kevin Miles Dela Vega", "Argus Jan Edric B. Ducay", "Jordan Bon"];
-    const batch2 = ["Victor Romulus Marcos", "Cesar John III L. Go", "Brent Velasco Espiritu", "Yiesha Lois Q. Ligeralde", "Frances Zizi Biwit", "Carl Andrei Burgos", "Sheldan Bahatan Escaño", "Reyjubail Flores", "Karl Tayoni", "Precious Calang", "Seiana Felitia Alvarez", "Claudia P. Izquierdo", "Ethan Dale Salentes", "Chatte Dimakuta", "Sittie Naima Macarambon", "Xian Sylvestre Taghoy", "Agaton Magno B. Biag", "Alfaree Luz Baldo", "Ynyl Xhyji Valladolid", "Jacintha Nicole Manotok", "Zane Jason Camacho", "Yzabella Naiomi Mendoza", "Mhiekyla Bea Paz Baylon", "Noreen Aira Faye Pu-od", "Jania Isabelle Balmediano", "Elijah Celine T. Soriano", "Keundra Abella", "Marella Jilian Singson", "Ellis Arciaga", "Ysabelle Sophia Isidro", "Marienkroon V. Bacolor", "Legend-DJ Langkit", "Gabrielle Heloise Gerona", "Ab c de U. Agtang", "Bernice Laurie Marquez", "Haleigh Kjyll Maglasang"];
+    async function loadScholars() {
+        try {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            
+            allBatch1 = [];
+            allBatch2 = [];
+            allAccolades = {};
+
+            rows.forEach(row => {
+                const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (columns.length < 2) return;
+
+                const name = columns[0].replace(/"/g, '').trim();
+                const batch = columns[1].replace(/"/g, '').trim();
+                const accolade = columns[2] ? columns[2].replace(/"/g, '').trim() : "";
+
+                if (!name) return;
+                if (batch === "1") allBatch1.push(name);
+                else allBatch2.push(name);
+                if (accolade) allAccolades[name] = accolade;
+            });
+
+            document.getElementById('loadingMessage').style.display = 'none';
+            renderGrids();
+        } catch (e) {
+            document.getElementById('loadingMessage').innerText = "Error loading harvest records.";
+        }
+    }
 
     function createCard(name, batchNum) {
         const card = document.createElement('div');
         card.className = `scholar-card card-batch${batchNum}`;
-        const randomRot = (Math.random() * 4 - 2).toFixed(2);
+        const randomRot = (Math.random() * 3 - 1.5).toFixed(2); // Slightly more conservative rotation
         card.style.setProperty('--rot', `${randomRot}deg`);
         
         let html = `<span class="name">${name}</span>`;
-        if (accolades[name]) html += `<span class="accolade">${accolades[name]}</span>`;
-        html += `<span class="batch-tag">${batchNum === 1 ? 'Founding Group' : 'Batch 2'}</span>`;
+        if (allAccolades[name]) html += `<span class="accolade">${allAccolades[name]}</span>`;
+        html += `<span class="batch-tag">${batchNum === 1 ? 'Founder' : 'Batch 2'}</span>`;
         
         card.innerHTML = html;
         return card;
@@ -195,21 +226,17 @@
         const g2 = document.getElementById('batch2Grid');
         g1.innerHTML = ""; g2.innerHTML = "";
         
-        let b1Filtered = batch1.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
-        let b2Filtered = batch2.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
+        let b1Filtered = allBatch1.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
+        let b2Filtered = allBatch2.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
 
-        /* EMPTY STATE SEARCH LOGIC */
-        if (b1Filtered.length === 0 && b2Filtered.length === 0) {
-            g2.innerHTML = `<div style="grid-column: 1/-1; padding: 60px 20px; color: #999; text-align:center; font-style: italic;">
-                🌾 No seeds found matching "${filter}" in our records.<br>
-                <small style="font-family: 'Poppins'; font-size: 10px; letter-spacing: 1px;">CHECK THE SPELLING OR TRY A PARTIAL NAME</small>
-            </div>`;
+        if (b1Filtered.length === 0 && b2Filtered.length === 0 && filter !== "") {
+            g2.innerHTML = `<div style="grid-column: 1/-1; padding: 60px 20px; color: #999; text-align:center; font-style: italic; font-size: 13px;">
+                🌾 No entries found matching "${filter}".</div>`;
         }
 
         b1Filtered.forEach(n => g1.appendChild(createCard(n, 1)));
         b2Filtered.forEach(n => g2.appendChild(createCard(n, 2)));
-        
-        document.getElementById('scholarCount').innerText = batch1.length + batch2.length;
+        document.getElementById('scholarCount').innerText = allBatch1.length + allBatch2.length;
     }
 
     function startCountdown() {
@@ -227,7 +254,7 @@
 
     function searchScholars() { renderGrids(document.getElementById('scholarSearch').value); }
     
-    renderGrids();
+    loadScholars();
     startCountdown();
 </script>
 </body>
