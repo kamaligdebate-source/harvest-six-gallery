@@ -3,208 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harvest Six | Scholars Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,500&display=swap" rel="stylesheet">
+    <title>Scholars Gallery | Harvest Six</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8da080;
-            --accent: #5c6b53;
-            --gold-grain: #b89d5d;
-            --bg: #f8f8f5;
-            --card-border: #eeede8;
+            --primary-green: #8da080;
+            --text-main: #444;
+            --gold: #b89d5d;
+            --tape-color: rgba(141, 160, 128, 0.2);
+            --tape-gold: rgba(184, 157, 93, 0.3);
         }
 
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--bg);
-            margin: 0; padding: 0; color: #444; 
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; color: var(--text-main); }
 
-        .gallery-container {
-            max-width: 1100px; width: 92%; background: white; border-radius: 20px;
-            margin: 50px auto; box-shadow: 0 20px 50px rgba(0,0,0,0.03); 
-            position: relative; overflow: hidden;
-        }
+        header { background-color: var(--primary-green); color: white; padding: 80px 20px; text-align: center; }
+        header h1 { font-size: 3rem; margin: 0; font-weight: 700; }
+        header p { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
-        header { 
-            background: var(--primary); color: white; padding: 70px 20px; text-align: center; 
-        }
+        /* RESTORED COUNTER */
+        .stats-bar { display: flex; justify-content: center; margin: -30px auto 30px; position: relative; z-index: 10; }
+        .stat-tag { background: #fff; padding: 12px 35px; border: 2px solid var(--primary-green); border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { display: block; font-size: 28px; font-weight: 700; color: var(--primary-green); line-height: 1; }
+        .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #999; }
 
-        .search-wrapper {
-            position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px); padding: 15px; border-bottom: 1px solid var(--card-border);
-            display: flex; justify-content: center;
-        }
+        .search-container { display: flex; justify-content: center; margin: 20px auto 40px; }
+        #scholarSearch { width: 90%; max-width: 500px; padding: 15px 30px; border-radius: 50px; border: 1px solid #ddd; outline: none; font-size: 14px; }
 
-        #scholarSearch { 
-            width: 100%; max-width: 450px; padding: 12px 25px; border-radius: 50px; 
-            border: 1.5px solid #ddd; outline: none; font-family: 'Poppins'; font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        #scholarSearch:focus { border-color: var(--primary); box-shadow: 0 5px 15px rgba(141, 160, 128, 0.1); }
+        .batch-title { text-align: center; font-weight: 700; font-size: 13px; color: #8da080; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 20px; }
 
-        /* BATCH SECTIONS */
-        .batch-section { padding-bottom: 50px; }
-        .batch-title { 
-            text-align: center; font-weight: 700; font-size: 13px; text-transform: uppercase; 
-            letter-spacing: 3px; color: #bbb; margin: 50px 0 25px;
-        }
+        .cohort-divider { display: flex; align-items: center; margin: 40px 5% 20px; font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+        .cohort-divider::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 15px; }
 
-        .cohort-header {
-            grid-column: 1 / -1; font-size: 10px; font-weight: 700; letter-spacing: 2px;
-            color: var(--accent); margin: 30px 40px 10px; display: flex; align-items: center;
-            text-transform: uppercase;
-        }
-        .cohort-header::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 5% 60px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; padding: 0 40px; }
-
-        /* THE SCHOLAR CARD */
+        /* RESTORED TAPE & WIND EFFECT */
         .scholar-card {
-            background: #fff; padding: 30px 20px; border: 1px solid var(--card-border); text-align: center;
-            border-radius: 8px; position: relative;
-            animation: windSway 7s infinite ease-in-out;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            background: #fff; padding: 45px 20px 30px; border-radius: 8px;
+            border: 1.5px solid #f2ede4; text-align: center;
+            position: relative; transition: all 0.4s ease;
+            animation: windSway 8s infinite ease-in-out;
+            animation-delay: var(--delay);
         }
-        
+
         @keyframes windSway {
             0%, 100% { transform: rotate(var(--rot)) translateY(0); }
-            50% { transform: rotate(calc(var(--rot) + 1.5deg)) translateY(-3px); }
+            50% { transform: rotate(calc(var(--rot) + 1.2deg)) translateY(-4px); }
         }
 
-        .scholar-card:hover { 
-            transform: translateY(-10px) rotate(0deg) !important;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--primary);
-            z-index: 10;
+        .scholar-card::before {
+            content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px;
         }
-
-        .name { font-weight: 500; font-style: italic; font-size: 0.95rem; color: #333; display: block; }
         
-        /* ACCOLADE STYLING */
-        .accolade-icon { font-size: 12px; margin-bottom: 8px; display: block; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
-        
-        .accolade { font-size: 10px; color: #777; margin-top: 8px; line-height: 1.4; font-weight: 400; }
-        
-        /* UNIFORM COHORT LABEL */
-        .cohort-tag { 
-            display: inline-block; margin-top: 12px; padding: 3px 10px; border-radius: 4px;
-            font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            background: #f0f0f0; color: #888; border: 1px solid #e8e8e8;
-        }
+        /* FOUNDER TAPE */
+        .card-batch-1::before { background: var(--tape-gold); }
 
-        /* GOLD BATCH 1 */
-        .card-batch-1 { border: 1px solid rgba(184, 157, 93, 0.4); background: #fffefb; }
-        .card-batch-1 .name { color: var(--gold-grain); font-weight: 600; }
+        .scholar-card:hover { transform: translateY(-10px) rotate(0deg) !important; border-color: var(--primary-green); box-shadow: 0 15px 35px rgba(0,0,0,0.06); z-index: 5; }
 
-        footer { padding: 60px 20px; text-align: center; font-size: 11px; opacity: 0.6; }
+        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; display: block; margin-bottom: 8px; }
+        .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; display: block; min-height: 30px;}
+        .accolade-icon { color: var(--gold); display: block; margin-bottom: 5px; font-size: 14px; animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ededed; }
+
+        footer { text-align: center; padding: 60px; font-size: 10px; color: #bbb; letter-spacing: 2px; border-top: 1px solid #f9f9f9; }
     </style>
 </head>
 <body>
 
-<div class="gallery-container">
-    <header>
-        <h1 style="font-size: 2.5rem; margin:0;">Scholars Gallery</h1>
-        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 4px; margin-top: 8px; opacity: 0.8;">Harvest Six, Kamalig Debate's Cultivation Arm</p>
-    </header>
+<header>
+    <h1>Scholars Gallery</h1>
+    <p>Harvest Six, Kamalig Debate's Cultivation Arm</p>
+</header>
 
-    <div class="search-wrapper">
-        <input type="text" id="scholarSearch" placeholder="Search scholars, cohorts, or batches..." onkeyup="searchScholars()">
+<div class="stats-bar">
+    <div class="stat-tag">
+        <span class="stat-number" id="scholarCount">0</span>
+        <span class="stat-label">Scholars Cultivated</span>
     </div>
-
-    <div id="dynamicGrids"></div>
-
-    <footer>
-        <p>© 2025 Kamalig Harvest • Luzon • Visayas • Mindanao</p>
-    </footer>
 </div>
+
+<div class="search-container">
+    <input type="text" id="scholarSearch" placeholder="Search scholars, cohorts, or batches..." onkeyup="searchScholars()">
+</div>
+
+<div id="gallery"></div>
+
+<footer>KAMALIG DEBATE • 2025</footer>
 
 <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
-    
-    let allScholars = []; 
-    let batchNames = {}; 
+    let allData = [];
 
-    async function loadScholars() {
+    async function loadGallery() {
         try {
             const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
-            
-            allScholars = rows.map(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (cols.length < 2) return null;
+            const csvText = await response.text();
+            const lines = csvText.split('\n').slice(1);
+
+            allData = lines.map(line => {
+                const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (!cols[0]) return null;
                 return {
                     name: cols[0].replace(/"/g, '').trim(),
-                    batch: cols[1].replace(/"/g, '').trim(),
+                    batchNum: cols[1].replace(/"/g, '').trim(),
                     accolade: cols[2] ? cols[2].replace(/"/g, '').trim() : "",
                     batchName: cols[3] ? cols[3].replace(/"/g, '').trim() : "",
                     cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : ""
                 };
-            }).filter(s => s && s.name);
+            }).filter(item => item !== null);
 
-            renderGrids();
-        } catch (e) { console.error("Archive connection failed", e); }
+            animateCount(allData.length);
+            render(allData);
+        } catch (err) { console.error("Load failed", err); }
     }
 
-    function renderGrids(filter = "") {
-        const container = document.getElementById('dynamicGrids');
-        container.innerHTML = "";
-        const f = filter.toLowerCase();
+    function animateCount(target) {
+        let current = 0;
+        const speed = target > 100 ? 10 : 30;
+        const interval = setInterval(() => {
+            if (current >= target) {
+                clearInterval(interval);
+                document.getElementById('scholarCount').innerText = target;
+            } else {
+                current++;
+                document.getElementById('scholarCount').innerText = current;
+            }
+        }, speed);
+    }
 
-        const filtered = allScholars.filter(s => 
-            s.name.toLowerCase().includes(f) || 
-            s.cohort.toLowerCase().includes(f) || 
-            (s.batchName && s.batchName.toLowerCase().includes(f))
-        );
+    function render(data) {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = "";
+        const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
 
-        const uniqueBatches = [...new Set(allScholars.map(s => s.batch))].sort((a,b) => a - b);
+        batches.forEach(bNum => {
+            const batchItems = data.filter(item => item.batchNum === bNum);
+            if (batchItems.length === 0) return;
 
-        uniqueBatches.forEach(batchNum => {
-            const batchScholars = filtered.filter(s => s.batch === batchNum);
-            if (batchScholars.length === 0) return;
+            const bName = batchItems[0].batchName || `Batch ${bNum}`;
+            const header = document.createElement('div');
+            header.className = 'batch-title';
+            header.innerHTML = `🌿 HARVEST SIX: ${bName}`;
+            gallery.appendChild(header);
 
-            // Sort by Cohort grouping (Pagtabi-tabi)
-            batchScholars.sort((a, b) => a.cohort.localeCompare(b.cohort) || a.name.localeCompare(b.name));
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            gallery.appendChild(grid);
 
-            const section = document.createElement('div');
-            section.className = "batch-section";
-            const bName = batchScholars[0].batchName || `Batch ${batchNum}`;
-            section.innerHTML = `
-                <div class="batch-title">🌿 ${bName}</div>
-                <div class="grid" id="grid-${batchNum}"></div>
-            `;
-            container.appendChild(section);
+            let currentCohort = "";
+            batchItems.sort((a, b) => (a.cohort || "").localeCompare(b.cohort || "") || a.name.localeCompare(b.name));
 
-            const grid = document.getElementById(`grid-${batchNum}`);
-            let lastCohort = "";
-
-            batchScholars.forEach((s, i) => {
-                if (s.cohort && s.cohort !== lastCohort) {
-                    const header = document.createElement('div');
-                    header.className = "cohort-header";
-                    header.innerText = s.cohort;
-                    grid.appendChild(header);
-                    lastCohort = s.cohort;
+            batchItems.forEach((item, idx) => {
+                if (item.cohort && item.cohort !== currentCohort) {
+                    const divider = document.createElement('div');
+                    divider.className = 'cohort-divider';
+                    divider.innerText = item.cohort;
+                    grid.appendChild(divider);
+                    currentCohort = item.cohort;
                 }
 
                 const card = document.createElement('div');
-                card.className = `scholar-card card-batch-${s.batch}`;
-                card.style.setProperty('--rot', `${(Math.random() * 2 - 1).toFixed(2)}deg`);
+                card.className = `scholar-card card-batch-${item.batchNum}`;
+                card.style.setProperty('--rot', `${(Math.random() * 2.5 - 1.25).toFixed(2)}deg`);
+                card.style.setProperty('--delay', `${(Math.random() * 5).toFixed(2)}s`);
                 
                 card.innerHTML = `
-                    ${s.accolade ? '<span class="accolade-icon">✨</span>' : ''}
-                    <span class="name">${s.name}</span>
-                    ${s.accolade ? `<span class="accolade">${s.accolade}</span>` : ''}
-                    ${s.cohort ? `<span class="cohort-tag">${s.cohort}</span>` : ''}
+                    ${item.accolade ? '<span class="accolade-icon">✨</span>' : ''}
+                    <span class="name">${item.name}</span>
+                    ${item.accolade ? `<span class="accolade">${item.accolade}</span>` : ''}
+                    ${item.cohort ? `<span class="cohort-pill">${item.cohort}</span>` : ''}
                 `;
                 grid.appendChild(card);
             });
         });
     }
 
-    function searchScholars() { renderGrids(document.getElementById('scholarSearch').value); }
-    loadScholars();
+    function searchScholars() {
+        const term = document.getElementById('scholarSearch').value.toLowerCase();
+        const filtered = allData.filter(s => 
+            s.name.toLowerCase().includes(term) || 
+            s.cohort.toLowerCase().includes(term) || 
+            s.batchName.toLowerCase().includes(term)
+        );
+        render(filtered);
+    }
+
+    loadGallery();
 </script>
 </body>
 </html>
