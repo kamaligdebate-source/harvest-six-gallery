@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Six | Scholars Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8da080;
+            --accent: #5c6b53;
+            --batch1-tape: rgba(205, 133, 63, 0.3);
+            --batch2-tape: rgba(141, 160, 128, 0.3);
+            --paper: #faf9f6;
+            --bg: #f0ede4;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 15px;
+            color: #444;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gallery-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--paper);
+            border: 1px solid #d1cdbc;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 6px double #b5c4a3;
+        }
+
+        h1 { font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
+
+        .countdown-box {
+            background: var(--accent);
+            color: white;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px dashed rgba(255,255,255,0.4);
+        }
+
+        #timer { font-size: 1.4rem; font-weight: 700; }
+
+        .search-container { padding: 10px 40px; text-align: center; }
+
+        #scholarSearch {
+            width: 100%;
+            max-width: 320px;
+            padding: 10px 20px;
+            border: 1.5px solid #d1cdbc;
+            border-radius: 50px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 30px 0 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
+            padding: 20px 30px 40px;
+        }
+
+        .scholar-card {
+            background: white;
+            padding: 18px 10px;
+            border: 1px solid #e0ddd0;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.03);
+            transform: rotate(var(--rot));
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scholar-card:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 5;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .card-batch1::before, .card-batch2::before {
+            content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+            width: 35px; height: 12px; border-radius: 1px;
+        }
+        .card-batch1::before { background: var(--batch1-tape); }
+        .card-batch2::before { background: var(--batch2-tape); }
+
+        .name-wrapper {
+            white-space: nowrap; 
+            overflow: hidden;
+            display: block;
+        }
+
+        .name { font-weight: 600; font-size: 11px; color: #333; }
+
+        /* Animated Grain */
+        .grain {
+            display: inline-block;
+            font-size: 14px;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: grainSway 3s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        @keyframes grainSway {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.2); filter: drop-shadow(0 0 2px rgba(141, 160, 128, 0.5)); }
+        }
+
+        .accolade {
+            display: block;
+            font-size: 8px;
+            color: #777;
+            margin-top: 4px;
+            line-height: 1.2;
+            font-style: italic;
+            padding: 0 5px;
+        }
+
+        .batch-tag { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 6px; display: block; opacity: 0.6; }
+        .tag-batch1 { color: #a0522d; }
+        .tag-batch2 { color: var(--primary); }
+
+        footer { background: #efeee7; padding: 30px; text-align: center; border-top: 1px solid #d1cdbc; font-size: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="gallery-container">
+    <header>
+        <h1>Scholars Gallery</h1>
+        <div style="font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 8px;">The Harvest Legacy</div>
+    </header>
+
+    <div class="countdown-box">
+        <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">🌱 Session 0 Countdown</div>
+        <div id="timer">Calculating...</div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="scholarSearch" placeholder="🔍 Find a scholar..." onkeyup="searchScholars()">
+    </div>
+
+    <div class="section-title">🌿 Harvest Six: Batch 2</div>
+    <div class="grid" id="batch2Grid"></div>
+
+    <div class="section-title">🌾 Harvest Six: Unang Ani</div>
+    <div style="text-align: center; font-size: 9px; color: #888; font-style: italic; margin-bottom: 10px;">🌾 National Break Achiever</div>
+    <div class="grid" id="batch1Grid"></div>
+
+    <footer>
+        <p style="font-weight: 700; color: var(--accent); margin: 0; font-size: 14px;">Kamalig Debate Cultivation Arm</p>
+        <p style="margin-top: 5px; letter-spacing: 2px;">LUZON • VISAYAS • MINDANAO</p>
+    </footer>
+</div>
+
+<script>
+    const breakScholars = ["Czarina Elizette Altobano", "Jayson S. Perez"];
+    const accolades = {
+        "Czarina Elizette Altobano": "Ana Alano Cup Quarterfinalist (PSDC 2025)",
+        "Jayson S. Perez": "30th Ranked Team of the PH, National Octofinalist (PSDC 2025)"
+    };
+
+    const batch1 = ["Czarina Elizette Altobano", "Azis Shannon S. Matnao", "Jun Railey S. Santos", "Jayson S. Perez", "John Michael Dawal", "Kevin Miles Dela Vega", "Argus Jan Edric B. Ducay", "Jordan Bon"];
+    
+    // Updated Batch 2 with Victor
+    const batch2 = ["Victor Romulus Marcos", "Cesar John III L. Go", "Brent Velasco Espiritu", "Yiesha Lois Q. Ligeralde", "Frances Zizi Biwit", "Carl Andrei Burgos", "Sheldan Bahatan Escaño", "Reyjubail Flores", "Karl Tayoni", "Precious Calang", "Seiana Felitia Alvarez", "Claudia P. Izquierdo", "Ethan Dale Salentes", "Chatte Dimakuta", "Sittie Naima Macarambon", "Xian Sylvestre Taghoy", "Agaton Magno B. Biag", "Alfaree Luz Baldo", "Ynyl Xhyji Valladolid", "Jacintha Nicole Manotok", "Zane Jason Camacho", "Yzabella Naiomi Mendoza", "Mhiekyla Bea Paz Baylon", "Noreen Aira Faye Pu-od", "Jania Isabelle Balmediano", "Elijah Celine T. Soriano", "Keundra Abella", "Marella Jilian Singson", "Ellis Arciaga", "Ysabelle Sophia Isidro", "Marienkroon V. Bacolor", "Legend-DJ Langkit", "Gabrielle Heloise Gerona", "Ab c de U. Agtang", "Bernice Laurie Marquez", "Haleigh Kjyll Maglasang"];
+
+    function createCard(name, batchNum) {
+        const card = document.createElement('div');
+        card.className = `scholar-card card-batch${batchNum}`;
+        const randomRot = (Math.random() * 4 - 2).toFixed(2);
+        card.style.setProperty('--rot', `${randomRot}deg`);
+        
+        let html = `<div class="name-wrapper"><span class="name">${name}</span>`;
+        if (breakScholars.includes(name)) html += `<span class="grain">🌾</span>`;
+        html += `</div>`;
+        
+        if (accolades[name]) html += `<span class="accolade">${accolades[name]}</span>`;
+        
+        html += `<span class="batch-tag tag-batch${batchNum}">${batchNum === 1 ? 'Unang Ani' : 'Batch 2'}</span>`;
+        card.innerHTML = html;
+        return card;
+    }
+
+    function renderGrids(filter = "") {
+        const g1 = document.getElementById('batch1Grid');
+        const g2 = document.getElementById('batch2Grid');
+        g1.innerHTML = ""; g2.innerHTML = "";
+        batch1.forEach(n => { if(n.toLowerCase().includes(filter.toLowerCase())) g1.appendChild(createCard(n, 1)); });
+        batch2.forEach(n => { if(n.toLowerCase().includes(filter.toLowerCase())) g2.appendChild(createCard(n, 2)); });
+    }
+
+    function startCountdown() {
+        const target = new Date("December 30, 2025 20:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = target - now;
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById("timer").innerHTML = diff < 0 ? "LIVE 🌱" : `${d}d ${h}h ${m}m ${s}s`;
+        }, 1000);
+    }
+
+    function searchScholars() { renderGrids(document.getElementById('scholarSearch').value); }
+    renderGrids();
+    startCountdown();
+</script>
+</body>
+</html>
