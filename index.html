@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harvest Six | Scholars Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Reenie+Beanie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Indie+Flower&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #8da080;
             --accent: #5c6b53;
-            --gold-grain: #d4af37;
-            --batch1-tape: rgba(212, 175, 55, 0.4);
+            --gold-grain: #b89d5d;
+            --batch1-tape: rgba(184, 157, 93, 0.4);
             --batch2-tape: rgba(141, 160, 128, 0.3);
             --paper: #faf9f6;
             --bg: #f0ede4;
@@ -26,7 +26,6 @@
             justify-content: center;
         }
 
-        /* TEXTURE OVERLAY */
         .gallery-container {
             max-width: 950px;
             width: 100%;
@@ -38,12 +37,13 @@
             position: relative;
         }
 
+        /* TEXTURE OVERLAY */
         .gallery-container::before {
             content: "";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-            opacity: 0.4;
+            opacity: 0.3;
             pointer-events: none;
             z-index: 20;
         }
@@ -56,10 +56,9 @@
             border-bottom: 6px double #b5c4a3;
         }
 
-        /* DYNAMIC STATS BAR */
         .stats-bar { display: flex; justify-content: center; margin: -25px auto 20px; position: relative; z-index: 25; }
-        .stat-tag { background: #fff; padding: 10px 25px; border: 2px solid var(--accent); border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
-        .stat-number { display: block; font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; }
+        .stat-tag { background: #fff; padding: 10px 25px; border: 2px solid var(--accent); border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .stat-number { display: block; font-size: 22px; font-weight: 700; color: var(--accent); line-height: 1; text-align: center;}
         .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #888; }
 
         .regional-hub { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px 40px; background: rgba(253, 252, 247, 0.5); border-bottom: 1px dashed #d1cdbc; text-align: center; }
@@ -69,18 +68,18 @@
         .countdown-box { background: var(--accent); color: white; padding: 15px; margin: 20px auto; max-width: 400px; border-radius: 12px; text-align: center; border: 1px dashed rgba(255,255,255,0.4); }
         #timer { font-size: 1.4rem; font-weight: 700; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 20px 30px 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px 30px 40px; }
 
         /* SCHOLAR CARDS */
         .scholar-card {
             background: white;
-            padding: 20px 10px;
+            padding: 25px 15px;
             border: 1px solid #e0ddd0;
             text-align: center;
             transform: rotate(var(--rot));
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
             position: relative;
-            min-height: 100px;
+            min-height: 110px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -88,17 +87,18 @@
         }
 
         .name {
-            font-family: 'Reenie Beanie', cursive;
-            font-size: 24px;
-            line-height: 0.9;
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.3rem; /* Much more readable than Reenie */
+            line-height: 1.1;
             color: #333;
+            font-weight: 600;
         }
 
-        /* IMPROVEMENT 1: LIFT & SHADOW HOVER */
+        /* LIFT & SHADOW HOVER */
         .scholar-card:hover {
             transform: translateY(-12px) rotate(0deg) !important;
             z-index: 25;
-            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.2);
+            box-shadow: 0 15px 35px rgba(92, 107, 83, 0.25);
         }
 
         /* BATCH 1: GOLD GRAIN GLOW */
@@ -110,15 +110,15 @@
         .card-batch1 .name { color: var(--gold-grain); }
 
         @keyframes goldGlow {
-            from { box-shadow: 0 0 5px rgba(212, 175, 55, 0.1); }
-            to { box-shadow: 0 0 15px rgba(212, 175, 55, 0.35); }
+            from { box-shadow: 0 0 5px rgba(184, 157, 93, 0.2); }
+            to { box-shadow: 0 0 20px rgba(184, 157, 93, 0.4); }
         }
 
-        .card-batch1::before { background: var(--batch1-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 35px; height: 12px; }
-        .card-batch2::before { background: var(--batch2-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 35px; height: 12px; }
+        .card-batch1::before { background: var(--batch1-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; }
+        .card-batch2::before { background: var(--batch2-tape); content: ""; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 40px; height: 14px; }
 
-        .accolade { font-size: 9px; color: #777; margin-top: 5px; font-style: italic; line-height: 1; }
-        .batch-tag { font-size: 8px; font-weight: 700; text-transform: uppercase; margin-top: 10px; opacity: 0.5; letter-spacing: 1px; }
+        .accolade { font-size: 10px; color: #777; margin-top: 8px; font-style: italic; line-height: 1.2; }
+        .batch-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; margin-top: 12px; opacity: 0.4; letter-spacing: 1px; }
 
         footer { background: #efeee7; padding: 30px; text-align: center; border-top: 1px solid #d1cdbc; font-size: 10px; }
     </style>
@@ -151,7 +151,7 @@
 
     <div class="search-container" style="text-align:center; padding: 20px;">
         <input type="text" id="scholarSearch" placeholder="🔍 Search the harvest..." onkeyup="searchScholars()" 
-               style="width: 80%; max-width: 300px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-family: 'Poppins', sans-serif;">
+               style="width: 80%; max-width: 320px; padding: 12px 20px; border-radius: 50px; border: 1.5px solid #d1cdbc; outline: none; font-family: 'Poppins', sans-serif;">
     </div>
 
     <div class="section-title" style="text-align: center; color: var(--accent); font-weight: 700; margin-top: 20px; letter-spacing: 2px; font-size: 14px; text-transform: uppercase;">🌿 Batch 2: The Sown Seeds</div>
@@ -184,7 +184,7 @@
         
         let html = `<span class="name">${name}</span>`;
         if (accolades[name]) html += `<span class="accolade">${accolades[name]}</span>`;
-        html += `<span class="batch-tag">${batchNum === 1 ? 'Founder' : 'Batch 2'}</span>`;
+        html += `<span class="batch-tag">${batchNum === 1 ? 'Founding Group' : 'Batch 2'}</span>`;
         
         card.innerHTML = html;
         return card;
@@ -198,18 +198,17 @@
         let b1Filtered = batch1.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
         let b2Filtered = batch2.filter(n => n.toLowerCase().includes(filter.toLowerCase()));
 
-        /* IMPROVEMENT 3: ON-BRAND EMPTY STATE */
+        /* EMPTY STATE SEARCH LOGIC */
         if (b1Filtered.length === 0 && b2Filtered.length === 0) {
             g2.innerHTML = `<div style="grid-column: 1/-1; padding: 60px 20px; color: #999; text-align:center; font-style: italic;">
                 🌾 No seeds found matching "${filter}" in our records.<br>
-                <small style="font-family: 'Poppins'; font-size: 10px; letter-spacing: 1px;">TRY SEARCHING BY FULL NAME</small>
+                <small style="font-family: 'Poppins'; font-size: 10px; letter-spacing: 1px;">CHECK THE SPELLING OR TRY A PARTIAL NAME</small>
             </div>`;
         }
 
         b1Filtered.forEach(n => g1.appendChild(createCard(n, 1)));
         b2Filtered.forEach(n => g2.appendChild(createCard(n, 2)));
         
-        // Automated Count
         document.getElementById('scholarCount').innerText = batch1.length + batch2.length;
     }
 
