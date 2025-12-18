@@ -40,84 +40,56 @@
 
         #batchNav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 5px 20px; }
         .nav-link { font-size: 10px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; border-radius: 4px; transition: 0.3s; }
-        .nav-link:hover { background: rgba(141, 160, 128, 0.1); }
 
         .batch-title { text-align: center; font-weight: 700; font-size: 13px; color: #8da080; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 20px; }
 
-        .cohort-divider { display: flex; align-items: center; margin: 40px 5% 20px; font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-        .cohort-divider::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 15px; }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 5% 60px; }
 
-        /* CARD CORE STYLING */
+        @keyframes harvestRise {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .scholar-card {
             background: #fff; padding: 60px 20px 30px; border-radius: 8px;
             border: 1.5px solid #f2ede4; text-align: center;
             position: relative; transition: all 0.4s ease;
-            animation: windSway 8s infinite ease-in-out;
-            animation-delay: var(--delay);
-            overflow: visible; /* Changed to visible to allow grain to 'breathe' */
             display: flex; flex-direction: column; align-items: center;
+            opacity: 0;
+            animation: harvestRise 0.6s ease forwards;
+            animation-delay: var(--growth-delay);
         }
 
-        /* BATCH 1 SPECIAL STYLING */
         .card-batch-1 {
             border: 2px solid #e3d5b8;
             background: radial-gradient(circle at top, rgba(184, 157, 93, 0.05) 0%, #fff 80%);
             box-shadow: 0 4px 15px rgba(184, 157, 93, 0.1);
         }
-        .card-batch-1::before { background: var(--tape-gold) !important; }
 
-        .scholar-card:hover, .scholar-card:active { 
-            transform: translateY(-10px) rotate(0deg) !important; 
-            border-color: var(--primary-green); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.06); 
-        }
-
-        @keyframes windSway {
-            0%, 100% { transform: rotate(var(--rot)) translateY(0); }
-            50% { transform: rotate(calc(var(--rot) + 1.2deg)) translateY(-4px); }
-        }
+        .scholar-card:hover { transform: translateY(-10px); border-color: var(--primary-green); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
 
         .scholar-card::before {
             content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px; z-index: 2;
+            width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px;
         }
+        .card-batch-1::before { background: var(--tape-gold) !important; }
 
-        /* GRAIN CONTAINER - FIXES DISTORTION */
-        .grain-wrapper {
-            position: absolute; top: 15px; left: 0; right: 0;
-            height: 40px; display: flex; justify-content: center; align-items: center;
-            pointer-events: none;
-        }
+        .grain-wrapper { position: absolute; top: 15px; height: 40px; display: flex; justify-content: center; align-items: center; }
+        .grain-icon { display: inline-block; font-size: 22px; animation: grainGrowSway 4s infinite ease-in-out; transform-origin: bottom center; }
+        @keyframes grainGrowSway { 0%, 100% { transform: scale(1) rotate(-3deg); } 50% { transform: scale(1.15) rotate(3deg); } }
 
-        .grain-icon { 
-            display: inline-block; font-size: 22px; 
-            animation: grainGrowSway 4s infinite ease-in-out;
-            transform-origin: bottom center;
-        }
-
-        @keyframes grainGrowSway {
-            0%, 100% { transform: scale(1) rotate(-3deg); }
-            50% { transform: scale(1.15) rotate(3deg); }
-        }
-
-        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; display: block; margin-bottom: 2px; line-height: 1.2; z-index: 1; }
-        .institution { font-size: 9px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 10px; line-height: 1.4; padding: 0 10px; }
-        .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; display: block; min-height: 30px; }
+        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; margin-bottom: 2px; line-height: 1.2; }
+        .institution { font-size: 9px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; line-height: 1.4; padding: 0 10px; }
+        .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; min-height: 30px; }
         .highlight { background-color: var(--highlight); border-radius: 2px; }
-
         .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ededed; margin-top: auto; }
 
-        /* STATS SECTION */
         .stats-summary { background: #fcfcfc; padding: 60px 10%; border-top: 1px solid #eee; margin-top: 40px; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
         .stats-batch-card h4 { font-size: 10px; letter-spacing: 2px; color: var(--primary-green); text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         .stats-item { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 5px; color: #777; }
-        .stats-school { font-weight: 600; color: #555; text-transform: uppercase; }
-
+        
         #backToTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #fff; border: 2px solid var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-
         footer { text-align: center; padding: 60px; font-size: 10px; color: #bbb; letter-spacing: 2px; }
     </style>
 </head>
@@ -200,16 +172,12 @@
         nav.innerHTML = uniqueBatches.map(bNum => `<a href="#batch-${bNum}" class="nav-link">Batch ${bNum}</a>`).join('');
     }
 
-    function highlightText(text, term) {
-        if (!term) return text;
-        const re = new RegExp(`(${term})`, "gi");
-        return text.replace(re, `<span class="highlight">$1</span>`);
-    }
-
     function render(data, term = "") {
         const gallery = document.getElementById('gallery');
         gallery.innerHTML = "";
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
+
+        let globalIndex = 0;
 
         batches.forEach(bNum => {
             const batchItems = data.filter(item => item.batchNum === bNum);
@@ -225,33 +193,19 @@
             grid.className = 'grid';
             section.appendChild(grid);
 
-            let currentCohort = "";
-            batchItems.sort((a, b) => (a.cohort || "").localeCompare(b.cohort || "") || a.name.localeCompare(b.name));
-
             batchItems.forEach(item => {
-                if (item.cohort && item.cohort !== currentCohort) {
-                    const div = document.createElement('div');
-                    div.className = 'cohort-divider';
-                    div.innerText = item.cohort;
-                    grid.appendChild(div);
-                    currentCohort = item.cohort;
-                }
-
                 const card = document.createElement('div');
-                // Apply 'card-batch-1' class if BatchNum is 1
                 const batchClass = item.batchNum == "1" ? "card-batch-1" : "";
-                card.className = `scholar-card card-batch-${item.batchNum} ${batchClass}`;
-                card.style.setProperty('--rot', `${(Math.random() * 2.5 - 1.25).toFixed(2)}deg`);
-                card.style.setProperty('--delay', `${(Math.random() * 5).toFixed(2)}s`);
+                card.className = `scholar-card ${batchClass}`;
+                card.style.setProperty('--growth-delay', `${globalIndex * 0.05}s`);
+                globalIndex++;
                 
                 card.innerHTML = `
-                    <div class="grain-wrapper">
-                        ${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}
-                    </div>
-                    <span class="name">${highlightText(item.name, term)}</span>
-                    <span class="institution">${highlightText(item.institution, term)}</span>
-                    ${item.accolade ? `<span class="accolade">${highlightText(item.accolade, term)}</span>` : ''}
-                    ${item.cohort ? `<span class="cohort-pill">${highlightText(item.cohort, term)}</span>` : ''}
+                    <div class="grain-wrapper">${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}</div>
+                    <span class="name">${item.name}</span>
+                    <span class="institution">${item.institution}</span>
+                    ${item.accolade ? `<span class="accolade">${item.accolade}</span>` : ''}
+                    ${item.cohort ? `<span class="cohort-pill">${item.cohort}</span>` : ''}
                 `;
                 grid.appendChild(card);
             });
@@ -262,7 +216,6 @@
         const statsGrid = document.getElementById('statsGrid');
         statsGrid.innerHTML = "";
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
-        
         batches.forEach(bNum => {
             const batchData = allData.filter(item => item.batchNum === bNum);
             const instCounts = {};
@@ -271,7 +224,7 @@
             statCard.className = 'stats-batch-card';
             statCard.innerHTML = `<h4>Batch ${bNum} Representation</h4>`;
             Object.entries(instCounts).sort((a,b) => b[1] - a[1]).forEach(([school, count]) => {
-                statCard.innerHTML += `<div class="stats-item"><span class="stats-school">${school}</span> <span>${count}</span></div>`;
+                statCard.innerHTML += `<div class="stats-item"><span>${school}</span> <span>${count}</span></div>`;
             });
             statsGrid.appendChild(statCard);
         });
@@ -280,7 +233,7 @@
     function searchScholars() {
         const term = document.getElementById('scholarSearch').value.toLowerCase();
         const filtered = allData.filter(s => 
-            s.name.toLowerCase().includes(term) || s.cohort.toLowerCase().includes(term) || s.institution.toLowerCase().includes(term)
+            s.name.toLowerCase().includes(term) || s.institution.toLowerCase().includes(term)
         );
         render(filtered, term);
     }
