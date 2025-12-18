@@ -13,11 +13,15 @@
             --dark-green: #6d7d62;
             --text-main: #444;
             --gold: #b89d5d;
+            --major-blue: #5d8ab8;
         }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
         body { font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; }
 
-        /* HEADER & SMOOTH CYCLE */
         header { 
             background: linear-gradient(180deg, var(--dark-green) 0%, var(--primary-green) 100%);
             color: white; padding: 100px 20px 80px; text-align: center; position: relative; overflow: hidden;
@@ -28,19 +32,10 @@
             background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
             padding: 8px 25px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
             font-size: 11px; font-weight: 700; z-index: 100; min-width: 250px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
 
-        /* THE SMOOTHNESS FIX */
-        #leaderName {
-            display: inline-block;
-            transition: opacity 0.5s ease-in-out;
-            opacity: 1;
-            will-change: opacity;
-            transform: translateZ(0); /* Force GPU acceleration */
-        }
+        #leaderName { display: inline-block; transition: opacity 0.5s ease-in-out; opacity: 1; will-change: opacity; }
 
-        /* REST OF UI */
         .stats-bar { display: flex; justify-content: center; margin: -28px auto 25px; position: relative; z-index: 150; }
         .stat-tag { background: #fff; padding: 12px 32px; border: 2px solid var(--primary-green); border-radius: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); text-align: center; }
         .stat-number { display: block; font-size: 26px; font-weight: 700; color: var(--primary-green); line-height: 1; }
@@ -52,10 +47,7 @@
             opacity: 0; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content {
-            background: white; padding: 50px 40px; border-radius: 15px; max-width: 500px; width: 90%;
-            text-align: center; position: relative; transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .modal-content { background: white; padding: 50px 40px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; position: relative; transform: scale(0.7); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .modal-overlay.active .modal-content { transform: scale(1); }
 
         .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.98); padding: 15px 0; border-bottom: 1px solid #eee; text-align: center; }
@@ -63,7 +55,22 @@
         .info-trigger { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-size: 9px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; margin-left: 10px; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px 5% 50px; }
-        .scholar-card { background: #ffffff; padding: 45px 15px 25px; border-radius: 5px; border: 1px solid #f2ede4; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; }
+        
+        .scholar-card { 
+            background: #ffffff; padding: 45px 15px 25px; border-radius: 5px; border: 1px solid #f2ede4; 
+            text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; 
+            transition: 0.3s ease;
+        }
+        .scholar-card:hover { transform: translateY(-5px); border-color: var(--primary-green); }
+
+        /* MAJOR TOOLTIP */
+        .major-tooltip {
+            position: absolute; top: -15px; background: var(--major-blue); color: white;
+            font-size: 7px; font-weight: 700; padding: 4px 10px; border-radius: 3px;
+            opacity: 0; transition: 0.3s; pointer-events: none; z-index: 10;
+        }
+        .scholar-card:hover .major-tooltip { opacity: 1; transform: translateY(-5px); }
+
         .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.15rem; color: var(--gold); margin: 10px 0 5px; }
         .batch-title { text-align: center; font-weight: 700; font-size: 11px; color: var(--primary-green); text-transform: uppercase; letter-spacing: 3px; margin-top: 50px; }
         .cohort-divider { text-align: left; font-size: 8px; color: #ccc; text-transform: uppercase; letter-spacing: 2px; margin: 30px 5%; padding-left: 10px; border-left: 2px solid var(--primary-green); }
@@ -148,9 +155,6 @@
         document.getElementById('totalBreaks').innerText = data.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('goalProgress').style.width = Math.min((data.length / 100) * 100, 100) + "%";
 
-        const maxBreaks = allData.length > 0 ? Math.max(...allData.map(s => s.breaks)) : 0;
-        leaders = allData.filter(s => s.breaks === maxBreaks && maxBreaks > 0);
-
         const batches = [...new Set(data.map(i => i.batchNum))].sort((a,b) => a-b);
         batches.forEach(bNum => {
             const bItems = data.filter(i => i.batchNum === bNum);
@@ -163,11 +167,15 @@
                 const grid = document.createElement('div');
                 grid.className = 'grid';
                 cItems.forEach(item => {
-                    let gColor = (item.breaks > 7) ? "grain-gold" : (item.breaks > 3 ? "grain-green" : "grain-default");
+                    // TOOLTIP LOGIC
+                    const isMajor = ["national", "pid", "pdc", "luzon", "open", "pdt"].some(k => item.accolade.toLowerCase().includes(k));
+                    let gColor = (item.breaks > 7) ? "#b89d5d" : (item.breaks > 3 ? "#4a5d45" : "#8da080");
+                    
                     grid.innerHTML += `
                         <div class="scholar-card">
+                            ${isMajor ? `<div class="major-tooltip">✨ Major Tournament Break</div>` : ''}
                             ${item.breaks > 0 ? `<div style="position:absolute; top:12px; right:12px; font-size:8px; font-weight:700; color:var(--gold);">${item.breaks}x 🌾</div>` : ''}
-                            <div style="font-size:20px; color:${gColor==='grain-gold'?'#b89d5d':(gColor==='grain-green'?'#4a5d45':'#8da080')}">🌾</div>
+                            <div style="font-size:20px; color:${gColor}">🌾</div>
                             <span class="name">${item.name}</span>
                             <span class="institution" style="font-size:8px; color:#aaa; text-transform:uppercase;">${item.institution}</span>
                             <span class="accolade" style="font-size:9px; color:#666; font-style:italic; min-height:32px; margin-top:8px;">${item.accolade}</span>
@@ -177,31 +185,24 @@
                 gallery.appendChild(grid);
             });
         });
+
+        // Set leaders based on current full data for the carousel
+        const maxBreaks = allData.length > 0 ? Math.max(...allData.map(s => s.breaks)) : 0;
+        leaders = allData.filter(s => s.breaks === maxBreaks && maxBreaks > 0);
     }
 
-    // THE SMOOTH CYCLE LOGIC
     function startLeaderCycle() {
         if (leaders.length === 0) return;
-        
-        // Initial set
         document.getElementById('leaderName').innerText = `${leaders[0].name} (${leaders[0].breaks}x)`;
-        
         setInterval(() => {
             const el = document.getElementById('leaderName');
-            
-            // 1. Fade out
             el.style.opacity = 0;
-            
-            // 2. Wait for fade out to finish (500ms), then swap text
             setTimeout(() => {
                 leaderIndex = (leaderIndex + 1) % leaders.length;
                 el.innerText = `${leaders[leaderIndex].name} (${leaders[leaderIndex].breaks}x)`;
-                
-                // 3. Fade back in
                 el.style.opacity = 1;
             }, 500); 
-            
-        }, 4000); // 4 seconds total per leader
+        }, 4000);
     }
 
     function searchScholars() {
