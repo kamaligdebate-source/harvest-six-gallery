@@ -14,9 +14,15 @@
             --tape-color: rgba(141, 160, 128, 0.2);
             --tape-gold: rgba(184, 157, 93, 0.5);
             --highlight: rgba(184, 157, 93, 0.2);
+            --mouse-x: 50%;
+            --mouse-y: 50%;
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; }
+        body { 
+            font-family: 'Poppins', sans-serif; background-color: #fff; 
+            background-image: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(184, 157, 93, 0.08) 0%, transparent 40%);
+            background-attachment: fixed; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; 
+        }
 
         header { background-color: var(--primary-green); color: white; padding: 80px 20px; text-align: center; }
         header h1 { font-size: 3rem; margin: 0; font-weight: 700; }
@@ -30,49 +36,41 @@
         .stat-number { display: block; font-size: 28px; font-weight: 700; color: var(--primary-green); line-height: 1; }
         .stat-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #999; }
 
-        .sticky-controls {
-            position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px); border-bottom: 1px solid #eee; padding: 10px 0;
-        }
-
+        .sticky-controls { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; padding: 10px 0; }
         .search-container { display: flex; justify-content: center; margin: 10px auto; }
         #scholarSearch { width: 90%; max-width: 450px; padding: 12px 25px; border-radius: 50px; border: 1px solid #ddd; outline: none; font-size: 14px; }
-
         #batchNav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 5px 20px; }
-        .nav-link { font-size: 10px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; border-radius: 4px; transition: 0.3s; }
+        .nav-link { font-size: 10px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; border-radius: 4px; }
 
         .batch-title { text-align: center; font-weight: 700; font-size: 13px; color: #8da080; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 20px; }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 5% 60px; }
 
-        @keyframes harvestRise {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* SKELETON */
+        .skeleton { background: #f9f9f9; height: 250px; border-radius: 8px; border: 1.5px solid #f2ede4; position: relative; overflow: hidden; }
+        .skeleton::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        /* REAPING BADGE */
+        .reaping-badge {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(184, 157, 93, 0.1); border: 1px solid rgba(184, 157, 93, 0.3);
+            padding: 4px 8px; border-radius: 12px; font-size: 9px; font-weight: 700;
+            color: var(--gold); display: flex; align-items: center; gap: 3px;
         }
 
+        /* CARD STYLE */
         .scholar-card {
-            background: #fff; padding: 60px 20px 30px; border-radius: 8px;
-            border: 1.5px solid #f2ede4; text-align: center;
-            position: relative; transition: all 0.4s ease;
-            display: flex; flex-direction: column; align-items: center;
-            opacity: 0;
-            animation: harvestRise 0.6s ease forwards;
+            background: #fff; padding: 60px 20px 30px; border-radius: 8px; border: 1.5px solid #f2ede4;
+            text-align: center; position: relative; transition: all 0.4s ease; display: flex;
+            flex-direction: column; align-items: center; opacity: 0; animation: harvestRise 0.6s ease forwards;
             animation-delay: var(--growth-delay);
         }
-
-        .card-batch-1 {
-            border: 2px solid #e3d5b8;
-            background: radial-gradient(circle at top, rgba(184, 157, 93, 0.05) 0%, #fff 80%);
-            box-shadow: 0 4px 15px rgba(184, 157, 93, 0.1);
-        }
-
+        .card-batch-1 { border: 2px solid #e3d5b8; background: radial-gradient(circle at top, rgba(184, 157, 93, 0.05) 0%, #fff 80%); box-shadow: 0 4px 15px rgba(184, 157, 93, 0.1); }
         .scholar-card:hover { transform: translateY(-10px); border-color: var(--primary-green); box-shadow: 0 15px 35px rgba(0,0,0,0.06); }
-
-        .scholar-card::before {
-            content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px;
-        }
+        .scholar-card::before { content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px; }
         .card-batch-1::before { background: var(--tape-gold) !important; }
+
+        @keyframes harvestRise { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .grain-wrapper { position: absolute; top: 15px; height: 40px; display: flex; justify-content: center; align-items: center; }
         .grain-icon { display: inline-block; font-size: 22px; animation: grainGrowSway 4s infinite ease-in-out; transform-origin: bottom center; }
@@ -81,7 +79,6 @@
         .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; margin-bottom: 2px; line-height: 1.2; }
         .institution { font-size: 9px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; line-height: 1.4; padding: 0 10px; }
         .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; min-height: 30px; }
-        .highlight { background-color: var(--highlight); border-radius: 2px; }
         .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ededed; margin-top: auto; }
 
         .stats-summary { background: #fcfcfc; padding: 60px 10%; border-top: 1px solid #eee; margin-top: 40px; }
@@ -116,7 +113,7 @@
     <div id="batchNav"></div>
 </div>
 
-<div id="gallery"></div>
+<div id="gallery"><div class="grid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div></div>
 
 <div class="stats-summary" id="statsSummary">
     <h2 style="text-align: center; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; color: #bbb;">Harvest Statistics</h2>
@@ -127,6 +124,11 @@
 <footer>KAMALIG DEBATE • 2025</footer>
 
 <script>
+    document.addEventListener('mousemove', e => {
+        document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    });
+
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
     let allData = [];
 
@@ -145,7 +147,8 @@
                     accolade: cols[2] ? cols[2].replace(/"/g, '').trim() : "",
                     batchName: cols[3] ? cols[3].replace(/"/g, '').trim() : "",
                     cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : "",
-                    institution: cols[5] ? cols[5].replace(/"/g, '').trim() : "Unspecified"
+                    institution: cols[5] ? cols[5].replace(/"/g, '').trim() : "Unspecified",
+                    breaks: cols[6] ? cols[6].replace(/"/g, '').trim() : "" // NEW BREAKS COLUMN
                 };
             }).filter(item => item !== null);
 
@@ -157,38 +160,20 @@
         } catch (err) { console.error("Load failed", err); }
     }
 
-    window.onscroll = function() {
-        const btn = document.getElementById("backToTop");
-        btn.style.display = (document.documentElement.scrollTop > 500) ? "flex" : "none";
-    };
-
-    function updateGoal(count) {
-        document.getElementById('goalProgress').style.width = Math.min((count / 100) * 100, 100) + "%";
-    }
-
-    function generateBatchNav() {
-        const nav = document.getElementById('batchNav');
-        const uniqueBatches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
-        nav.innerHTML = uniqueBatches.map(bNum => `<a href="#batch-${bNum}" class="nav-link">Batch ${bNum}</a>`).join('');
-    }
-
-    function render(data, term = "") {
+    function render(data) {
         const gallery = document.getElementById('gallery');
         gallery.innerHTML = "";
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
-
         let globalIndex = 0;
 
         batches.forEach(bNum => {
             const batchItems = data.filter(item => item.batchNum === bNum);
             if (batchItems.length === 0) return;
-
             const section = document.createElement('div');
             section.className = 'batch-section';
             section.id = `batch-${bNum}`;
             section.innerHTML = `<div class="batch-title">🌿 HARVEST SIX: ${batchItems[0].batchName || `Batch ${bNum}`}</div>`;
             gallery.appendChild(section);
-
             const grid = document.createElement('div');
             grid.className = 'grid';
             section.appendChild(grid);
@@ -201,6 +186,7 @@
                 globalIndex++;
                 
                 card.innerHTML = `
+                    ${item.breaks ? `<div class="reaping-badge">${item.breaks}x 🌾</div>` : ''}
                     <div class="grain-wrapper">${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}</div>
                     <span class="name">${item.name}</span>
                     <span class="institution">${item.institution}</span>
@@ -212,16 +198,20 @@
         });
     }
 
+    // (Remaining functions: updateGoal, generateBatchNav, renderStats, searchScholars - preserved from previous)
+    function updateGoal(count) { document.getElementById('goalProgress').style.width = Math.min((count / 100) * 100, 100) + "%"; }
+    function generateBatchNav() {
+        const nav = document.getElementById('batchNav');
+        const uniqueBatches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
+        nav.innerHTML = uniqueBatches.map(bNum => `<a href="#batch-${bNum}" class="nav-link">Batch ${bNum}</a>`).join('');
+    }
     function renderStats() {
-        const statsGrid = document.getElementById('statsGrid');
-        statsGrid.innerHTML = "";
+        const statsGrid = document.getElementById('statsGrid'); statsGrid.innerHTML = "";
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
         batches.forEach(bNum => {
             const batchData = allData.filter(item => item.batchNum === bNum);
-            const instCounts = {};
-            batchData.forEach(s => { instCounts[s.institution] = (instCounts[s.institution] || 0) + 1; });
-            const statCard = document.createElement('div');
-            statCard.className = 'stats-batch-card';
+            const instCounts = {}; batchData.forEach(s => { instCounts[s.institution] = (instCounts[s.institution] || 0) + 1; });
+            const statCard = document.createElement('div'); statCard.className = 'stats-batch-card';
             statCard.innerHTML = `<h4>Batch ${bNum} Representation</h4>`;
             Object.entries(instCounts).sort((a,b) => b[1] - a[1]).forEach(([school, count]) => {
                 statCard.innerHTML += `<div class="stats-item"><span>${school}</span> <span>${count}</span></div>`;
@@ -229,15 +219,11 @@
             statsGrid.appendChild(statCard);
         });
     }
-
     function searchScholars() {
         const term = document.getElementById('scholarSearch').value.toLowerCase();
-        const filtered = allData.filter(s => 
-            s.name.toLowerCase().includes(term) || s.institution.toLowerCase().includes(term)
-        );
-        render(filtered, term);
+        const filtered = allData.filter(s => s.name.toLowerCase().includes(term) || s.institution.toLowerCase().includes(term));
+        render(filtered);
     }
-
     loadGallery();
 </script>
 </body>
