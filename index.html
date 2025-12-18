@@ -30,7 +30,6 @@
             color: white; padding: 100px 20px; text-align: center; position: relative; overflow: hidden;
         }
 
-        /* TOP HARVESTER CYCLE UI */
         #topHarvesterCycle {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
@@ -50,7 +49,7 @@
         @keyframes drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         header .content { position: relative; z-index: 10; }
-        header h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; margin: 0; font-weight: 700; } /* Scaled down 20% */
+        header h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; margin: 0; font-weight: 700; }
         header p { font-size: 8px; letter-spacing: 5px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
         .goal-container { width: 100%; max-width: 320px; margin: 20px auto 0; background: rgba(255,255,255,0.2); height: 3px; border-radius: 10px; overflow: hidden; }
@@ -75,9 +74,8 @@
         #batchNav { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 8px 20px 0; }
         .nav-link { font-size: 7px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; padding: 15px 5% 60px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; padding: 15px 5% 40px; }
 
-        /* CARD SIZING 20% SMALLER */
         .scholar-card {
             background: #fff; padding: 52px 16px 28px; border-radius: 6px; border: 1.2px solid #f2ede4;
             text-align: center; position: relative; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
@@ -93,16 +91,22 @@
         .top-harvester-ribbon { position: absolute; bottom: 0; width: 100%; background: var(--gold); color: white; font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 5px 0; border-radius: 0 0 6px 6px; }
 
         .reaping-badge { position: absolute; top: 12px; right: 12px; background: rgba(184, 157, 93, 0.1); border: 1px solid rgba(184, 157, 93, 0.3); padding: 4px 8px; border-radius: 16px; font-size: 8px; font-weight: 700; color: var(--gold); }
-        .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.05rem; color: var(--gold); margin-bottom: 3px; }
+        
+        /* THE NAME FIX */
+        .name { 
+            font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.05rem; 
+            color: var(--gold); margin-bottom: 3px; display: block; width: 100%;
+        }
+
         .institution { font-size: 8px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
         .accolade { font-size: 9px; color: #777; margin-bottom: 12px; min-height: 32px; font-style: italic; line-height: 1.3; }
         .cohort-pill { display: inline-block; background: #f8f8f8; color: #bbb; font-size: 7px; font-weight: 700; padding: 4px 12px; border-radius: 40px; border: 1px solid #eee; margin-top: auto; }
 
         .batch-title { text-align: center; font-weight: 700; font-size: 11px; color: var(--primary-green); text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 20px; }
-        .cohort-divider { text-align: left; font-size: 8px; color: #bbb; text-transform: uppercase; letter-spacing: 2px; margin: 20px 0 10px; padding-left: 5%; border-left: 2px solid #f2ede4; }
+        .cohort-divider { text-align: left; font-size: 8px; color: #bbb; text-transform: uppercase; letter-spacing: 2px; margin: 40px 0 10px; padding-left: 5%; border-left: 2px solid var(--primary-green); }
         
         footer { text-align: center; padding: 60px 20px; font-size: 8px; color: #ccc; letter-spacing: 2px; }
-        #backToTop { position: fixed; bottom: 25px; right: 25px; width: 40px; height: 40px; background: #fff; border: 2px solid var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; font-size: 16px; }
+        #backToTop { position: fixed; bottom: 25px; right: 25px; width: 40px; height: 40px; background: #fff; border: 2px solid var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; }
     </style>
 </head>
 <body>
@@ -113,7 +117,7 @@
 </div>
 
 <header id="mainHeader">
-    <div id="topHarvesterCycle">🏆 <span class="cycle-name" id="leaderName">Loading Harvesters...</span></div>
+    <div id="topHarvesterCycle">🏆 <span class="cycle-name" id="leaderName">Loading Leaders...</span></div>
     <div class="parallax-layer layer-1"></div>
     <div class="parallax-layer layer-2"></div>
     <div class="content">
@@ -139,7 +143,7 @@
 <div id="gallery"></div>
 
 <div id="backToTop" onclick="window.scrollTo(0,0)">🌾</div>
-<footer>KAMALIG DEBATE FOUNDATION • EST. 2025</footer>
+<footer>KAMALIG DEBATE FOUNDATION • 2025</footer>
 
 <script>
     window.addEventListener('scroll', () => {
@@ -155,8 +159,8 @@
 
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
     let allData = [];
-    let leaderIndex = 0;
     let leaders = [];
+    let leaderIndex = 0;
 
     async function loadGallery() {
         try {
@@ -194,8 +198,6 @@
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
         const maxBreaks = data.length > 0 ? Math.max(...data.map(s => s.breaks)) : 0;
-        
-        // Update Leaders List
         leaders = data.filter(s => s.breaks === maxBreaks && maxBreaks > 0);
 
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
@@ -206,12 +208,10 @@
             if (batchItems.length === 0) return;
             
             const batchHeader = document.createElement('div');
-            batchHeader.className = 'batch-section';
             batchHeader.id = `batch-${bNum}`;
             batchHeader.innerHTML = `<div class="batch-title">🌿 ${batchItems[0].batchName || `Batch ${bNum}`}</div>`;
             gallery.appendChild(batchHeader);
 
-            // COHORT CLUSTERING LOGIC
             const cohortsInBatch = [...new Set(batchItems.map(item => item.cohort))].sort();
             
             cohortsInBatch.forEach(cName => {
@@ -253,14 +253,11 @@
 
     function startLeaderCycle() {
         setInterval(() => {
-            if (leaders.length === 0) {
-                document.getElementById('leaderName').innerText = "Tending the fields...";
-                return;
-            }
+            if (leaders.length === 0) return;
             const el = document.getElementById('leaderName');
             el.style.opacity = 0;
             setTimeout(() => {
-                el.innerText = `Top Harvester: ${leaders[leaderIndex].name} (${leaders[leaderIndex].breaks}x)`;
+                el.innerText = `${leaders[leaderIndex].name} (${leaders[leaderIndex].breaks}x)`;
                 el.style.opacity = 1;
                 leaderIndex = (leaderIndex + 1) % leaders.length;
             }, 500);
