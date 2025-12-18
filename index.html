@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholars Gallery | Harvest Six</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-green: #8da080;
-            --dark-green: #6d7d62;
             --text-main: #444;
             --gold: #b89d5d;
             --tape-color: rgba(141, 160, 128, 0.2);
             --tape-gold: rgba(184, 157, 93, 0.5);
+            --highlight: rgba(184, 157, 93, 0.2);
             --mouse-x: 50%;
             --mouse-y: 50%;
         }
@@ -25,38 +24,13 @@
             background-attachment: fixed; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; 
         }
 
-        /* BEAUTIFIED PARALLAX HEADER */
-        header { 
-            background: linear-gradient(180deg, var(--dark-green) 0%, var(--primary-green) 100%);
-            color: white; padding: 120px 20px; text-align: center; position: relative; overflow: hidden;
-        }
-        
-        /* Sun Glow Effect */
-        header::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 30%, rgba(184, 157, 93, 0.3) 0%, transparent 70%);
-            z-index: 1;
-        }
+        header { background-color: var(--primary-green); color: white; padding: 80px 20px; text-align: center; }
+        header h1 { font-size: 3rem; margin: 0; font-weight: 700; }
+        header p { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
-        /* Parallax Grain Layers */
-        .parallax-layer {
-            position: absolute; bottom: -10px; left: 0; width: 200%; height: 100px;
-            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,120 L1200,120 L1200,20 Q1150,80 1100,20 Q1050,80 1000,20 Q950,80 900,20 Q850,80 800,20 Q750,80 700,20 Q650,80 600,20 Q550,80 500,20 Q450,80 400,20 Q350,80 300,20 Q250,80 200,20 Q150,80 100,20 Q50,80 0,20 Z" fill="rgba(255,255,255,0.1)"/></svg>');
-            background-repeat: repeat-x; background-size: 50% 100%; z-index: 2;
-        }
-        .layer-1 { animation: drift 25s linear infinite; opacity: 0.4; }
-        .layer-2 { animation: drift 15s linear reverse infinite; opacity: 0.2; bottom: -20px; transform: scaleY(1.5); }
-
-        @keyframes drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        header .content { position: relative; z-index: 10; }
-        header h1 { font-family: 'Playfair Display', serif; font-size: 4rem; margin: 0; font-weight: 700; letter-spacing: -1px; }
-        header p { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; margin-top: 15px; opacity: 0.9; font-weight: 600; }
-
-        .goal-container { width: 100%; max-width: 400px; margin: 25px auto 0; background: rgba(255,255,255,0.2); height: 4px; border-radius: 10px; overflow: hidden; }
+        .goal-container { width: 100%; max-width: 400px; margin: 15px auto 0; background: rgba(255,255,255,0.2); height: 6px; border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: width 1.5s ease-out; }
 
-        /* FLOATING BREAK COUNTER */
         #floatingBreakCounter {
             position: fixed; bottom: 30px; left: 30px; z-index: 1000;
             background: #fff; border: 2px solid var(--gold); padding: 10px 20px;
@@ -66,40 +40,53 @@
         .break-total-num { font-size: 20px; font-weight: 700; color: var(--gold); line-height: 1; }
         .break-total-label { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-top: 2px; }
 
-        .sticky-controls { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; padding: 15px 0; }
-        .search-container { display: flex; justify-content: center; margin: 0 auto; }
-        #scholarSearch { width: 90%; max-width: 500px; padding: 14px 28px; border-radius: 50px; border: 1px solid #eee; outline: none; font-size: 14px; background: #fafafa; }
-        #batchNav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 10px 20px 0; }
-        .nav-link { font-size: 9px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; }
+        .sticky-controls { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; padding: 10px 0; }
+        .search-container { display: flex; justify-content: center; margin: 10px auto; }
+        #scholarSearch { width: 90%; max-width: 450px; padding: 12px 25px; border-radius: 50px; border: 1px solid #ddd; outline: none; font-size: 14px; }
+        #batchNav { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 5px 20px; }
+        .nav-link { font-size: 10px; font-weight: 700; color: var(--primary-green); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; padding: 5px 10px; border-radius: 4px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; padding: 20px 5% 80px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 5% 60px; }
 
-        /* TOP HARVESTER */
-        .is-top-harvester { border: 2px solid var(--gold) !important; box-shadow: 0 0 25px rgba(184, 157, 93, 0.25) !important; transform: scale(1.02); }
-        .top-harvester-ribbon { position: absolute; bottom: 0; width: 100%; background: var(--gold); color: white; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 6px 0; border-radius: 0 0 6px 6px; }
+        /* TOP HARVESTER STYLES */
+        .is-top-harvester {
+            border: 2px solid var(--gold) !important;
+            box-shadow: 0 0 20px rgba(184, 157, 93, 0.3) !important;
+        }
+        .top-harvester-ribbon {
+            position: absolute; bottom: 0; width: 100%;
+            background: var(--gold); color: white;
+            font-size: 8px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; padding: 4px 0; border-radius: 0 0 6px 6px;
+        }
 
         .scholar-card {
-            background: #fff; padding: 65px 20px 35px; border-radius: 8px; border: 1.5px solid #f2ede4;
-            text-align: center; position: relative; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            display: flex; flex-direction: column; align-items: center; opacity: 0; animation: harvestRise 0.6s ease forwards;
+            background: #fff; padding: 60px 20px 30px; border-radius: 8px; border: 1.5px solid #f2ede4;
+            text-align: center; position: relative; transition: all 0.4s ease; display: flex;
+            flex-direction: column; align-items: center; opacity: 0; animation: harvestRise 0.6s ease forwards;
             animation-delay: var(--growth-delay);
         }
-        .card-batch-1 { border: 2.5px solid #e3d5b8; background: radial-gradient(circle at top, rgba(184, 157, 93, 0.05) 0%, #fff 80%); }
+        .card-batch-1 { border: 2px solid #e3d5b8; background: radial-gradient(circle at top, rgba(184, 157, 93, 0.05) 0%, #fff 80%); }
         .scholar-card:hover { transform: translateY(-10px); border-color: var(--primary-green); }
         .scholar-card::before { content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px; }
         .card-batch-1::before { background: var(--tape-gold) !important; }
 
         @keyframes harvestRise { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        .reaping-badge { position: absolute; top: 15px; right: 15px; background: rgba(184, 157, 93, 0.1); border: 1px solid rgba(184, 157, 93, 0.3); padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; color: var(--gold); }
-        .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.3rem; color: var(--gold); margin-bottom: 4px; }
-        .institution { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
-        .accolade { font-size: 11px; color: #777; margin-bottom: 15px; min-height: 40px; font-style: italic; }
-        .cohort-pill { display: inline-block; background: #f8f8f8; color: #bbb; font-size: 9px; font-weight: 700; padding: 5px 15px; border-radius: 50px; border: 1px solid #eee; margin-top: auto; }
+        .reaping-badge {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(184, 157, 93, 0.1); border: 1px solid rgba(184, 157, 93, 0.3);
+            padding: 4px 8px; border-radius: 12px; font-size: 9px; font-weight: 700; color: var(--gold);
+        }
 
-        .batch-title { text-align: center; font-weight: 700; font-size: 14px; color: var(--primary-green); text-transform: uppercase; letter-spacing: 4px; margin: 80px 0 30px; }
-        footer { text-align: center; padding: 80px 20px; font-size: 10px; color: #ccc; letter-spacing: 3px; border-top: 1px solid #f9f9f9; }
-        #backToTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #fff; border: 2px solid var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; }
+        .institution { font-size: 9px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .accolade { font-size: 10px; color: #777; margin-bottom: 12px; min-height: 30px; }
+        .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; margin-top: auto; }
+
+        .batch-title { text-align: center; font-weight: 700; font-size: 13px; color: #8da080; text-transform: uppercase; letter-spacing: 3px; margin: 60px 0 20px; }
+        footer { text-align: center; padding: 60px; font-size: 10px; color: #bbb; letter-spacing: 2px; }
+        #backToTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #fff; border: 2px solid var(--primary-green); border-radius: 50%; display: none; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; }
     </style>
 </head>
 <body>
@@ -109,20 +96,16 @@
     <span class="break-total-label">Total Harvest</span>
 </div>
 
-<header id="mainHeader">
-    <div class="parallax-layer layer-1"></div>
-    <div class="parallax-layer layer-2"></div>
-    <div class="content">
-        <h1>Scholars Gallery</h1>
-        <p>Harvest Six • Kamalig Debate</p>
-        <div class="goal-container"><div id="goalProgress"></div></div>
-        <p style="font-size: 8px; opacity: 0.7; letter-spacing: 2px; margin-top: 12px;">Cultivation Goal: 100 Scholars</p>
-    </div>
+<header>
+    <h1>Scholars Gallery</h1>
+    <p>Harvest Six, Kamalig Debate's Cultivation Arm</p>
+    <div class="goal-container"><div id="goalProgress"></div></div>
+    <p style="font-size: 8px; opacity: 0.7; letter-spacing: 2px; margin-top: 8px;">Goal: 100 Scholars</p>
 </header>
 
 <div class="sticky-controls">
     <div class="search-container">
-        <input type="text" id="scholarSearch" placeholder="Search the field (Name, School, or Cohort)..." onkeyup="searchScholars()">
+        <input type="text" id="scholarSearch" placeholder="Search scholars, schools, or cohorts..." onkeyup="searchScholars()">
     </div>
     <div id="batchNav"></div>
 </div>
@@ -130,16 +113,9 @@
 <div id="gallery"></div>
 
 <div id="backToTop" onclick="window.scrollTo(0,0)">🌾</div>
-<footer>KAMALIG DEBATE FOUNDATION • EST. 2025</footer>
+<footer>KAMALIG DEBATE • 2025</footer>
 
 <script>
-    // Parallax Scroll Logic
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        document.querySelector('.layer-1').style.transform = `translateY(${scrolled * 0.2}px)`;
-        document.querySelector('.layer-2').style.transform = `translateY(${scrolled * 0.1}px)`;
-    });
-
     document.addEventListener('mousemove', e => {
         document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
         document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
@@ -170,7 +146,6 @@
 
             render(allData);
             generateBatchNav();
-            updateGoal(allData.length);
         } catch (err) { console.error("Load failed", err); }
     }
 
@@ -178,10 +153,13 @@
         const gallery = document.getElementById('gallery');
         gallery.innerHTML = "";
         
+        // Dynamic Counter
         const totalBreaks = data.reduce((sum, item) => sum + item.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
+        // TOP HARVESTER LOGIC
         const maxBreaks = data.length > 0 ? Math.max(...data.map(s => s.breaks)) : 0;
+
         const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
         let globalIndex = 0;
 
@@ -192,7 +170,7 @@
             const section = document.createElement('div');
             section.className = 'batch-section';
             section.id = `batch-${bNum}`;
-            section.innerHTML = `<div class="batch-title">🌿 ${batchItems[0].batchName || `Batch ${bNum}`}</div>`;
+            section.innerHTML = `<div class="batch-title">🌿 HARVEST SIX: ${batchItems[0].batchName || `Batch ${bNum}`}</div>`;
             gallery.appendChild(section);
             
             const grid = document.createElement('div');
@@ -211,11 +189,11 @@
                 
                 card.innerHTML = `
                     ${item.breaks > 0 ? `<div class="reaping-badge">${item.breaks}x 🌾</div>` : ''}
-                    <div class="grain-wrapper" style="position: absolute; top: 20px;"><span class="grain-icon" style="font-size: 24px;">🌾</span></div>
+                    <div class="grain-wrapper">${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}</div>
                     <span class="name">${item.name}</span>
                     <span class="institution">${item.institution}</span>
-                    <span class="accolade">${item.accolade || ""}</span>
-                    <span class="cohort-pill">${item.cohort || "Cultivator"}</span>
+                    ${item.accolade ? `<span class="accolade">${item.accolade}</span>` : ''}
+                    ${item.cohort ? `<span class="cohort-pill">${item.cohort}</span>` : ''}
                     ${isTop ? `<div class="top-harvester-ribbon">🏆 Top Harvester</div>` : ''}
                 `;
                 grid.appendChild(card);
@@ -227,8 +205,7 @@
         const term = document.getElementById('scholarSearch').value.toLowerCase();
         const filtered = allData.filter(s => 
             s.name.toLowerCase().includes(term) || 
-            s.institution.toLowerCase().includes(term) ||
-            s.cohort.toLowerCase().includes(term)
+            s.institution.toLowerCase().includes(term)
         );
         render(filtered);
     }
@@ -239,13 +216,9 @@
         nav.innerHTML = uniqueBatches.map(bNum => `<a href="#batch-${bNum}" class="nav-link">Batch ${bNum}</a>`).join('');
     }
 
-    function updateGoal(count) {
-        document.getElementById('goalProgress').style.width = Math.min((count / 100) * 100, 100) + "%";
-    }
-
     window.onscroll = function() {
         const btn = document.getElementById("backToTop");
-        btn.style.display = (window.pageYOffset > 500) ? "flex" : "none";
+        btn.style.display = (document.documentElement.scrollTop > 500) ? "flex" : "none";
     };
 
     loadGallery();
