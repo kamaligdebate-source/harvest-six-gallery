@@ -16,7 +16,29 @@
             --major-blue: #5d8ab8;
         }
 
-        body { font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; color: var(--text-main); scroll-behavior: smooth; overflow-x: hidden; }
+        /* NICHE: LEGACY GRAIN TEXTURE */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+            opacity: 0.4; pointer-events: none; z-index: 5000;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; 
+            color: var(--text-main); scroll-behavior: smooth; overflow-x: hidden; 
+            /* NICHE: PARALLAX SOIL BACKGROUND */
+            background-image: radial-gradient(var(--primary-green) 0.5px, transparent 0.5px);
+            background-size: 40px 40px;
+            background-attachment: fixed;
+        }
+
+        /* NICHE: GOLDEN DUST (POLLEN) */
+        .pollen {
+            position: fixed; width: 4px; height: 4px; background: var(--gold);
+            border-radius: 50%; pointer-events: none; z-index: 9999;
+            opacity: 0.6; transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
 
         header { 
             background: linear-gradient(180deg, var(--dark-green) 0%, var(--primary-green) 100%);
@@ -46,22 +68,17 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px 5% 50px; }
 
-        /* SEEDLING ENTRANCE */
         .scholar-card { 
             background: #ffffff; padding: 45px 15px 25px; border-radius: 5px; border: 1px solid #f2ede4; 
             text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; 
-            transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: opacity 0.6s ease, transform 0.2s ease-out; /* Faster transform for Harvest Wind */
             opacity: 0; transform: translateY(40px);
+            will-change: transform;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .scholar-card:hover { border-color: var(--primary-green); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .scholar-card:hover { border-color: var(--primary-green); box-shadow: 0 10px 25px rgba(0,0,0,0.05); z-index: 10; }
 
-        /* FUZZY BATCH STAMPING */
-        .batch-stamp { 
-            position: absolute; top: 10px; left: 15px; font-family: 'Playfair Display', serif; 
-            font-size: 60px; font-weight: 900; opacity: 0.05; pointer-events: none; 
-        }
-
+        .batch-stamp { position: absolute; top: 10px; left: 15px; font-family: 'Playfair Display', serif; font-size: 60px; font-weight: 900; opacity: 0.05; pointer-events: none; }
         .major-tooltip { position: absolute; top: -15px; background: var(--major-blue); color: white; font-size: 7px; font-weight: 700; padding: 4px 10px; border-radius: 3px; opacity: 0; transition: 0.3s; z-index: 10; }
         .scholar-card:hover .major-tooltip { opacity: 1; transform: translateY(-5px); }
 
@@ -69,11 +86,9 @@
         .batch-title { text-align: center; font-weight: 700; font-size: 11px; color: var(--primary-green); text-transform: uppercase; letter-spacing: 3px; margin-top: 50px; }
         .cohort-divider { text-align: left; font-size: 8px; color: #ccc; text-transform: uppercase; letter-spacing: 2px; margin: 30px 5%; padding-left: 10px; border-left: 2px solid var(--primary-green); }
 
-        /* IN-YOUR-FACE MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000; opacity: 0; transition: 0.3s; }
         .modal-overlay.active { display: flex; opacity: 1; }
-        .modal-content { background: white; padding: 60px 40px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; position: relative; transform: scale(0.5); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-content { background: white; padding: 60px 40px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; position: relative; }
 
         #floatingBreakCounter { position: fixed; bottom: 25px; left: 25px; z-index: 1000; background: #fff; border: 1.5px solid var(--gold); padding: 10px 18px; border-radius: 40px; text-align: center; }
     </style>
@@ -84,8 +99,8 @@
     <div class="modal-content">
         <span style="position:absolute; top:20px; right:20px; cursor:pointer; font-size:28px; color:#ccc;" onclick="toggleModal()">&times;</span>
         <div style="font-size: 50px; margin-bottom: 20px;">🌾</div>
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 10px;">The Harvest Six</h2>
-        <p style="font-size: 14px; line-height: 1.8; color: #666;">Flagship scholarship program of the Kamalig Debate Foundation. We nurture high-potential debaters through a season of intensive community-driven excellence.</p>
+        <h2 style="font-family: 'Playfair Display', serif; color: var(--gold);">The Harvest Six</h2>
+        <p style="color: #666;">Flagship scholarship program of the Kamalig Debate Foundation.</p>
     </div>
 </div>
 
@@ -109,7 +124,7 @@
 
 <div class="sticky-controls">
     <input type="text" id="scholarSearch" placeholder="Search scholars..." onkeyup="searchScholars()">
-    <button style="background:var(--gold); color:white; border:none; padding:12px 25px; border-radius:40px; font-size:9px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:1px; margin-left:10px;" onclick="toggleModal()">LEARN WHAT HARVEST SIX IS</button>
+    <button style="background:var(--gold); color:white; border:none; padding:12px 25px; border-radius:40px; font-size:9px; font-weight:700; cursor:pointer; text-transform:uppercase;" onclick="toggleModal()">Learn what Harvest Six is</button>
 </div>
 
 <div id="gallery"></div>
@@ -119,6 +134,38 @@
     let allData = [];
     let leaders = [];
     let leaderIndex = 0;
+
+    // NICHE: HARVEST WIND & GOLDEN DUST LOGIC
+    document.addEventListener('mousemove', (e) => {
+        // Dust Trail
+        const dust = document.createElement('div');
+        dust.className = 'pollen';
+        dust.style.left = e.clientX + 'px';
+        dust.style.top = e.clientY + 'px';
+        document.body.appendChild(dust);
+        setTimeout(() => {
+            dust.style.transform = `translate(${(Math.random()-0.5)*20}px, ${Math.random()*20}px) scale(0)`;
+            dust.style.opacity = '0';
+            setTimeout(() => dust.remove(), 500);
+        }, 10);
+
+        // Wind Physics for Cards
+        document.querySelectorAll('.scholar-card.sprouted').forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const cardX = rect.left + rect.width / 2;
+            const cardY = rect.top + rect.height / 2;
+            const dist = Math.hypot(e.clientX - cardX, e.clientY - cardY);
+            
+            if (dist < 300) {
+                const angle = Math.atan2(e.clientY - cardY, e.clientX - cardX);
+                const moveX = Math.cos(angle) * -10 * (1 - dist/300);
+                const moveY = Math.sin(angle) * -10 * (1 - dist/300);
+                card.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            } else {
+                card.style.transform = `translate(0, 0)`;
+            }
+        });
+    });
 
     function toggleModal() { document.getElementById('infoModal').classList.toggle('active'); }
 
@@ -158,18 +205,15 @@
         batches.forEach(bNum => {
             const bItems = data.filter(i => i.batchNum === bNum);
             gallery.insertAdjacentHTML('beforeend', `<div class="batch-title">🌿 ${bItems[0].batchName || `Batch ${bNum}`}</div>`);
-            
             const cohorts = [...new Set(bItems.map(i => i.cohort))].sort();
             cohorts.forEach(cName => {
                 gallery.insertAdjacentHTML('beforeend', `<div class="cohort-divider">${cName} Cluster</div>`);
                 const grid = document.createElement('div');
                 grid.className = 'grid';
-                
                 bItems.filter(i => i.cohort === cName).forEach(item => {
                     const isMajor = ["national", "pid", "pdc", "luzon", "open", "pdt"].some(k => item.accolade.toLowerCase().includes(k));
                     const randRot = (Math.random() * 8 - 4).toFixed(1); 
                     const bColor = stampColors[item.batchNum % stampColors.length];
-
                     grid.innerHTML += `
                         <div class="scholar-card">
                             <div class="batch-stamp" style="color:${bColor}; transform: rotate(${randRot}deg)">${item.batchNum}</div>
@@ -186,13 +230,8 @@
             });
         });
 
-        // RE-ATTACH SEEDLING OBSERVER
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { 
-                if(entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('sprouted'), 50);
-                }
-            });
+            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('sprouted'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.scholar-card').forEach(card => observer.observe(card));
 
