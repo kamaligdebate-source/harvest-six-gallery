@@ -16,7 +16,7 @@
             --major-blue: #5d8ab8;
         }
 
-        /* NICHE 4: GOLDEN HOUR SCROLLBAR */
+        /* NICHE: GOLDEN HOUR SCROLLBAR */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
@@ -37,6 +37,9 @@
             font-size: 11px; font-weight: 700; z-index: 100; min-width: 220px;
         }
 
+        .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); padding: 15px 0; border-bottom: 1px solid #eee; text-align: center; }
+        #scholarSearch { width: 80%; max-width: 400px; padding: 10px 25px; border-radius: 40px; border: 1px solid #eee; outline: none; font-size: 11px; }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 20px 5% 50px; }
         
         .scholar-card {
@@ -46,25 +49,19 @@
         }
         .scholar-card:hover { transform: translateY(-8px); border-color: var(--primary-green); }
 
-        /* NICHE 1: GRAIN GROWTH */
         .grain-icon { font-size: 20px; transition: 0.4s ease; transform: scale(1); }
         .scholar-card:hover .grain-icon { transform: scale(1.3) translateY(-3px); }
         .grain-gold { color: #b89d5d; }
         .grain-green { color: #4a5d45; }
         .grain-default { color: #8da080; }
 
-        /* NICHE 2: FAINT CARBON BATCHING */
         .batch-stamp {
             position: absolute; top: 10px; left: 15px; font-family: 'Playfair Display', serif;
             font-size: 60px; font-weight: 900; color: #000; opacity: 0.03; pointer-events: none;
         }
 
-        /* NAME ZONE - PROTECTION FOR VISIBILITY */
         .name-container { width: 100%; margin: 10px 0 5px; z-index: 10; position: relative; }
-        .name { 
-            font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.15rem; 
-            color: var(--gold); line-height: 1.2; display: block;
-        }
+        .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.15rem; color: var(--gold); line-height: 1.2; display: block; }
 
         .institution { font-size: 8px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
         .accolade { font-size: 9px; color: #666; font-style: italic; min-height: 32px; margin-bottom: 12px; line-height: 1.3; }
@@ -73,7 +70,7 @@
         .batch-title { text-align: center; font-weight: 700; font-size: 11px; color: var(--primary-green); text-transform: uppercase; letter-spacing: 3px; margin-top: 50px; }
         .cohort-divider { text-align: left; font-size: 8px; color: #ccc; text-transform: uppercase; letter-spacing: 2px; margin: 30px 5%; padding-left: 10px; border-left: 2px solid var(--primary-green); }
 
-        .reaping-badge { position: absolute; top: 12px; right: 12px; background: #fff; border: 1px solid #f2e1c1; padding: 4px 8px; border-radius: 16px; font-size: 8px; font-weight: 700; color: var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .reaping-badge { position: absolute; top: 12px; right: 12px; background: #fff; border: 1px solid #f2e1c1; padding: 4px 8px; border-radius: 16px; font-size: 8px; font-weight: 700; color: var(--gold); }
         .top-harvester-ribbon { position: absolute; bottom: 0; width: 100%; background: var(--gold); color: white; font-size: 7px; font-weight: 700; padding: 5px 0; border-radius: 0 0 5px 5px; }
         
         .major-tooltip {
@@ -93,7 +90,7 @@
 
 <div id="floatingBreakCounter">
     <div style="font-size: 16px; font-weight: 700; color: var(--gold);" id="totalBreaks">0</div>
-    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px;">Total Harvest</div>
+    <div style="font-size: 6px; text-transform: uppercase; color: #999;">Total Harvest</div>
 </div>
 
 <header>
@@ -105,6 +102,10 @@
     </div>
 </header>
 
+<div class="sticky-controls">
+    <input type="text" id="scholarSearch" placeholder="Search (Name or School)..." onkeyup="searchScholars()">
+</div>
+
 <div id="gallery"></div>
 
 <script>
@@ -113,15 +114,27 @@
     let leaders = [];
     let leaderIndex = 0;
 
+    // NICHE: NORMALIZE HELPER
+    function norm(t) { return t.toLowerCase().replace(/\./g, '').trim(); }
+
     async function loadGallery() {
+        // CODE IMPROVEMENT 1: LOCALSTORAGE CACHING
+        const cached = localStorage.getItem('k_gallery_cache');
+        if (cached) {
+            allData = JSON.parse(cached);
+            render(allData);
+        }
+
         try {
             const response = await fetch(sheetUrl);
             const csvText = await response.text();
             const lines = csvText.split('\n').slice(1);
 
-            allData = lines.map(line => {
+            const freshData = lines.map(line => {
                 const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (!cols[0]) return null;
+                // CODE IMPROVEMENT 2: DEAD-LINK PROTECTION
+                if (!cols[0] || cols[0].trim() === "") return null;
+                
                 return {
                     name: cols[0].replace(/"/g, '').trim(),
                     batchNum: cols[1].replace(/"/g, '').trim(),
@@ -133,9 +146,11 @@
                 };
             }).filter(item => item !== null);
 
+            allData = freshData;
+            localStorage.setItem('k_gallery_cache', JSON.stringify(allData));
             render(allData);
             startLeaderCycle();
-        } catch (e) { console.error("Sheet Error:", e); }
+        } catch (e) { console.error("Update failed, showing cached."); }
     }
 
     function render(data) {
@@ -144,19 +159,17 @@
         
         const totalBreaks = data.reduce((sum, item) => sum + item.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
-        document.getElementById('goalProgress').style.width = Math.min((data.length / 100) * 100, 100) + "%";
+        document.getElementById('goalProgress').style.width = Math.min((allData.length / 100) * 100, 100) + "%";
 
-        const maxBreaks = data.length > 0 ? Math.max(...data.map(s => s.breaks)) : 0;
-        leaders = data.filter(s => s.breaks === maxBreaks && maxBreaks > 0);
+        const maxBreaks = allData.length > 0 ? Math.max(...allData.map(s => s.breaks)) : 0;
+        leaders = allData.filter(s => s.breaks === maxBreaks && maxBreaks > 0);
 
-        const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
+        const batches = [...new Set(data.map(item => item.batchNum))].sort((a,b) => a - b);
 
         batches.forEach(bNum => {
             const bItems = data.filter(item => item.batchNum === bNum);
-            if (bItems.length === 0) return;
-            
             const bTitle = document.createElement('div');
-            bTitle.innerHTML = `<div id="batch-${bNum}" class="batch-title">🌿 ${bItems[0].batchName || `Batch ${bNum}`}</div>`;
+            bTitle.innerHTML = `<div class="batch-title">🌿 ${bItems[0].batchName || `Batch ${bNum}`}</div>`;
             gallery.appendChild(bTitle);
 
             const cohorts = [...new Set(bItems.map(item => item.cohort))].sort();
@@ -173,27 +186,20 @@
 
                 cItems.forEach(item => {
                     const isTop = (item.breaks === maxBreaks && maxBreaks > 0);
-                    const isMajor = ["national", "pid", "pdc", "luzon", "open", "major", "pdt"].some(k => item.accolade.toLowerCase().includes(k));
+                    const isMajor = ["national", "pid", "pdc", "luzon", "open", "pdt"].some(k => item.accolade.toLowerCase().includes(k));
                     
-                    // NICHE 1 COLOR LOGIC
-                    let grainColor = "grain-default";
-                    if (item.breaks > 7) grainColor = "grain-gold";
-                    else if (item.breaks > 3) grainColor = "grain-green";
+                    let gColor = "grain-default";
+                    if (item.breaks > 7) gColor = "grain-gold";
+                    else if (item.breaks > 3) gColor = "grain-green";
 
                     const card = document.createElement('div');
                     card.className = `scholar-card`;
-                    
                     card.innerHTML = `
                         <div class="batch-stamp">${item.batchNum}</div>
                         ${isMajor ? `<div class="major-tooltip">✨ Major Tournament Break</div>` : ''}
                         ${item.breaks > 0 ? `<div class="reaping-badge">${item.breaks}x 🌾</div>` : ''}
-                        
-                        <div class="grain-icon ${grainColor}">🌾</div>
-                        
-                        <div class="name-container">
-                            <span class="name">${item.name}</span>
-                        </div>
-                        
+                        <div class="grain-icon ${gColor}">🌾</div>
+                        <div class="name-container"><span class="name">${item.name}</span></div>
                         <span class="institution">${item.institution}</span>
                         <span class="accolade">${item.accolade}</span>
                         <span class="cohort-pill">${item.cohort}</span>
@@ -203,6 +209,12 @@
                 });
             });
         });
+    }
+
+    function searchScholars() {
+        const t = norm(document.getElementById('scholarSearch').value);
+        const filtered = allData.filter(s => norm(s.name).includes(t) || norm(s.institution).includes(t));
+        render(filtered);
     }
 
     function startLeaderCycle() {
