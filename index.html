@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholars Gallery | Harvest Six</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,7 +22,6 @@
         header h1 { font-size: 3rem; margin: 0; font-weight: 700; }
         header p { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
-        /* GOAL PROGRESS BAR */
         .goal-container { width: 100%; max-width: 400px; margin: 15px auto 0; background: rgba(255,255,255,0.2); height: 6px; border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: width 1.5s ease-out; }
 
@@ -50,6 +50,13 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 0 5% 60px; }
 
+        #backToTop {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: #fff; border: 2px solid var(--primary-green); border-radius: 50%;
+            display: none; justify-content: center; align-items: center; cursor: pointer;
+            z-index: 1000; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
         .scholar-card {
             background: #fff; padding: 45px 20px 30px; border-radius: 8px;
             border: 1.5px solid #f2ede4; text-align: center;
@@ -57,14 +64,14 @@
             animation: windSway 8s infinite ease-in-out;
             animation-delay: var(--delay);
             overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        .scholar-card:hover { 
+        .scholar-card:hover, .scholar-card:active { 
             transform: translateY(-10px) rotate(0deg) !important; 
             border-color: var(--primary-green); 
             box-shadow: 0 15px 35px rgba(0,0,0,0.06); 
-            z-index: 5;
-            background: radial-gradient(circle at center, rgba(184, 157, 93, 0.05) 0%, #fff 70%);
+            background: radial-gradient(circle at center, rgba(184, 157, 93, 0.08) 0%, #fff 70%);
         }
 
         @keyframes windSway {
@@ -76,28 +83,32 @@
             content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
             width: 50px; height: 18px; background: var(--tape-color); border-radius: 2px;
         }
-        .card-batch-1::before { background: var(--tape-gold); }
 
-        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; display: block; margin-bottom: 8px; white-space: normal; overflow-wrap: break-word; }
-        .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; display: block; min-height: 30px; white-space: normal; overflow-wrap: break-word; }
-
-        /* HIGHLIGHT STYLE */
-        .highlight { background-color: var(--highlight); border-radius: 2px; color: #333; padding: 0 2px; }
-
-        .grain-icon { 
-            display: inline-block; font-size: 18px; margin-bottom: 5px; 
-            animation: grainGrowSway 3s infinite ease-in-out;
-            transform-origin: bottom center;
+        .name { font-weight: 700; font-size: 1.1rem; color: var(--gold); font-style: italic; display: block; margin-bottom: 2px; line-height: 1.2; }
+        
+        /* ADJUSTED INSTITUTION FOR LONG NAMES */
+        .institution { 
+            font-size: 9px; font-weight: 600; color: #999; text-transform: uppercase; 
+            letter-spacing: 1px; display: block; margin-bottom: 10px; 
+            line-height: 1.4; padding: 0 10px; word-wrap: break-word; 
         }
+        
+        .accolade { font-size: 10px; color: #777; line-height: 1.5; margin-bottom: 12px; display: block; min-height: 30px; padding: 0 5px; }
+        .highlight { background-color: var(--highlight); border-radius: 2px; color: #333; }
 
-        @keyframes grainGrowSway {
-            0%, 100% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 0px var(--gold)); }
-            50% { transform: scale(1.25) rotate(5deg); filter: drop-shadow(0 0 5px var(--gold)); }
-        }
+        .grain-icon { display: inline-block; font-size: 18px; margin-bottom: 5px; animation: grainGrowSway 3s infinite ease-in-out; transform-origin: bottom center; }
+        @keyframes grainGrowSway { 0%, 100% { transform: scale(1) rotate(-5deg); } 50% { transform: scale(1.25) rotate(5deg); } }
 
-        .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ededed; }
+        .cohort-pill { display: inline-block; background: #f4f4f4; color: #999; font-size: 9px; font-weight: 700; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #ededed; margin-top: auto; }
 
-        footer { text-align: center; padding: 60px; font-size: 10px; color: #bbb; letter-spacing: 2px; border-top: 1px solid #f9f9f9; }
+        /* BATCH STATISTICS SECTION */
+        .stats-summary { background: #fcfcfc; padding: 60px 10%; border-top: 1px solid #eee; margin-top: 40px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .stats-batch-card h4 { font-size: 10px; letter-spacing: 2px; color: var(--primary-green); text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .stats-item { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 5px; color: #777; }
+        .stats-school { font-weight: 600; color: #555; text-transform: uppercase; }
+
+        footer { text-align: center; padding: 60px; font-size: 10px; color: #bbb; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -105,9 +116,7 @@
 <header>
     <h1>Scholars Gallery</h1>
     <p>Harvest Six, Kamalig Debate's Cultivation Arm</p>
-    <div class="goal-container">
-        <div id="goalProgress"></div>
-    </div>
+    <div class="goal-container"><div id="goalProgress"></div></div>
     <p style="font-size: 8px; opacity: 0.7; letter-spacing: 2px; margin-top: 8px;">Goal: 100 Scholars</p>
 </header>
 
@@ -120,13 +129,19 @@
 
 <div class="sticky-controls">
     <div class="search-container">
-        <input type="text" id="scholarSearch" placeholder="Search scholars, cohorts, or batches..." onkeyup="searchScholars()">
+        <input type="text" id="scholarSearch" placeholder="Search scholars, schools, or cohorts..." onkeyup="searchScholars()">
     </div>
     <div id="batchNav"></div>
 </div>
 
 <div id="gallery"></div>
 
+<div class="stats-summary" id="statsSummary">
+    <h2 style="text-align: center; font-size: 14px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; color: #bbb;">Harvest Statistics</h2>
+    <div class="stats-grid" id="statsGrid"></div>
+</div>
+
+<div id="backToTop" onclick="window.scrollTo(0,0)">🌾</div>
 <footer>KAMALIG DEBATE • 2025</footer>
 
 <script>
@@ -147,7 +162,8 @@
                     batchNum: cols[1].replace(/"/g, '').trim(),
                     accolade: cols[2] ? cols[2].replace(/"/g, '').trim() : "",
                     batchName: cols[3] ? cols[3].replace(/"/g, '').trim() : "",
-                    cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : ""
+                    cohort: cols[4] ? cols[4].replace(/"/g, '').trim() : "",
+                    institution: cols[5] ? cols[5].replace(/"/g, '').trim() : "Unspecified"
                 };
             }).filter(item => item !== null);
 
@@ -155,13 +171,17 @@
             updateGoal(allData.length);
             render(allData);
             generateBatchNav();
+            renderStats();
         } catch (err) { console.error("Load failed", err); }
     }
 
+    window.onscroll = function() {
+        const btn = document.getElementById("backToTop");
+        btn.style.display = (document.documentElement.scrollTop > 500) ? "flex" : "none";
+    };
+
     function updateGoal(count) {
-        const goal = 100;
-        const percent = Math.min((count / goal) * 100, 100);
-        document.getElementById('goalProgress').style.width = percent + "%";
+        document.getElementById('goalProgress').style.width = Math.min((count / 100) * 100, 100) + "%";
     }
 
     function generateBatchNav() {
@@ -176,14 +196,10 @@
             if (current >= target) {
                 clearInterval(interval);
                 document.getElementById('scholarCount').innerText = target;
-            } else {
-                current++;
-                document.getElementById('scholarCount').innerText = current;
-            }
+            } else { current++; document.getElementById('scholarCount').innerText = current; }
         }, 30);
     }
 
-    // HELPER TO HIGHLIGHT SEARCH TERM
     function highlightText(text, term) {
         if (!term) return text;
         const re = new RegExp(`(${term})`, "gi");
@@ -199,11 +215,10 @@
             const batchItems = data.filter(item => item.batchNum === bNum);
             if (batchItems.length === 0) return;
 
-            const bName = batchItems[0].batchName || `Batch ${bNum}`;
             const section = document.createElement('div');
             section.className = 'batch-section';
             section.id = `batch-${bNum}`;
-            section.innerHTML = `<div class="batch-title">🌿 HARVEST SIX: ${bName}</div>`;
+            section.innerHTML = `<div class="batch-title">🌿 HARVEST SIX: ${batchItems[0].batchName || `Batch ${bNum}`}</div>`;
             gallery.appendChild(section);
 
             const grid = document.createElement('div');
@@ -213,12 +228,12 @@
             let currentCohort = "";
             batchItems.sort((a, b) => (a.cohort || "").localeCompare(b.cohort || "") || a.name.localeCompare(b.name));
 
-            batchItems.forEach((item, idx) => {
+            batchItems.forEach(item => {
                 if (item.cohort && item.cohort !== currentCohort) {
-                    const divider = document.createElement('div');
-                    divider.className = 'cohort-divider';
-                    divider.innerText = item.cohort;
-                    grid.appendChild(divider);
+                    const div = document.createElement('div');
+                    div.className = 'cohort-divider';
+                    div.innerText = item.cohort;
+                    grid.appendChild(div);
                     currentCohort = item.cohort;
                 }
 
@@ -230,6 +245,7 @@
                 card.innerHTML = `
                     ${item.accolade ? '<span class="grain-icon">🌾</span>' : ''}
                     <span class="name">${highlightText(item.name, term)}</span>
+                    <span class="institution">${highlightText(item.institution, term)}</span>
                     ${item.accolade ? `<span class="accolade">${highlightText(item.accolade, term)}</span>` : ''}
                     ${item.cohort ? `<span class="cohort-pill">${highlightText(item.cohort, term)}</span>` : ''}
                 `;
@@ -238,12 +254,37 @@
         });
     }
 
+    function renderStats() {
+        const statsGrid = document.getElementById('statsGrid');
+        const batches = [...new Set(allData.map(item => item.batchNum))].sort((a,b) => a - b);
+        
+        batches.forEach(bNum => {
+            const batchData = allData.filter(item => item.batchNum === bNum);
+            const instCounts = {};
+            batchData.forEach(s => {
+                instCounts[s.institution] = (instCounts[s.institution] || 0) + 1;
+            });
+
+            const statCard = document.createElement('div');
+            statCard.className = 'stats-batch-card';
+            statCard.innerHTML = `<h4>Batch ${bNum} Representation</h4>`;
+            
+            Object.entries(instCounts).sort((a,b) => b[1] - a[1]).forEach(([school, count]) => {
+                const item = document.createElement('div');
+                item.className = 'stats-item';
+                item.innerHTML = `<span class="stats-school">${school}</span> <span>${count}</span>`;
+                statCard.appendChild(item);
+            });
+            statsGrid.appendChild(statCard);
+        });
+    }
+
     function searchScholars() {
         const term = document.getElementById('scholarSearch').value.toLowerCase();
         const filtered = allData.filter(s => 
             s.name.toLowerCase().includes(term) || 
             s.cohort.toLowerCase().includes(term) || 
-            s.batchName.toLowerCase().includes(term)
+            s.institution.toLowerCase().includes(term)
         );
         render(filtered, term);
     }
