@@ -3,135 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden Registry | Harvest Six</title>
+    <title>The Great Field | Harvest Six Registry</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-green: #5d6d4f;
             --gold: #b89d5d;
+            --sky: #e3f2fd;
             --paper: #fcfaf7;
-            --text: #4a453e;
         }
 
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--paper); 
-            margin: 0; padding: 0; 
-            color: var(--text); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh;
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; font-family: 'Poppins', sans-serif;
+            background-color: var(--paper);
+        }
+
+        .big-garden-container {
+            width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, var(--sky) 0%, #ffffff 50%, #efebe9 100%);
+            position: relative;
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        .registry-box {
-            max-width: 500px;
-            width: 90%;
-            background: #ffffff;
-            padding: 50px 40px;
-            border-radius: 24px;
-            border: 1px solid #e6dfd1;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .sun { position: absolute; top: 50px; right: 80px; font-size: 80px; filter: drop-shadow(0 0 20px #fff9c4); z-index: 1; }
+
+        /* THE FIELD */
+        #bigField { position: absolute; bottom: 0; width: 100%; height: 60vh; z-index: 20; pointer-events: none; }
+
+        .grain-stalk {
+            position: absolute; bottom: -10px;
+            transform-origin: bottom;
+            animation: sway 4s ease-in-out infinite alternate;
+        }
+        @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+
+        /* GALLOPING DEER */
+        .deer {
+            position: absolute; bottom: 100px; font-size: 40px;
+            z-index: 15; white-space: nowrap;
+            animation: gallop 15s linear infinite;
+        }
+        @keyframes gallop {
+            from { left: -100px; transform: scaleX(1); }
+            to { left: 110vw; transform: scaleX(1); }
         }
 
-        /* Decorative top element */
-        .registry-box::before {
-            content: "🌾";
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 50px;
-            opacity: 0.1;
+        /* SOARING EAGLES */
+        .eagle-container {
+            position: absolute; top: 150px; left: -200px;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 5; animation: flyAcross 20s linear infinite;
+        }
+        .eagle { font-size: 35px; margin-bottom: 5px; }
+        .scholar-banner {
+            font-size: 10px; font-weight: 600; color: var(--gold);
+            text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(255,255,255,0.6); padding: 2px 8px; border-radius: 4px;
+        }
+        @keyframes flyAcross {
+            from { left: -200px; top: 100px; }
+            to { left: 110vw; top: 50px; }
         }
 
-        h1 { 
-            font-family: 'Playfair Display', serif; 
-            color: var(--primary-green); 
-            font-size: 2.2rem; 
-            margin: 0 0 10px 0; 
+        /* TEXT OVERLAYS */
+        .ui-layer {
+            position: absolute; top: 40px; width: 100%;
+            display: flex; flex-direction: column; align-items: center; z-index: 100;
         }
-
-        .subtitle {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--gold);
-            font-weight: 700;
-            margin-bottom: 30px;
-            display: block;
+        .registry-card {
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(8px);
+            padding: 20px 40px; border-radius: 30px; border: 1px solid rgba(230, 223, 209, 0.5);
+            text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         }
-
-        .entry {
-            text-align: left;
-            background: #faf8f5;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border-left: 3px solid var(--gold);
+        h1 { font-family: 'Playfair Display', serif; color: var(--primary-green); font-size: 2.5rem; margin: 0; }
+        
+        .back-home {
+            position: absolute; bottom: 30px; left: 30px;
+            background: var(--primary-green); color: white; text-decoration: none;
+            padding: 12px 25px; border-radius: 50px; font-size: 12px; font-weight: 600;
+            transition: 0.3s; z-index: 200;
         }
-
-        .entry strong { color: var(--primary-green); display: block; margin-bottom: 5px; }
-        .entry p { margin: 0; font-size: 13px; line-height: 1.6; opacity: 0.8; }
-
-        .fauna-list {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            font-size: 20px;
-            margin: 25px 0;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 12px 30px;
-            background: var(--primary-green);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .back-btn:hover {
-            background: var(--gold);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(184, 157, 93, 0.3);
-        }
+        .back-home:hover { background: var(--gold); transform: translateY(-3px); }
     </style>
 </head>
 <body>
 
-    <div class="registry-box">
-        <span class="subtitle">Ecosystem Archive</span>
-        <h1>The Field Registry</h1>
-        
-        <div class="fauna-list">
-            <span>🦋</span><span>🐞</span><span>🐝</span><span>🐌</span>
+<div class="big-garden-container">
+    <div class="sun">☀️</div>
+    
+    <div class="ui-layer">
+        <div class="registry-card">
+            <h1>Harvest Registry</h1>
+            <p style="font-size: 12px; color: #777; margin: 5px 0 0;">Observing the National Breakers</p>
         </div>
-
-        <div class="entry">
-            <strong>The Harvest Stalks ($🌾$)</strong>
-            <p>Each grain represents a scholar's successful break. The density of the field reflects the collective momentum of the cohort.</p>
-        </div>
-
-        <div class="entry">
-            <strong>Miniature Fauna</strong>
-            <p>The insects ($🦋, 🐞, 🐝$) signify a healthy, living academic ecosystem. They appear only as the field matures and grows.</p>
-        </div>
-
-        <p style="font-size: 11px; font-style: italic; margin-bottom: 30px; opacity: 0.6;">
-            "A garden is a grand teacher. It teaches patience and careful watchfulness; it teaches industry and thrift; above all it teaches entire trust."
-        </p>
-
-        <a href="index.html" class="back-btn">Return to the Harvest</a>
     </div>
+
+    <div id="airLayer"></div>
+    <div id="bigField"></div>
+
+    <a href="index.html" class="back-home">← Back to Gallery</a>
+</div>
+
+<script>
+    const field = document.getElementById('bigField');
+    const air = document.getElementById('airLayer');
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
+
+    async function initRegistry() {
+        // 1. Plant the field
+        for(let i = 0; i < 180; i++) {
+            const stalk = document.createElement('div');
+            stalk.className = 'grain-stalk';
+            stalk.innerHTML = '🌾';
+            const depth = Math.random();
+            stalk.style.left = Math.random() * 100 + "%";
+            stalk.style.bottom = (depth * 100) + "px";
+            stalk.style.fontSize = (20 + (depth * 60)) + "px";
+            stalk.style.zIndex = Math.floor(depth * 50);
+            stalk.style.opacity = 0.4 + (depth * 0.6);
+            stalk.style.animationDelay = (Math.random() * 5) + "s";
+            field.appendChild(stalk);
+        }
+
+        // 2. Add Deer Family
+        const deerFamily = ['🦌', '🦌', '🦌'];
+        deerFamily.forEach((d, index) => {
+            const deer = document.createElement('div');
+            deer.className = 'deer';
+            deer.innerHTML = d;
+            deer.style.animationDelay = (index * 1.5) + "s";
+            deer.style.bottom = (80 + (index * 10)) + "px";
+            deer.style.zIndex = 40;
+            field.appendChild(deer);
+        });
+
+        // 3. Fetch Data for Eagles
+        try {
+            const res = await fetch(sheetUrl);
+            const csv = await res.text();
+            const lines = csv.split('\n').slice(1);
+            const nationalScholars = lines.map(line => {
+                const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return { name: c[0].replace(/^"|"$/g, ''), accolade: c[2] || "" };
+            }).filter(s => s.accolade.length > 3); // Only those with long accolades (Nationals)
+
+            // Spawn Eagles periodically
+            spawnEagle(nationalScholars);
+            setInterval(() => spawnEagle(nationalScholars), 15000);
+        } catch (e) { console.error(e); }
+    }
+
+    function spawnEagle(scholars) {
+        if (scholars.length === 0) return;
+        const scholar = scholars[Math.floor(Math.random() * scholars.length)];
+        
+        const container = document.createElement('div');
+        container.className = 'eagle-container';
+        container.innerHTML = `
+            <div class="eagle">🦅</div>
+            <div class="scholar-banner">${scholar.name}</div>
+        `;
+        
+        container.style.top = (50 + Math.random() * 150) + "px";
+        container.style.animationDuration = (15 + Math.random() * 10) + "s";
+        
+        air.appendChild(container);
+        setTimeout(() => container.remove(), 25000);
+    }
+
+    initRegistry();
+</script>
 
 </body>
 </html>
