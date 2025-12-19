@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholars Gallery | Harvest Six</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -25,9 +28,9 @@
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* --- MODERN ROUNDED HEADER --- */
+        /* --- TRIMMED ROUNDED HEADER --- */
         header { 
-            padding: 60px 20px;
+            padding: 50px 20px;
             background: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 1px solid #eeeae0;
@@ -35,102 +38,110 @@
 
         .header-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 2.6rem;
+            font-size: 2.5rem;
             color: var(--dark-green);
-            margin: 10px 0;
+            margin: 5px 0;
             font-weight: 800;
             letter-spacing: -0.5px;
         }
 
-        #topHarvesterCycle { min-height: 30px; margin-bottom: 5px; }
+        #topHarvesterCycle { min-height: 25px; margin-bottom: 5px; }
         #leaderName { 
             font-family: 'Montserrat', sans-serif; 
-            font-size: 13px; color: var(--gold);
-            font-weight: 600;
-            transition: all 1s ease; display: block;
+            font-size: 12px; color: var(--gold);
+            font-weight: 700;
+            transition: all 0.8s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
-        .fade-hidden { opacity: 0; transform: translateY(3px); }
+        .fade-hidden { opacity: 0; transform: translateY(5px); }
 
-        .population-box { margin-top: 20px; text-align: center; }
-        .goal-bar-bg { width: 240px; height: 6px; background: #f0f0f0; border-radius: 20px; margin: 10px auto; overflow: hidden; }
+        .population-box { margin-top: 15px; text-align: center; }
+        .goal-bar-bg { width: 220px; height: 6px; background: #f0f0f0; border-radius: 20px; margin: 8px auto; overflow: hidden; }
         #goalProgress { background: var(--primary-green); width: 0%; height: 100%; border-radius: 20px; transition: 2s ease; }
-        .counter-text { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; font-weight: 700; }
+        .counter-text { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #aaa; font-weight: 700; }
 
         /* --- STICKY NAV --- */
         .sticky-controls { 
             position: sticky; top: 0; z-index: 200; 
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
-            padding: 15px 0; border-bottom: 1px solid #eeeae0; text-align: center;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
+            padding: 12px 0; border-bottom: 1px solid #eeeae0; text-align: center;
         }
         .nav-btn { 
             font-family: 'Montserrat', sans-serif;
-            font-size: 9px; text-transform: uppercase; letter-spacing: 1px; 
-            padding: 8px 16px; border: 1px solid #eeeae0; border-radius: 30px; 
+            font-size: 8px; text-transform: uppercase; letter-spacing: 1px; 
+            padding: 7px 14px; border: 1px solid #eeeae0; border-radius: 25px; 
             cursor: pointer; color: #999; text-decoration: none; font-weight: 700; margin: 0 4px;
-            transition: 0.3s;
+            transition: 0.3s; display: inline-block;
         }
-        .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-        /* --- GARDEN --- */
+        /* --- GARDEN (FIXED) --- */
         #grainGardenContainer {
-            position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: #fff; border: 1px solid #eeeae0; padding: 12px; border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 130px; text-align: center;
+            position: fixed; bottom: 20px; left: 20px; z-index: 1000;
+            background: #fff; border: 1px solid #eeeae0; padding: 10px; border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05); width: 120px; text-align: center;
         }
         #gardenBed {
-            height: 80px; position: relative; overflow: hidden; 
+            height: 70px; position: relative; overflow: hidden; 
             background: linear-gradient(to bottom, #f0f7ff 0%, #fff 100%);
-            border-radius: 16px; margin-bottom: 8px; border: 1px solid #f2ede4;
+            border-radius: 12px; margin-bottom: 6px; border: 1px solid #f2ede4;
         }
         .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
         @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
         /* --- MASONRY GRID --- */
-        .cohort-section { padding: 50px 8% 20px; }
+        .cohort-section { padding: 40px 8% 10px; }
         .cohort-title { 
             text-align: center; font-family: 'Montserrat', sans-serif; 
-            font-size: 18px; color: var(--primary-green); 
-            margin-bottom: 40px; text-transform: uppercase; letter-spacing: 4px; font-weight: 700;
+            font-size: 16px; color: var(--primary-green); 
+            margin-bottom: 30px; text-transform: uppercase; letter-spacing: 4px; font-weight: 700;
         }
         
-        .grid { column-count: 4; column-gap: 35px; display: block; }
+        .grid { column-count: 4; column-gap: 30px; display: block; }
         @media (max-width: 1200px) { .grid { column-count: 3; } }
         @media (max-width: 800px) { .grid { column-count: 2; } }
         @media (max-width: 500px) { .grid { column-count: 1; } }
 
-        /* --- CARDS (SOFT GEOMETRY) --- */
+        /* --- CARDS --- */
         .scholar-card { 
-            display: inline-block; width: 100%; margin-bottom: 45px; break-inside: avoid;
-            background: #fff; padding: 50px 20px 30px; 
-            border: 1px solid #eeeae0; border-radius: 12px; /* Rounded Corporate Corners */
-            text-align: center; position: relative; opacity: 0; transform: translateY(20px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: inline-block; width: 100%; margin-bottom: 40px; break-inside: avoid;
+            background: #fff; padding: 45px 20px 25px; 
+            border: 1px solid #eeeae0; border-radius: 15px; 
+            text-align: center; position: relative; opacity: 0; transform: translateY(15px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02); 
+            transition: all 0.5s ease;
             box-sizing: border-box;
         }
-        /* Soft Washi Tape */
+        /* Rounded Washi Tape */
         .scholar-card::before {
             content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 60px; height: 20px; background: var(--tape-color); border-radius: 2px; z-index: 5;
+            width: 65px; height: 20px; background: var(--tape-color); border-radius: 4px; z-index: 5;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .aura { position: absolute; top: 40px; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: radial-gradient(circle, rgba(184, 157, 93, 0.1) 0%, transparent 70%); pointer-events: none; }
-        .star-badge { position: absolute; top: 15px; right: 18px; font-size: 14px; color: var(--gold); }
-        .break-badge { position: absolute; top: 15px; left: 18px; font-size: 10px; font-weight: 700; color: var(--gold); background: #fff; padding: 3px 10px; border-radius: 20px; border: 1px solid #eeeae0; z-index: 10; }
         
-        .name { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-green); font-size: 1.05rem; margin-top: 15px; display: block; }
-        #scholarSearch { width: 220px; padding: 10px 20px; border: 1px solid #eeeae0; font-size: 11px; outline: none; border-radius: 30px; font-family: 'Inter', sans-serif; transition: 0.3s; }
-        #scholarSearch:focus { border-color: var(--gold); width: 260px; }
+        /* Distinction Aura & Star */
+        .aura { position: absolute; top: 40px; left: 50%; transform: translate(-50%, -50%); width: 85px; height: 85px; background: radial-gradient(circle, rgba(184, 157, 93, 0.15) 0%, transparent 70%); pointer-events: none; }
+        .star-badge { position: absolute; top: 15px; right: 18px; font-size: 14px; color: var(--gold); }
+        
+        /* Break Badge */
+        .break-badge { position: absolute; top: 15px; left: 18px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fffcf5; padding: 3px 10px; border-radius: 15px; border: 1px solid #eeeae0; z-index: 10; }
+        
+        .name { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-green); font-size: 1rem; margin-top: 15px; display: block; }
+        
+        #scholarSearch { 
+            width: 200px; padding: 10px 20px; border: 1px solid #eeeae0; font-size: 10px; outline: none; border-radius: 25px; 
+            font-family: 'Inter', sans-serif; transition: 0.3s; background: #fafafa;
+        }
+        #scholarSearch:focus { border-color: var(--gold); background: #fff; width: 240px; }
 
-        footer { text-align: center; padding: 60px 20px; background: #faf8f5; border-top: 1px solid #eeeae0; }
+        footer { text-align: center; padding: 50px 20px; background: #faf8f5; border-top: 1px solid #eeeae0; }
     </style>
 </head>
 <body>
 
 <header>
-    <div id="topHarvesterCycle"><span id="leaderName">Gathering the harvest...</span></div>
+    <div id="topHarvesterCycle"><span id="leaderName">Loading Grains...</span></div>
     <h1 class="header-title">The Scholars Gallery</h1>
     <div class="population-box">
         <div class="counter-text">Population: <span id="countDisplay">0</span> / 100</div>
@@ -140,19 +151,19 @@
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search by name or school..." onkeyup="searchScholars()">
+    <input type="text" id="scholarSearch" placeholder="Find a scholar..." onkeyup="searchScholars()">
 </div>
 
 <div id="grainGardenContainer">
     <div id="gardenBed"><div style="position:absolute; top:5px; right:5px; font-size:16px;">☀️</div></div>
-    <div style="font-size: 16px; font-weight: 800; color: var(--gold); font-family: 'Montserrat';" id="totalBreaks">0</div>
-    <div style="font-size: 7px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Grains</div>
+    <div style="font-size: 15px; font-weight: 800; color: var(--gold); font-family: 'Montserrat';" id="totalBreaks">0</div>
+    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Harvest</div>
 </div>
 
 <div id="gallery"></div>
 
 <footer>
-    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 10px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-family: 'Montserrat';">Update Profile</a>
+    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 9px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-family: 'Montserrat';">Update Profile</a>
 </footer>
 
 <script>
@@ -164,40 +175,55 @@
     async function loadGallery() {
         try {
             const res = await fetch(sheetUrl);
+            if (!res.ok) throw new Error("Could not fetch sheet");
             const csv = await res.text();
-            const lines = csv.split('\n').slice(1);
+            const lines = csv.split('\n').filter(line => line.trim() !== "").slice(1);
+            
             allData = lines.map(line => {
                 const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : "";
                 if (!c[0]) return null;
                 return { 
-                    name: clean(c[0]), batchNum: clean(c[1]), accolade: clean(c[2]), 
-                    batchName: clean(c[3]), institution: clean(c[5]), breaks: parseInt(clean(c[6])) || 0 
+                    name: clean(c[0]), 
+                    batchNum: clean(c[1]), 
+                    accolade: clean(c[2]), 
+                    batchName: clean(c[3]), 
+                    institution: clean(c[5]), 
+                    breaks: parseInt(clean(c[6])) || 0 
                 };
             }).filter(i => i !== null);
+            
             render();
-        } catch (e) { console.error(e); }
+        } catch (e) { 
+            console.error("Gallery Error:", e);
+            document.getElementById('gallery').innerHTML = "<p style='text-align:center; padding: 50px;'>Error loading gallery. Please refresh.</p>";
+        }
     }
 
     function render() {
         const gal = document.getElementById('gallery');
         const nav = document.getElementById('batchNav');
         const bed = document.getElementById('gardenBed');
-        gal.innerHTML = ""; nav.innerHTML = ""; 
         
+        gal.innerHTML = ""; 
+        nav.innerHTML = ""; 
+        
+        // Populate Progress & Totals
         document.getElementById('countDisplay').innerText = allData.length;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
-        for(let i=0; i < Math.min(totalBreaks, 20); i++) {
+        // Populate Garden
+        for(let i=0; i < Math.min(totalBreaks, 15); i++) {
             const g = document.createElement('span');
             g.className = 'garden-item'; g.innerHTML = '🌾';
-            g.style.left = Math.random() * 90 + "%";
-            g.style.fontSize = (14 + Math.random() * 8) + "px";
+            g.style.left = Math.random() * 85 + "%";
+            g.style.fontSize = (12 + Math.random() * 8) + "px";
             bed.appendChild(g);
         }
 
+        // Group by Batch
         const batches = [...new Set(allData.map(i => i.batchNum))].sort((a,b) => a-b);
         batches.forEach(bNum => {
             const bItems = allData.filter(i => i.batchNum === bNum);
@@ -218,4 +244,54 @@
                 const isNational = item.accolade.toLowerCase().includes("national");
                 grid.innerHTML += `
                     <div class="scholar-card" style="transition-delay: ${(index % 10) * 0.05}s">
-                        ${isNational ? '<div class="aura"></div><div class="
+                        ${isNational ? '<div class="aura"></div><div class="star-badge">✦</div>' : ''}
+                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks}x 🌾</div>` : ''}
+                        <div style="font-size:24px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                        <span class="name">${item.name}</span>
+                        <span style="font-size:9px; color:#aaa; text-transform:uppercase; font-weight:700;">${item.institution}</span>
+                        <div style="font-size:10px; color:#777; line-height:1.5; margin-top:12px; border-top:1px solid #fcfaf7; padding-top:10px;">${item.accolade}</div>
+                    </div>`;
+            });
+            section.appendChild(grid);
+            gal.appendChild(section);
+        });
+
+        // Trigger animations
+        setTimeout(() => {
+            const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
+            document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
+        }, 100);
+
+        // Leader Carousel
+        const maxB = Math.max(...allData.map(x => x.breaks));
+        leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
+        if(leaders.length) startLeaderCycle();
+    }
+
+    function startLeaderCycle() {
+        const el = document.getElementById('leaderName');
+        const update = () => {
+            el.classList.add('fade-hidden');
+            setTimeout(() => {
+                lIdx = (lIdx + 1) % leaders.length;
+                el.innerText = `Field Leader: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Grains)`;
+                el.classList.remove('fade-hidden');
+            }, 800);
+        };
+        update();
+        setInterval(update, 5000);
+    }
+
+    function searchScholars() {
+        const t = document.getElementById('scholarSearch').value.toLowerCase();
+        document.querySelectorAll('.scholar-card').forEach(c => {
+            const isMatch = c.innerText.toLowerCase().includes(t);
+            c.style.display = isMatch ? 'inline-block' : 'none';
+        });
+    }
+
+    // Run
+    loadGallery();
+</script>
+</body>
+</html>
