@@ -9,28 +9,33 @@
     
     <style>
         :root {
-            --primary-green: #8da080;
-            --dark-green: #6d7d62;
-            --text-main: #444;
+            --primary-green: #5d6d4f; /* Earthier Sage */
+            --dark-green: #4a573e;
+            --text-main: #4a453e;
             --gold: #b89d5d;
             --major-blue: #5d8ab8;
+            --paper: #fcfaf7;
         }
 
         body { 
-            font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; 
-            color: var(--text-main); scroll-behavior: smooth; overflow-x: hidden; 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--paper); 
+            margin: 0; padding: 0; 
+            color: var(--text-main); 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
         /* PARALLAX HEADER */
         header { 
             height: 450px;
-            background: linear-gradient(180deg, var(--dark-green) 0%, var(--primary-green) 100%);
+            background: radial-gradient(circle at center, #8da080 0%, var(--dark-green) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; overflow: hidden; color: white;
         }
         .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; will-change: transform; }
         
-        /* ULTRA-SMOOTH CAROUSEL */
         #topHarvesterCycle {
             background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
             padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
@@ -53,13 +58,13 @@
         /* ENHANCED GRAIN GARDEN */
         #grainGardenContainer {
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: #fff; border: 2px solid var(--gold); padding: 10px; border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 140px; text-align: center;
+            background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 140px; text-align: center;
         }
         #gardenBed {
             height: 90px; position: relative; overflow: hidden; 
-            background: linear-gradient(to bottom, #87CEEB 0%, #fff 70%, #d7ccc8 100%);
-            border-radius: 12px; margin-bottom: 8px; border: 1px solid #eee;
+            background: linear-gradient(to bottom, #e3f2fd 0%, #fff 70%, #efebe9 100%);
+            border-radius: 12px; margin-bottom: 8px; border: 1px solid #f2ede4;
         }
         .sun { position: absolute; top: 10px; right: 10px; font-size: 20px; animation: pulse 4s ease-in-out infinite; }
         .cloud { position: absolute; font-size: 15px; opacity: 0.6; animation: floatCloud 25s linear infinite; }
@@ -74,39 +79,46 @@
         @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
         /* NAVIGATION & CONTROLS */
-        .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.98); padding: 15px 0; border-bottom: 1px solid #eee; text-align: center; }
+        .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(252,250,247,0.95); padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center; }
         #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #eee; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
-        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
 
         /* GRID & ROOTS */
         .cohort-group { position: relative; padding-top: 40px; }
         .root-svg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; fill: none; stroke: var(--primary-green); stroke-width: 1.5; stroke-opacity: 0.2;
+            z-index: -1; fill: none; stroke: var(--primary-green); stroke-width: 1.5; stroke-opacity: 0.1;
         }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 30px; padding: 20px 5% 80px; }
+        
         .scholar-card { 
-            background: #fff; padding: 45px 15px 25px; border: 1px solid #f2ede4; border-radius: 4px;
-            text-align: center; transition: 0.4s ease; position: relative;
-            opacity: 0; transform: translateY(30px);
+            background: #ffffff; padding: 45px 15px 25px; 
+            border-radius: 12px; border: 1px solid #e6dfd1; 
+            text-align: center; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+            position: relative; opacity: 0; transform: translateY(30px);
+            box-shadow: 0 4px 15px rgba(141, 160, 128, 0.05);
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .scholar-card:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .scholar-card:hover { 
+            transform: translateY(-8px) rotate(1deg);
+            border-color: var(--gold); 
+            box-shadow: 0 15px 35px rgba(184, 157, 93, 0.12); 
+        }
 
         .growth-ring {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             border: 1px solid var(--gold); border-radius: 50%; opacity: 0.2; pointer-events: none;
         }
 
-        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1.1rem; margin-top: 15px; display: block; }
+        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.1rem; margin-top: 15px; display: block; }
         .batch-stamp { position: absolute; top: 5px; left: 10px; font-size: 50px; font-family: serif; opacity: 0.04; font-weight: 900; }
         .scholar-break-badge { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fffcf5; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; }
         .major-tooltip { position: absolute; top: -10px; background: var(--major-blue); color: white; font-size: 7px; padding: 3px 8px; border-radius: 2px; opacity: 0; transition: 0.3s; z-index: 10; }
         .scholar-card:hover .major-tooltip { opacity: 1; transform: translateY(-5px); }
         
-        footer { text-align: center; padding: 40px; background: #faf9f7; border-top: 1px solid #eee; }
+        footer { text-align: center; padding: 40px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
     </style>
 </head>
 <body>
@@ -127,7 +139,7 @@
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #eee; font-size:10px; outline:none; background: #fafafa;">
+    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #e6dfd1; font-size:10px; outline:none; background: #fff;">
 </div>
 
 <div id="grainGardenContainer">
@@ -140,7 +152,7 @@
     <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Breaks</div>
 </div>
 
-<div id="gallery" style="background: white; position: relative; z-index: 2; padding-top: 50px;"></div>
+<div id="gallery" style="position: relative; z-index: 2; padding-top: 50px;"></div>
 
 <footer>
     <p style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px;">Update your details</p>
@@ -202,7 +214,11 @@
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        for(let i=0; i < totalBreaks; i++) {
+        // PERFORMANCE FIX: We cap the number of emoji elements at 40
+        // even if there are 1000 total breaks.
+        const visualGrainCount = Math.min(totalBreaks, 40); 
+
+        for(let i=0; i < visualGrainCount; i++) {
             const g = document.createElement('span');
             g.className = 'garden-grain';
             g.innerHTML = '🌾';
@@ -226,7 +242,7 @@
                 const group = document.createElement('div');
                 group.className = 'cohort-group';
                 group.innerHTML = `<svg class="root-svg"><path d="${generateRootPath()}"></path></svg>
-                                   <div style="margin-left:5%; font-size:8px; color:#ccc; text-transform:uppercase; letter-spacing:2px; border-left:2px solid var(--primary-green); padding-left:10px;">${cName} Cluster</div>`;
+                                   <div style="margin-left:5%; font-size:8px; color:#aaa; text-transform:uppercase; letter-spacing:2px; border-left:2px solid var(--primary-green); padding-left:10px;">${cName} Cluster</div>`;
                 
                 const grid = document.createElement('div');
                 grid.className = 'grid';
