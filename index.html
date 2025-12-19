@@ -3,210 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Great Field | Harvest Six</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Scholars Gallery | Harvest Six</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-green: #5d6d4f;
+            --primary-green: #5d6d4f; 
+            --dark-green: #4a573e;
+            --text-main: #4a453e;
             --gold: #b89d5d;
-            --sky-top: #a5d6f7;
-            --sky-bottom: #e1f5fe;
+            --major-blue: #5d8ab8;
+            --paper: #fcfaf7;
         }
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; font-family: 'Poppins', sans-serif;
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--paper); 
+            margin: 0; padding: 0; 
+            color: var(--text-main); 
+            scroll-behavior: smooth; 
+            overflow-x: hidden; 
+            background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* BETTER BACKGROUND: Watercolor Gradient & Clouds */
-        .big-garden-container {
-            width: 100vw; height: 100vh;
-            background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-bottom) 40%, #ffffff 100%);
-            position: relative;
+        header { 
+            height: 450px;
+            background: radial-gradient(circle at center, #8da080 0%, var(--dark-green) 100%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; color: white;
+        }
+        .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; will-change: transform; }
+        
+        #topHarvesterCycle {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 25px; min-width: 280px; height: 55px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* CLOUD ANIMATIONS */
-        .cloud {
-            position: absolute; color: white; opacity: 0.6; filter: blur(3px);
-            animation: floatCloud linear infinite;
+        #leaderName { font-size: 11px; font-weight: 700; transition: all 0.8s ease; }
+        #leaderName.fade-out { opacity: 0; transform: translateY(5px); }
+
+        .goal-container { width: 280px; margin: 15px auto; }
+        .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
+
+        /* CLICKABLE MINI GARDEN */
+        #gardenLink {
+            text-decoration: none; color: inherit;
+            position: fixed; bottom: 25px; left: 25px; z-index: 1000;
+            display: block; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @keyframes floatCloud {
-            from { left: -200px; }
-            to { left: 110vw; }
+        #gardenLink:hover { transform: scale(1.08) translateY(-5px); }
+
+        #grainGardenContainer {
+            background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 140px; text-align: center;
         }
 
-        .sun { 
-            position: absolute; top: 40px; right: 10%; font-size: 80px; 
-            filter: blur(1px) drop-shadow(0 0 50px #fff9c4); z-index: 1; 
+        #gardenBed {
+            height: 90px; position: relative; overflow: hidden; 
+            background: linear-gradient(to bottom, #e3f2fd 0%, #fff 70%, #efebe9 100%);
+            border-radius: 12px; margin-bottom: 8px; border: 1px solid #f2ede4;
         }
+        .sun { position: absolute; top: 10px; right: 10px; font-size: 20px; }
+        
+        .garden-item {
+            position: absolute; bottom: -2px;
+            animation: sway 4s ease-in-out infinite alternate;
+            transform-origin: bottom;
+        }
+        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
-        /* THE FIELD */
-        #bigField { position: absolute; bottom: 0; width: 100%; height: 55vh; z-index: 20; pointer-events: none; }
+        /* GRID STYLES */
+        .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(252,250,247,0.95); padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center; }
+        #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-        .grain-stalk {
-            position: absolute; bottom: -10px; transform-origin: bottom;
-            animation: sway 6s ease-in-out infinite alternate;
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 30px; padding: 20px 5% 80px; }
+        
+        .scholar-card { 
+            background: #ffffff; padding: 45px 15px 25px; 
+            border-radius: 12px; border: 1px solid #e6dfd1; 
+            text-align: center; transition: all 0.5s ease; 
+            position: relative; opacity: 0; transform: translateY(20px);
         }
-        @keyframes sway { 
-            0% { transform: rotate(-3deg); } 
-            100% { transform: rotate(3deg); } 
-        }
+        .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
+        .scholar-card:hover { transform: translateY(-5px); border-color: var(--gold); }
 
-        /* DEER: THE LEAP */
-        .deer {
-            position: absolute; font-size: 40px; z-index: 15;
-            animation: moveForward 18s linear infinite, deerJump 0.8s ease-in-out infinite alternate;
-        }
-        @keyframes moveForward {
-            from { left: -100px; }
-            to { left: 110vw; }
-        }
-        @keyframes deerJump {
-            from { bottom: 80px; transform: rotate(5deg); }
-            to { bottom: 120px; transform: rotate(-10deg); }
-        }
-
-        /* EAGLE: THE SOAR */
-        .eagle-container {
-            position: absolute; top: 120px; display: flex; flex-direction: column; 
-            align-items: center; z-index: 5; animation: soar 22s linear infinite;
-        }
-        .eagle { font-size: 40px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }
-        .scholar-banner {
-            font-size: 9px; font-weight: 700; color: var(--gold);
-            text-transform: uppercase; letter-spacing: 2px;
-            background: rgba(255,255,255,0.9); padding: 4px 12px; 
-            border-radius: 20px; margin-top: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        @keyframes soar {
-            from { left: -200px; transform: translateY(0px); }
-            50% { transform: translateY(-40px); }
-            to { left: 110vw; transform: translateY(10px); }
-        }
-
-        /* UI ELEMENTS */
-        .back-home {
-            position: absolute; top: 30px; left: 30px; z-index: 1000;
-            color: var(--primary-green); text-decoration: none; font-size: 11px;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-            padding: 10px 20px; border: 1.5px solid var(--primary-green); border-radius: 50px;
-            background: white; transition: 0.3s;
-        }
-        .back-home:hover { background: var(--primary-green); color: white; }
-
-        .total-counter {
-            position: absolute; top: 30px; right: 30px; text-align: right;
-            font-family: 'Playfair Display', serif; color: var(--primary-green);
-        }
+        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.1rem; margin-top: 15px; display: block; }
+        .scholar-break-badge { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fffcf5; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; }
+        
+        footer { text-align: center; padding: 40px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
     </style>
 </head>
 <body>
 
-<div class="big-garden-container">
-    <div class="sun">☀️</div>
-    
-    <div id="cloudLayer"></div>
-    <div id="airLayer"></div>
-    <div id="bigField"></div>
-
-    <a href="index.html" class="back-home">← Return to Gallery</a>
-    
-    <div class="total-counter">
-        <div style="font-size: 2.5rem; line-height: 1;" id="countText">0</div>
-        <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.7;">Total Field Grains</div>
+<header>
+    <div class="header-content" id="parallaxHeader">
+        <div id="topHarvesterCycle">
+            <span id="leaderName">Cultivating excellence...</span>
+        </div>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin: 0;">Scholars Gallery</h1>
+        <div class="goal-container">
+            <div class="goal-bar-bg"><div id="goalProgress"></div></div>
+            <div style="font-size: 8px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; opacity: 0.8;">Goal: 100 Scholars</div>
+        </div>
     </div>
+</header>
+
+<div class="sticky-controls">
+    <div id="batchNav"></div>
+    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #e6dfd1; font-size:10px; outline:none;">
 </div>
 
+<a href="garden-registry.html" id="gardenLink">
+    <div id="grainGardenContainer">
+        <div id="gardenBed">
+            <div class="sun">☀️</div>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; color: var(--gold); line-height:1;" id="totalBreaks">0</div>
+        <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Breaks</div>
+    </div>
+</a>
+
+<div id="gallery"></div>
+
+<footer>
+    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 12px; font-weight: 700; text-decoration: none;">Update Your Details</a>
+</footer>
+
 <script>
-    const field = document.getElementById('bigField');
-    const air = document.getElementById('airLayer');
-    const cloudLayer = document.getElementById('cloudLayer');
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
+    let allData = [];
+    let leaders = [];
+    let lIdx = 0;
 
-    async function initRegistry() {
-        // 1. Create Clouds
-        for(let i=0; i<6; i++) {
-            const cloud = document.createElement('div');
-            cloud.className = 'cloud';
-            cloud.innerHTML = '☁️';
-            cloud.style.top = (Math.random() * 200) + "px";
-            cloud.style.fontSize = (40 + Math.random() * 60) + "px";
-            cloud.style.animationDuration = (25 + Math.random() * 20) + "s";
-            cloud.style.animationDelay = (Math.random() * -30) + "s";
-            cloudLayer.appendChild(cloud);
-        }
+    window.addEventListener('scroll', () => {
+        document.getElementById('parallaxHeader').style.transform = `translateY(${window.pageYOffset * 0.4}px)`;
+    });
 
+    async function loadGallery() {
         try {
             const res = await fetch(sheetUrl);
             const csv = await res.text();
             const lines = csv.split('\n').slice(1);
             
-            let totalBreaks = 0;
-            let nationalScholars = [];
-
-            const scholars = lines.map(line => {
+            allData = lines.map(line => {
                 const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                const bCount = parseInt(c[6]) || 0;
-                totalBreaks += bCount;
-                
-                const name = c[0].replace(/^"|"$/g, '');
-                const accolade = c[2] || "";
-                if(accolade.length > 3) nationalScholars.push(name);
-
-                return bCount;
-            });
-
-            document.getElementById('countText').innerText = totalBreaks;
-
-            // 2. PLANT EXACT NUMBER OF GRAINS
-            for(let i = 0; i < totalBreaks; i++) {
-                const stalk = document.createElement('div');
-                stalk.className = 'grain-stalk';
-                stalk.innerHTML = '🌾';
-                const depth = Math.random();
-                stalk.style.left = Math.random() * 100 + "%";
-                stalk.style.bottom = (depth * 150) - 10 + "px";
-                stalk.style.fontSize = (25 + (depth * 60)) + "px";
-                stalk.style.zIndex = Math.floor(depth * 100);
-                stalk.style.opacity = 0.5 + (depth * 0.5);
-                stalk.style.animationDelay = (Math.random() * 5) + "s";
-                field.appendChild(stalk);
-            }
-
-            // 3. Spawn Deer (Small Family)
-            spawnDeer();
-
-            // 4. Spawn National Eagles
-            if(nationalScholars.length > 0) {
-                spawnEagle(nationalScholars);
-                setInterval(() => spawnEagle(nationalScholars), 15000);
-            }
-
+                const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : "";
+                return { 
+                    name: clean(c[0]), 
+                    batchNum: clean(c[1]), 
+                    accolade: clean(c[2]), 
+                    batchName: clean(c[3]), 
+                    cohort: clean(c[4]), 
+                    institution: clean(c[5]), 
+                    breaks: parseInt(clean(c[6])) || 0 
+                };
+            }).filter(i => i.name);
+            render();
         } catch (e) { console.error(e); }
     }
 
-    function spawnDeer() {
-        for(let i=0; i<3; i++) {
-            const deer = document.createElement('div');
-            deer.className = 'deer';
-            deer.innerHTML = '🦌';
-            deer.style.animationDelay = (i * 1.2) + "s";
-            field.appendChild(deer);
+    function render() {
+        const gal = document.getElementById('gallery');
+        const nav = document.getElementById('batchNav');
+        const bed = document.getElementById('gardenBed');
+        gal.innerHTML = ""; nav.innerHTML = "";
+        
+        const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
+        document.getElementById('totalBreaks').innerText = totalBreaks;
+        document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
+
+        // Plant Mini Grains (Max 30 for performance in index)
+        const miniGrains = Math.min(totalBreaks, 30);
+        for(let i=0; i<miniGrains; i++) {
+            const g = document.createElement('span');
+            g.className = 'garden-item';
+            g.innerHTML = '🌾';
+            g.style.left = Math.random() * 90 + "%";
+            g.style.fontSize = (12 + Math.random() * 10) + "px";
+            g.style.animationDelay = Math.random() * 2 + "s";
+            bed.appendChild(g);
         }
+
+        const batches = [...new Set(allData.map(i => i.batchNum))].sort();
+        batches.forEach(bNum => {
+            const bItems = allData.filter(i => i.batchNum === bNum);
+            const bID = `batch-${bNum}`;
+            nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bItems[0].batchName}</a>`;
+            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:80px 0 20px; font-weight:700; font-size:10px; letter-spacing:3px; color:var(--primary-green); text-transform:uppercase;">🌿 ${bItems[0].batchName}</div>`);
+            
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            bItems.forEach(item => {
+                grid.innerHTML += `
+                    <div class="scholar-card">
+                        ${item.breaks > 0 ? `<div class="scholar-break-badge">${item.breaks}x 🌾</div>` : ''}
+                        <span class="name">${item.name}</span>
+                        <span style="font-size:8px; color:#aaa; text-transform:uppercase;">${item.institution}</span>
+                    </div>`;
+            });
+            gal.appendChild(grid);
+        });
+
+        const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }));
+        document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
+
+        leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)) && s.breaks > 0);
+        startLeaderCycle();
     }
 
-    function spawnEagle(names) {
-        const name = names[Math.floor(Math.random() * names.length)];
-        const container = document.createElement('div');
-        container.className = 'eagle-container';
-        container.innerHTML = `<div class="eagle">🦅</div><div class="scholar-banner">${name}</div>`;
-        container.style.top = (80 + Math.random() * 120) + "px";
-        air.appendChild(container);
-        setTimeout(() => container.remove(), 25000);
+    function startLeaderCycle() {
+        if(!leaders.length) return;
+        const el = document.getElementById('leaderName');
+        setInterval(() => {
+            el.classList.add('fade-out');
+            setTimeout(() => {
+                lIdx = (lIdx + 1) % leaders.length;
+                el.innerText = `Top Speaker: ${leaders[lIdx].name} (${leaders[lIdx].breaks})`;
+                el.classList.remove('fade-out');
+            }, 800);
+        }, 4000);
     }
 
-    initRegistry();
+    function searchScholars() {
+        const t = document.getElementById('scholarSearch').value.toLowerCase();
+        document.querySelectorAll('.scholar-card').forEach(c => {
+            c.style.display = c.innerText.toLowerCase().includes(t) ? 'block' : 'none';
+        });
+    }
+
+    loadGallery();
 </script>
-
 </body>
 </html>
