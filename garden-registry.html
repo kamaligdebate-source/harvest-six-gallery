@@ -1,44 +1,137 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garden Registry | Harvest Six</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-green: #5d6d4f;
+            --gold: #b89d5d;
+            --paper: #fcfaf7;
+            --text: #4a453e;
+        }
+
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: #fcfaf7; color: #4a453e; 
+            background-color: var(--paper); 
+            margin: 0; padding: 0; 
+            color: var(--text); 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0;
+            min-height: 100vh;
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
-        .container { 
-            max-width: 500px; padding: 40px; background: white; 
-            border-radius: 30px; border: 1px solid #e6dfd1;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center;
+
+        .registry-box {
+            max-width: 500px;
+            width: 90%;
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 24px;
+            border: 1px solid #e6dfd1;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        h1 { font-family: 'Playfair Display', serif; color: #5d6d4f; margin: 0; }
-        .eco-icon { font-size: 40px; margin: 20px 0; display: block; }
-        .divider { height: 1px; background: #eee; margin: 20px 0; }
-        p { font-size: 14px; line-height: 1.6; opacity: 0.8; }
-        .back-btn { 
-            display: inline-block; margin-top: 20px; padding: 10px 20px; 
-            background: #5d6d4f; color: white; text-decoration: none; 
-            border-radius: 20px; font-size: 12px; transition: 0.3s;
+
+        /* Decorative top element */
+        .registry-box::before {
+            content: "🌾";
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            opacity: 0.1;
         }
-        .back-btn:hover { background: #b89d5d; transform: translateY(-2px); }
+
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--primary-green); 
+            font-size: 2.2rem; 
+            margin: 0 0 10px 0; 
+        }
+
+        .subtitle {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .entry {
+            text-align: left;
+            background: #faf8f5;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .entry strong { color: var(--primary-green); display: block; margin-bottom: 5px; }
+        .entry p { margin: 0; font-size: 13px; line-height: 1.6; opacity: 0.8; }
+
+        .fauna-list {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 20px;
+            margin: 25px 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 30px;
+            background: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(184, 157, 93, 0.3);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <span class="eco-icon">🦋</span>
+
+    <div class="registry-box">
+        <span class="subtitle">Ecosystem Archive</span>
         <h1>The Field Registry</h1>
-        <div class="divider"></div>
-        <p>This ecosystem is a living representation of the <strong>Harvest Six</strong> community. Each stalk of grain ($🌾$) represents a scholar's achievement, while the small fauna symbolizes the growth of our academic field.</p>
-        <div style="background: #faf8f5; padding: 15px; border-radius: 12px; font-size: 12px; color: #8da080;">
-            Current Ecosystem Health: <strong>Thriving</strong>
+        
+        <div class="fauna-list">
+            <span>🦋</span><span>🐞</span><span>🐝</span><span>🐌</span>
         </div>
-        <a href="index.html" class="back-btn">Return to Gallery</a>
+
+        <div class="entry">
+            <strong>The Harvest Stalks ($🌾$)</strong>
+            <p>Each grain represents a scholar's successful break. The density of the field reflects the collective momentum of the cohort.</p>
+        </div>
+
+        <div class="entry">
+            <strong>Miniature Fauna</strong>
+            <p>The insects ($🦋, 🐞, 🐝$) signify a healthy, living academic ecosystem. They appear only as the field matures and grows.</p>
+        </div>
+
+        <p style="font-size: 11px; font-style: italic; margin-bottom: 30px; opacity: 0.6;">
+            "A garden is a grand teacher. It teaches patience and careful watchfulness; it teaches industry and thrift; above all it teaches entire trust."
+        </p>
+
+        <a href="index.html" class="back-btn">Return to the Harvest</a>
     </div>
+
 </body>
 </html>
