@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholars Gallery | Harvest Six</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -13,8 +13,8 @@
             --dark-green: #4a573e;
             --text-main: #4a453e;
             --gold: #b89d5d;
-            --major-blue: #5d8ab8;
             --paper: #fcfaf7;
+            --tape-color: rgba(230, 223, 209, 0.6);
         }
 
         body { 
@@ -22,164 +22,142 @@
             background-color: var(--paper); 
             margin: 0; padding: 0; 
             color: var(--text-main); 
-            scroll-behavior: smooth; 
-            overflow-x: hidden; 
-            /* Subtle sandpaper texture for the background */
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* --- HEADER --- */
+        /* --- ENHANCED TRIMMED HEADER --- */
         header { 
-            height: 450px;
-            background: radial-gradient(circle at center, #8da080 0%, var(--dark-green) 100%);
+            height: 320px; /* Trimmed height */
+            background: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative; overflow: hidden; color: white;
+            position: relative; overflow: hidden;
+            border-bottom: 1px solid #e6dfd1;
         }
-        .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; will-change: transform; }
-        
+
+        .header-title {
+            font-family: 'Libre+Baskerville', serif;
+            font-size: 2.8rem;
+            color: var(--dark-green);
+            margin: 10px 0;
+            letter-spacing: -1px;
+            font-weight: 700;
+        }
+
+        /* --- FLUID CAROUSEL --- */
         #topHarvesterCycle {
-            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
-            padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
-            margin-bottom: 25px; min-width: 280px; height: 55px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 8px 24px;
+            text-align: center;
+            min-height: 40px;
         }
 
         #leaderName { 
-            font-size: 11px; font-weight: 700; 
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: 'Libre+Baskerville', serif;
+            font-style: italic;
+            font-size: 14px;
+            color: var(--gold);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            display: block;
         }
-        #leaderName.fade-out { opacity: 0; transform: translateY(5px); }
+        .fade-hidden { opacity: 0; transform: scale(0.98); }
 
-        .goal-container { width: 280px; margin: 15px auto; }
-        .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
-        #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
-
-        /* --- STICKY CONTROLS --- */
-        .sticky-controls { 
-            position: sticky; top: 0; z-index: 200; 
-            background: rgba(252,250,247,0.9); 
-            backdrop-filter: blur(12px);
-            padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center; 
-        }
-        #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
-        .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
-
-        /* --- MASONRY GRID SYSTEM --- */
-        .grid { 
-            column-count: 4; 
-            column-gap: 30px; 
-            padding: 20px 5% 80px; 
-            display: block; 
-        }
-
+        /* --- MASONRY GRID --- */
+        .grid { column-count: 4; column-gap: 35px; padding: 40px 8%; display: block; }
         @media (max-width: 1200px) { .grid { column-count: 3; } }
         @media (max-width: 800px) { .grid { column-count: 2; } }
         @media (max-width: 500px) { .grid { column-count: 1; } }
 
-        /* --- TACTILE SCHOLAR CARD --- */
+        /* --- SCHOLAR CARD WITH TAPE & AURA --- */
         .scholar-card { 
-            display: inline-block; /* Required for Masonry */
+            display: inline-block;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             break-inside: avoid;
             background: #ffffff; 
-            padding: 45px 15px 25px; 
-            border-radius: 0px; /* Reverted to original geometric edges */
+            padding: 50px 20px 30px; 
+            border-radius: 2px;
             border: 1px solid #e6dfd1; 
             text-align: center; 
             position: relative; 
             opacity: 0; 
-            transform: translateY(30px);
-            box-sizing: border-box;
-            
-            /* Layered Tactile Shadow */
-            box-shadow: 
-                0 1px 1px rgba(0,0,0,0.02), 
-                0 2px 2px rgba(0,0,0,0.02), 
-                0 4px 4px rgba(0,0,0,0.02), 
-                0 8px 8px rgba(0,0,0,0.02);
-            
+            transform: translateY(20px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
             transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-            overflow: hidden;
         }
 
-        /* Cardstock Texture Overlay */
+        /* The Tape Improvement */
         .scholar-card::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.04;
-            pointer-events: none;
-            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            top: -12px; left: 50%;
+            transform: translateX(-50%);
+            width: 80px; height: 24px;
+            background: var(--tape-color);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            z-index: 10;
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
         }
 
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
 
-        .scholar-card:hover { 
-            transform: translateY(-8px);
-            border-color: var(--gold); 
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.04), 
-                0 8px 16px rgba(0,0,0,0.04), 
-                0 16px 32px rgba(0,0,0,0.04);
+        /* The National Aura */
+        .aura {
+            position: absolute;
+            top: 40px; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px; height: 100px;
+            background: radial-gradient(circle, rgba(184, 157, 93, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.1rem; margin-top: 15px; display: block; }
-        .batch-stamp { position: absolute; top: 5px; left: 10px; font-size: 50px; font-family: serif; opacity: 0.04; font-weight: 900; pointer-events: none; }
-        .scholar-break-badge { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fffcf5; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; }
+        .star-badge {
+            position: absolute;
+            top: 15px; right: 15px;
+            font-size: 14px;
+            color: var(--gold);
+            filter: drop-shadow(0 0 5px rgba(184, 157, 93, 0.4));
+        }
+
+        .scholar-card:hover { transform: translateY(-5px) rotate(0.5deg); box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
+        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.15rem; margin-top: 15px; display: block; position: relative; z-index: 1; }
         
-        /* --- GARDEN CONTAINER --- */
-        #grainGardenContainer {
-            position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 140px; text-align: center;
+        /* Sticky Navigation */
+        .sticky-controls { 
+            position: sticky; top: 0; z-index: 200; 
+            background: rgba(252,250,247,0.95); backdrop-filter: blur(10px);
+            padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center;
         }
-        #gardenBed {
-            height: 90px; position: relative; overflow: hidden; 
-            background: linear-gradient(to bottom, #e3f2fd 0%, #fff 70%, #efebe9 100%);
-            border-radius: 12px; margin-bottom: 8px; border: 1px solid #f2ede4;
-        }
-        .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
-        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+        .nav-btn { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 6px 15px; border: 1px solid #e6dfd1; border-radius: 0px; cursor: pointer; color: #999; text-decoration: none; font-weight: 600; margin: 0 5px;}
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-        footer { text-align: center; padding: 80px 40px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
+        footer { text-align: center; padding: 60px 20px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-content" id="parallaxHeader">
-        <div id="topHarvesterCycle">
-            <span id="leaderName">Cultivating excellence...</span>
-            <div style="font-size: 7px; opacity: 0.6; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Top Speakers</div>
-        </div>
-        <h1 style="font-family: 'Playfair Display', serif; font-size: 3.5rem; margin: 0; letter-spacing: -1px; font-style: italic;">Scholars Gallery</h1>
-        <div class="goal-container">
-            <div class="goal-bar-bg"><div id="goalProgress"></div></div>
-            <div style="font-size: 8px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; opacity: 0.8;">Goal: 100 Scholars</div>
-        </div>
+    <div id="topHarvesterCycle">
+        <span id="leaderName">Cultivating excellence...</span>
+    </div>
+    <h1 class="header-title">The Scholars Gallery</h1>
+    <div class="goal-container">
+        <div class="goal-bar-bg"><div id="goalProgress"></div></div>
+        <div style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; color: #999;">Harvest Goal: 100</div>
     </div>
 </header>
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #e6dfd1; font-size:10px; outline:none; background: #fff;">
-</div>
-
-<div id="grainGardenContainer">
-    <div id="gardenBed">
-        <div class="sun" style="position:absolute; top:5px; right:5px;">☀️</div>
-    </div>
-    <div style="font-size: 16px; font-weight: 700; color: var(--gold); line-height:1;" id="totalBreaks">0</div>
-    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Breaks</div>
+    <input type="text" id="scholarSearch" placeholder="Filter by name or institution..." onkeyup="searchScholars()" style="width:250px; padding:10px; border:1px solid #e6dfd1; font-size:10px; outline:none; font-family:inherit;">
 </div>
 
 <div id="gallery"></div>
 
 <footer>
-    <p style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Update your details</p>
-    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 12px; font-weight: 700; text-decoration: none; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 30px;">Confirmation Link</a>
+    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 12px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;">Update Scholar Profile</a>
 </footer>
 
 <script>
@@ -188,17 +166,11 @@
     let leaders = [];
     let lIdx = 0;
 
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        document.getElementById('parallaxHeader').style.transform = `translateY(${scrolled * 0.4}px)`;
-    });
-
     async function loadGallery() {
         try {
             const res = await fetch(sheetUrl);
             const csv = await res.text();
             const lines = csv.split('\n').slice(1);
-            
             allData = lines.map(line => {
                 const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : "";
@@ -220,44 +192,29 @@
     function render() {
         const gal = document.getElementById('gallery');
         const nav = document.getElementById('batchNav');
-        const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; 
         
-        const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
-        document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
-
-        // Garden Grains
-        for(let i=0; i < Math.min(totalBreaks, 20); i++) {
-            const g = document.createElement('span');
-            g.className = 'garden-item';
-            g.innerHTML = '🌾';
-            g.style.left = Math.random() * 90 + "%";
-            g.style.fontSize = (12 + Math.random() * 10) + "px";
-            g.style.animationDelay = Math.random() * 2 + "s";
-            bed.appendChild(g);
-        }
 
         const batches = [...new Set(allData.map(i => i.batchNum))].sort((a,b) => a-b);
         batches.forEach(bNum => {
             const bItems = allData.filter(i => i.batchNum === bNum);
             const bID = `batch-${bNum}`;
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bItems[0].batchName || 'Batch '+bNum}</a>`;
-            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:120px 0 40px; font-weight:700; font-size:12px; letter-spacing:5px; color:var(--primary-green); text-transform:uppercase;">🌿 ${bItems[0].batchName}</div>`);
+            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:80px 0 20px; font-family:'Libre Baskerville'; font-size:18px; color:var(--primary-green); opacity:0.7;">${bItems[0].batchName}</div>`);
             
             const grid = document.createElement('div');
             grid.className = 'grid';
             
             bItems.forEach((item, index) => {
-                const delay = (index % 15) * 0.08; // Staggered entrance delay
+                const isNational = item.accolade.toLowerCase().includes("national") || item.accolade.length > 20;
                 grid.innerHTML += `
-                    <div class="scholar-card" style="transition-delay: ${delay}s">
-                        <div class="batch-stamp">${item.batchNum}</div>
-                        ${item.breaks > 0 ? `<div class="scholar-break-badge">${item.breaks}x 🌾</div>` : ''}
-                        <div style="font-size:24px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                    <div class="scholar-card" style="transition-delay: ${(index % 10) * 0.1}s">
+                        ${isNational ? '<div class="aura"></div><div class="star-badge">✦</div>' : ''}
+                        <div style="font-size:22px; position:relative; z-index:2;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
-                        <span style="font-size:8px; color:#aaa; text-transform:uppercase; letter-spacing:1px;">${item.institution}</span>
-                        <div style="font-size:9px; color:#777; font-style:italic; margin-top:12px; line-height:1.4;">${item.accolade}</div>
+                        <span style="font-size:8px; color:#aaa; text-transform:uppercase; letter-spacing:1px; font-weight:600;">${item.institution}</span>
+                        <div style="font-size:9px; color:#777; font-style:italic; margin-top:15px; border-top:1px solid #f9f6f0; padding-top:10px;">${item.accolade}</div>
                     </div>`;
             });
             gal.appendChild(grid);
@@ -274,22 +231,24 @@
     function startLeaderCycle() {
         if(!leaders.length) return;
         const el = document.getElementById('leaderName');
-        el.innerText = `${leaders[0].name} (${leaders[0].breaks}x)`;
-        setInterval(() => {
-            el.classList.add('fade-out');
+        
+        const update = () => {
+            el.classList.add('fade-hidden');
             setTimeout(() => {
                 lIdx = (lIdx + 1) % leaders.length;
-                el.innerText = `${leaders[lIdx].name} (${leaders[lIdx].breaks}x)`;
-                el.classList.remove('fade-out');
-            }, 850);
-        }, 4500);
+                el.innerText = `Currently Leading: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Grains)`;
+                el.classList.remove('fade-hidden');
+            }, 1200);
+        };
+        
+        update();
+        setInterval(update, 6000);
     }
 
     function searchScholars() {
         const t = document.getElementById('scholarSearch').value.toLowerCase();
         document.querySelectorAll('.scholar-card').forEach(c => {
-            const match = c.innerText.toLowerCase().includes(t);
-            c.style.display = match ? 'inline-block' : 'none';
+            c.style.display = c.innerText.toLowerCase().includes(t) ? 'inline-block' : 'none';
         });
     }
 
