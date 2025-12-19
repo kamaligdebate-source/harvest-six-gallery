@@ -53,12 +53,27 @@
         .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
 
-        /* MINI ECOSYSTEM GARDEN */
-        #grainGardenContainer {
+        /* CLICKABLE GARDEN WIDGET */
+        #gardenLink {
+            text-decoration: none;
+            color: inherit;
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
+            display: block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #gardenLink:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        #grainGardenContainer {
             background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 140px; text-align: center;
+            cursor: pointer;
         }
+        #gardenLink:hover #grainGardenContainer {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            border-color: var(--gold);
+        }
+
         #gardenBed {
             height: 90px; position: relative; overflow: hidden; 
             background: linear-gradient(to bottom, #e3f2fd 0%, #fff 70%, #efebe9 100%);
@@ -139,15 +154,17 @@
     <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #e6dfd1; font-size:10px; outline:none; background: #fff;">
 </div>
 
-<div id="grainGardenContainer">
-    <div id="gardenBed">
-        <div class="sun">☀️</div>
-        <div class="cloud" style="top: 15px; animation-delay: 0s;">☁️</div>
-        <div class="cloud" style="top: 35px; animation-delay: -12s; font-size: 10px;">☁️</div>
+<a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank" id="gardenLink">
+    <div id="grainGardenContainer">
+        <div id="gardenBed">
+            <div class="sun">☀️</div>
+            <div class="cloud" style="top: 15px; animation-delay: 0s;">☁️</div>
+            <div class="cloud" style="top: 35px; animation-delay: -12s; font-size: 10px;">☁️</div>
+        </div>
+        <div style="font-size: 16px; font-weight: 700; color: var(--gold); line-height:1;" id="totalBreaks">0</div>
+        <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Breaks</div>
     </div>
-    <div style="font-size: 16px; font-weight: 700; color: var(--gold); line-height:1;" id="totalBreaks">0</div>
-    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Breaks</div>
-</div>
+</a>
 
 <div id="gallery" style="position: relative; z-index: 2; padding-top: 50px;"></div>
 
@@ -221,33 +238,27 @@
             g.innerHTML = '🌾';
             
             g.style.left = Math.random() * 90 + "%";
-            const depthFactor = Math.random(); // 0 to 1
-            
-            // Perspective: Higher bottom = further back
+            const depthFactor = Math.random(); 
             g.style.bottom = ((1 - depthFactor) * 12) + "px";
-            g.style.zIndex = Math.floor(depthFactor * 10) + 1; // Grains always above base
-            
-            // Height variation for grains
+            g.style.zIndex = Math.floor(depthFactor * 10) + 1; 
             g.style.fontSize = (12 + Math.random() * 14) + "px";
-            
             g.style.animationDelay = Math.random() * 3 + "s";
             g.style.opacity = 0.7 + (depthFactor * 0.3);
             bed.appendChild(g);
         }
 
-        // 2. GENERATE MINI-FAUNA (Small decorations)
+        // 2. GENERATE MINI-FAUNA (Smaller animals)
         const fauna = ['🦋', '🐞', '🐌', '🐝'];
         for(let i=0; i < 5; i++) {
             const a = document.createElement('span');
             a.className = 'garden-item';
             a.innerHTML = fauna[Math.floor(Math.random() * fauna.length)];
-            
             a.style.left = Math.random() * 90 + "%";
             const depth = Math.random();
             a.style.bottom = ((1 - depth) * 15) + "px";
             a.style.zIndex = Math.floor(depth * 10);
             
-            // Small scale for animals
+            // SMALLER ANIMALS as requested
             a.style.fontSize = (6 + Math.random() * 3) + "px";
             a.style.animationDelay = Math.random() * 5 + "s";
             a.style.opacity = "0.8";
