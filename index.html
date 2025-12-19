@@ -168,7 +168,7 @@
 <div id="grainGardenContainer">
     <div id="gardenBed"><div style="position:absolute; top:5px; right:8px; font-size:20px;">☀️</div></div>
     <div style="font-size: 18px; font-weight: 700; color: var(--harvest-green); font-family: 'Fredoka';" id="totalBreaks">0</div>
-    <div style="font-size: 8px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Grains</div>
+    <div style="font-size: 8px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Breaks</div>
 </div>
 
 <div id="gallery"></div>
@@ -240,7 +240,7 @@
             bItems.forEach((item, index) => {
                 grid.innerHTML += `
                     <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Grains</div>` : ''}
+                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks</div>` : ''}
                         <div style="font-size:32px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
                         <span class="inst">${item.institution}</span>
@@ -270,13 +270,13 @@
             el.classList.add('fade-out'); // Cross-fade out
             setTimeout(() => {
                 lIdx = (lIdx + 1) % leaders.length;
-                el.innerText = `Top Harvester: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Grains)`;
+                el.innerText = `Top Harvester: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Breaks)`;
                 el.classList.remove('fade-out'); // Cross-fade in
             }, 1200); 
         };
         setInterval(cycle, 5500);
         // Set initial state
-        el.innerText = `Top Harvester: ${leaders[0].name} (${leaders[0].breaks} Grains)`;
+        el.innerText = `Top Harvester: ${leaders[0].name} (${leaders[0].breaks} Breaks)`;
     }
 
     function searchScholars() {
