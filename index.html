@@ -14,6 +14,7 @@
             --text-main: #444;
             --gold: #b89d5d;
             --major-blue: #5d8ab8;
+            --sky-blue: #e0f2f1;
         }
 
         body::before {
@@ -35,7 +36,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; overflow: hidden; color: white;
         }
-        .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; transition: transform 0.1s linear; }
+        .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; }
         
         #topHarvesterCycle {
             background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
@@ -47,47 +48,59 @@
         .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
 
-        /* GRAIN GARDEN */
+        /* ENHANCED GRAIN GARDEN */
         #grainGardenContainer {
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: #fff; border: 1px solid #eee; padding: 15px; border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 120px; text-align: center;
+            background: #fff; border: 2px solid var(--gold); padding: 10px; border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); width: 140px; text-align: center;
         }
         #gardenBed {
-            height: 60px; position: relative; overflow: hidden; 
-            background: #fdfbf7; border-radius: 8px; margin-bottom: 8px;
+            height: 90px; position: relative; overflow: hidden; 
+            background: linear-gradient(to bottom, #87CEEB 0%, #fff 70%, #d7ccc8 100%);
+            border-radius: 12px; margin-bottom: 8px; border: 1px solid #eee;
         }
+        .sun {
+            position: absolute; top: 10px; right: 10px; font-size: 20px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        .cloud {
+            position: absolute; font-size: 15px; opacity: 0.6;
+            animation: floatCloud 20s linear infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
+        @keyframes floatCloud { from { left: -30px; } to { left: 150px; } }
+
         .garden-grain {
-            position: absolute; font-size: 10px; bottom: 0;
+            position: absolute; font-size: 12px; bottom: -2px;
             animation: sway 3s ease-in-out infinite alternate;
             transform-origin: bottom;
         }
-        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+        @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
         /* NAVIGATION & CONTROLS */
         .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(255,255,255,0.98); padding: 15px 0; border-bottom: 1px solid #eee; text-align: center; }
         #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #eee; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; }
+        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #eee; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
         .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
         /* GRID & ROOTS */
         .cohort-group { position: relative; padding-top: 40px; }
         .root-svg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; fill: none; stroke: var(--primary-green); stroke-width: 1.5; stroke-opacity: 0.15;
-            stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawRoot 3s forwards;
+            z-index: -1; fill: none; stroke: var(--primary-green); stroke-width: 1.5; stroke-opacity: 0.2;
+            stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawRoot 4s forwards;
         }
         @keyframes drawRoot { to { stroke-dashoffset: 0; } }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 30px; padding: 20px 5% 80px; }
         .scholar-card { 
-            background: #fff; padding: 40px 15px 25px; border: 1px solid #f2ede4; border-radius: 4px;
-            text-align: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #fff; padding: 45px 15px 25px; border: 1px solid #f2ede4; border-radius: 4px;
+            text-align: center; transition: 0.4s ease; position: relative;
             opacity: 0; transform: translateY(30px);
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
+        .scholar-card:hover { border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-        /* CONCENTRIC RINGS */
         .growth-ring {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             border: 1px solid var(--gold); border-radius: 50%; opacity: 0.2; pointer-events: none;
@@ -95,7 +108,8 @@
 
         .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--gold); font-size: 1.1rem; margin-top: 15px; display: block; }
         .batch-stamp { position: absolute; top: 5px; left: 10px; font-size: 50px; font-family: serif; opacity: 0.04; font-weight: 900; }
-        .major-tooltip { position: absolute; top: -10px; background: var(--major-blue); color: white; font-size: 7px; padding: 3px 8px; border-radius: 2px; opacity: 0; transition: 0.3s; }
+        .scholar-break-badge { position: absolute; top: 12px; right: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fffcf5; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; }
+        .major-tooltip { position: absolute; top: -10px; background: var(--major-blue); color: white; font-size: 7px; padding: 3px 8px; border-radius: 2px; opacity: 0; transition: 0.3s; z-index: 10; }
         .scholar-card:hover .major-tooltip { opacity: 1; transform: translateY(-5px); }
     </style>
 </head>
@@ -107,23 +121,27 @@
             <span id="leaderName">Cultivating...</span>
             <div style="font-size: 7px; opacity: 0.6; text-transform: uppercase; margin-top: 4px;">Top Harvesters</div>
         </div>
-        <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin: 0;">Scholars Gallery</h1>
+        <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin: 0; letter-spacing: -1px;">Scholars Gallery</h1>
         <div class="goal-container">
             <div class="goal-bar-bg"><div id="goalProgress"></div></div>
-            <div style="font-size: 8px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px;">Goal: 100 Scholars</div>
+            <div style="font-size: 8px; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; opacity: 0.8;">Goal: 100 Scholars</div>
         </div>
     </div>
 </header>
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:200px; padding:8px 20px; border-radius:30px; border:1px solid #eee; font-size:10px; outline:none;">
+    <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #eee; font-size:10px; outline:none; background: #fafafa;">
 </div>
 
 <div id="grainGardenContainer">
-    <div id="gardenBed"></div>
-    <div style="font-size: 14px; font-weight: 700; color: var(--gold);" id="totalBreaks">0</div>
-    <div style="font-size: 6px; text-transform: uppercase; color: #999;">Total Harvested</div>
+    <div id="gardenBed">
+        <div class="sun">☀️</div>
+        <div class="cloud" style="top: 15px; animation-delay: 0s;">☁️</div>
+        <div class="cloud" style="top: 30px; animation-delay: -10s; font-size: 10px;">☁️</div>
+    </div>
+    <div style="font-size: 16px; font-weight: 700; color: var(--gold); line-height:1;" id="totalBreaks">0</div>
+    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-top: 4px;">Total Harvest</div>
 </div>
 
 <div id="gallery" style="background: white; position: relative; z-index: 2; padding-top: 50px;"></div>
@@ -133,17 +151,15 @@
     let allData = [];
     let leaders = [];
 
-    // PARALLAX LOGIC
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         document.getElementById('parallaxHeader').style.transform = `translateY(${scrolled * 0.4}px)`;
     });
 
-    // ORGANIC ROOT GENERATOR
     function generateRootPath() {
-        let path = `M ${Math.random()*10}% 0 `;
-        for(let i=1; i<=4; i++) {
-            path += `Q ${Math.random()*100}% ${i*100} ${Math.random()*100}% ${i*150} `;
+        let path = `M ${20 + Math.random()*60}% 0 `;
+        for(let i=1; i<=3; i++) {
+            path += `C ${Math.random()*100}% ${i*100}, ${Math.random()*100}% ${i*150}, ${Math.random()*100}% ${i*250} `;
         }
         return path;
     }
@@ -154,7 +170,15 @@
         const lines = csv.split('\n').slice(1);
         allData = lines.map(line => {
             const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            return c[0] ? { name: c[0].replace(/"/g, ''), batchNum: c[1].replace(/"/g, ''), accolade: c[2]?.replace(/"/g, '') || "", batchName: c[3]?.replace(/"/g, '') || "", cohort: c[4]?.replace(/"/g, '') || "Unassigned", institution: c[5]?.replace(/"/g, '') || "", breaks: parseInt(c[6]?.replace(/"/g, '')) || 0 } : null;
+            return c[0] ? { 
+                name: c[0].replace(/"/g, ''), 
+                batchNum: c[1].replace(/"/g, ''), 
+                accolade: c[2]?.replace(/"/g, '') || "", 
+                batchName: c[3]?.replace(/"/g, '') || "", 
+                cohort: c[4]?.replace(/"/g, '') || "Unassigned", 
+                institution: c[5]?.replace(/"/g, '') || "", 
+                breaks: parseInt(c[6]?.replace(/"/g, '')) || 0 
+            } : null;
         }).filter(i => i);
         render();
     }
@@ -163,21 +187,25 @@
         const gal = document.getElementById('gallery');
         const nav = document.getElementById('batchNav');
         const bed = document.getElementById('gardenBed');
-        gal.innerHTML = ""; nav.innerHTML = ""; bed.innerHTML = "";
+        gal.innerHTML = ""; nav.innerHTML = ""; 
+        
+        // Clear previous grains but keep sun/clouds
+        document.querySelectorAll('.garden-grain').forEach(g => g.remove());
         
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // Fill Garden
+        // Fill Garden Grains
         for(let i=0; i < totalBreaks; i++) {
             const g = document.createElement('span');
             g.className = 'garden-grain';
             g.innerHTML = '🌾';
             g.style.left = Math.random() * 90 + "%";
-            g.style.bottom = Math.random() * 20 + "px";
-            g.style.animationDelay = Math.random() * 2 + "s";
-            g.style.opacity = 0.3 + Math.random() * 0.7;
+            g.style.bottom = (Math.random() * 10 - 5) + "px";
+            g.style.animationDelay = Math.random() * 3 + "s";
+            g.style.fontSize = (8 + Math.random() * 6) + "px";
+            g.style.opacity = 0.4 + Math.random() * 0.6;
             bed.appendChild(g);
         }
 
@@ -187,7 +215,7 @@
             const bID = `batch-${bNum}`;
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bItems[0].batchName || 'Batch '+bNum}</a>`;
             
-            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:100px 0 20px; font-weight:700; font-size:12px; letter-spacing:4px; color:var(--primary-green); text-transform:uppercase;">🌿 ${bItems[0].batchName}</div>`);
+            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:120px 0 20px; font-weight:700; font-size:12px; letter-spacing:5px; color:var(--primary-green); text-transform:uppercase;">🌿 ${bItems[0].batchName}</div>`);
             
             const cohorts = [...new Set(bItems.map(i => i.cohort))];
             cohorts.forEach(cName => {
@@ -201,17 +229,18 @@
                 
                 bItems.filter(i => i.cohort === cName).forEach(item => {
                     const isMajor = item.accolade.trim().length > 0;
-                    const ringSize = 30 + (item.breaks * 5);
+                    const ringSize = 35 + (item.breaks * 4);
                     grid.innerHTML += `
                         <div class="scholar-card">
                             <div class="batch-stamp">${item.batchNum}</div>
+                            ${item.breaks > 0 ? `<div class="scholar-break-badge">${item.breaks}x 🌾</div>` : ''}
                             ${isMajor ? `<div class="major-tooltip">✨ National Scholar</div>` : ''}
-                            <div style="position:relative; height:50px; display:flex; align-items:center; justify-content:center;">
-                                ${isMajor ? `<div class="growth-ring" style="width:${ringSize}px; height:${ringSize}px;"></div><div style="font-size:22px;">🌾</div>` : '<div style="height:22px;"></div>'}
+                            <div style="position:relative; height:60px; display:flex; align-items:center; justify-content:center;">
+                                ${isMajor ? `<div class="growth-ring" style="width:${ringSize}px; height:${ringSize}px;"></div><div style="font-size:26px;">🌾</div>` : '<div style="height:26px;"></div>'}
                             </div>
                             <span class="name">${item.name}</span>
-                            <span style="font-size:8px; color:#aaa; text-transform:uppercase;">${item.institution}</span>
-                            <div style="font-size:9px; color:#777; font-style:italic; margin-top:10px; min-height:30px;">${item.accolade}</div>
+                            <span style="font-size:8px; color:#aaa; text-transform:uppercase; letter-spacing:1px;">${item.institution}</span>
+                            <div style="font-size:9px; color:#777; font-style:italic; margin-top:12px; min-height:30px; line-height:1.4;">${item.accolade}</div>
                         </div>`;
                 });
                 group.appendChild(grid);
@@ -222,7 +251,8 @@
         const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
         document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
 
-        leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)));
+        const maxB = Math.max(...allData.map(x => x.breaks));
+        leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
         startLeaderCycle();
     }
 
@@ -243,8 +273,8 @@
     function searchScholars() {
         const t = document.getElementById('scholarSearch').value.toLowerCase();
         document.querySelectorAll('.scholar-card').forEach(c => {
-            const visible = c.innerText.toLowerCase().includes(t);
-            c.style.display = visible ? 'flex' : 'none';
+            const match = c.innerText.toLowerCase().includes(t);
+            c.style.display = match ? 'flex' : 'none';
         });
     }
 
