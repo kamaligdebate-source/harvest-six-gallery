@@ -16,7 +16,7 @@
             --major-blue: #5d8ab8;
         }
 
-        /* NICHE: LEGACY GRAIN TEXTURE */
+        /* LEGACY GRAIN TEXTURE */
         body::before {
             content: "";
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -27,7 +27,6 @@
         body { 
             font-family: 'Poppins', sans-serif; background-color: #fff; margin: 0; padding: 0; 
             color: var(--text-main); scroll-behavior: smooth; overflow-x: hidden; 
-            /* NICHE: PARALLAX SOIL BACKGROUND */
             background-image: radial-gradient(var(--primary-green) 0.5px, transparent 0.5px);
             background-size: 40px 40px;
             background-attachment: fixed;
@@ -83,6 +82,8 @@
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-content { background: white; padding: 60px 40px; border-radius: 20px; max-width: 500px; width: 90%; text-align: center; position: relative; }
 
+        footer { text-align: center; padding: 40px; background: #faf9f7; border-top: 1px solid #eee; }
+
         #floatingBreakCounter { position: fixed; bottom: 25px; left: 25px; z-index: 1000; background: #fff; border: 1.5px solid var(--gold); padding: 10px 18px; border-radius: 40px; text-align: center; }
     </style>
 </head>
@@ -117,10 +118,15 @@
 
 <div class="sticky-controls">
     <input type="text" id="scholarSearch" placeholder="Search scholars..." onkeyup="searchScholars()">
-    <button style="background:var(--gold); color:white; border:none; padding:12px 25px; border-radius:40px; font-size:9px; font-weight:700; cursor:pointer; text-transform:uppercase;" onclick="toggleModal()">Learn what Harvest Six is</button>
+    <button style="background:var(--gold); color:white; border:none; padding:12px 25px; border-radius:40px; font-size:9px; font-weight:700; cursor:pointer; text-transform:uppercase;" onclick="toggleModal()">About Harvest Six</button>
 </div>
 
 <div id="gallery"></div>
+
+<footer>
+    <p style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px;">Need to update your stats?</p>
+    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 12px; font-weight: 700; text-decoration: none;">Submit Confirmation Link</a>
+</footer>
 
 <script>
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
@@ -128,7 +134,7 @@
     let leaders = [];
     let leaderIndex = 0;
 
-    // NICHE: HARVEST WIND PHYSICS
+    // HARVEST WIND PHYSICS
     document.addEventListener('mousemove', (e) => {
         document.querySelectorAll('.scholar-card.sprouted').forEach(card => {
             const rect = card.getBoundingClientRect();
@@ -191,15 +197,18 @@
                 const grid = document.createElement('div');
                 grid.className = 'grid';
                 bItems.filter(i => i.cohort === cName).forEach(item => {
-                    const isMajor = ["national", "pid", "pdc", "luzon", "open", "pdt"].some(k => item.accolade.toLowerCase().includes(k));
+                    // TRIGGER: IF ACCOLADE HAS ANY TEXT AT ALL
+                    const isMajor = item.accolade.trim().length > 0;
                     const randRot = (Math.random() * 8 - 4).toFixed(1); 
                     const bColor = stampColors[item.batchNum % stampColors.length];
+                    const gColor = (item.breaks > 7) ? "#b89d5d" : (item.breaks > 3 ? "#4a5d45" : "#8da080");
+
                     grid.innerHTML += `
                         <div class="scholar-card">
                             <div class="batch-stamp" style="color:${bColor}; transform: rotate(${randRot}deg)">${item.batchNum}</div>
-                            ${isMajor ? `<div class="major-tooltip">✨ Major Tournament Break</div>` : ''}
+                            ${isMajor ? `<div class="major-tooltip">✨ National Scholar</div>` : ''}
                             ${item.breaks > 0 ? `<div style="position:absolute; top:12px; right:12px; font-size:8px; font-weight:700; color:var(--gold);">${item.breaks}x 🌾</div>` : ''}
-                            <div style="font-size:20px; color:${(item.breaks > 7) ? "#b89d5d" : (item.breaks > 3 ? "#4a5d45" : "#8da080")}">🌾</div>
+                            ${isMajor ? `<div style="font-size:20px; color:${gColor}">🌾</div>` : '<div style="height:20px;"></div>'}
                             <span class="name">${item.name}</span>
                             <span class="institution" style="font-size:8px; color:#aaa; text-transform:uppercase;">${item.institution}</span>
                             <span class="accolade" style="font-size:9px; color:#666; font-style:italic; min-height:32px; margin-top:8px;">${item.accolade}</span>
