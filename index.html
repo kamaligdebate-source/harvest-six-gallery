@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholars Gallery | Harvest Six</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -14,103 +14,117 @@
             --text-main: #4a453e;
             --gold: #b89d5d;
             --paper: #fcfaf7;
-            --tape-color: rgba(230, 223, 209, 0.6);
+            --tape-color: rgba(220, 215, 200, 0.5);
         }
 
         body { 
-            font-family: 'Poppins', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             background-color: var(--paper); 
             margin: 0; padding: 0; 
             color: var(--text-main); 
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* --- HEADER --- */
+        /* --- MODERN ROUNDED HEADER --- */
         header { 
-            padding: 50px 20px;
+            padding: 60px 20px;
             background: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-bottom: 1px solid #e6dfd1;
-            border-top: 6px solid var(--primary-green);
+            border-bottom: 1px solid #eeeae0;
         }
 
         .header-title {
-            font-family: 'Libre Baskerville', serif;
-            font-size: 2.8rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.6rem;
             color: var(--dark-green);
-            margin: 5px 0;
-            font-weight: 700;
+            margin: 10px 0;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
         #topHarvesterCycle { min-height: 30px; margin-bottom: 5px; }
         #leaderName { 
-            font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 13px; color: var(--gold);
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 13px; color: var(--gold);
+            font-weight: 600;
             transition: all 1s ease; display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .fade-hidden { opacity: 0; transform: translateY(5px); }
+        .fade-hidden { opacity: 0; transform: translateY(3px); }
 
-        .population-box { margin-top: 15px; text-align: center; }
-        .goal-bar-bg { width: 220px; height: 4px; background: #f0f0f0; border-radius: 10px; margin: 8px auto; overflow: hidden; }
-        #goalProgress { background: var(--primary-green); width: 0%; height: 100%; transition: 2s ease; }
-        .counter-text { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #aaa; font-weight: 700; }
+        .population-box { margin-top: 20px; text-align: center; }
+        .goal-bar-bg { width: 240px; height: 6px; background: #f0f0f0; border-radius: 20px; margin: 10px auto; overflow: hidden; }
+        #goalProgress { background: var(--primary-green); width: 0%; height: 100%; border-radius: 20px; transition: 2s ease; }
+        .counter-text { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; font-weight: 700; }
 
         /* --- STICKY NAV --- */
         .sticky-controls { 
             position: sticky; top: 0; z-index: 200; 
-            background: rgba(252,250,247,0.95); backdrop-filter: blur(10px);
-            padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
+            padding: 15px 0; border-bottom: 1px solid #eeeae0; text-align: center;
         }
-        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; cursor: pointer; color: #999; text-decoration: none; font-weight: 600; margin: 0 3px;}
-        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .nav-btn { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px; text-transform: uppercase; letter-spacing: 1px; 
+            padding: 8px 16px; border: 1px solid #eeeae0; border-radius: 30px; 
+            cursor: pointer; color: #999; text-decoration: none; font-weight: 700; margin: 0 4px;
+            transition: 0.3s;
+        }
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
 
         /* --- GARDEN --- */
         #grainGardenContainer {
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 130px; text-align: center;
+            background: #fff; border: 1px solid #eeeae0; padding: 12px; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 130px; text-align: center;
         }
         #gardenBed {
             height: 80px; position: relative; overflow: hidden; 
-            background: linear-gradient(to bottom, #e3f2fd 0%, #fff 70%, #efebe9 100%);
-            border-radius: 12px; margin-bottom: 5px; border: 1px solid #f2ede4;
+            background: linear-gradient(to bottom, #f0f7ff 0%, #fff 100%);
+            border-radius: 16px; margin-bottom: 8px; border: 1px solid #f2ede4;
         }
         .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
         @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
         /* --- MASONRY GRID --- */
-        .cohort-section { padding: 60px 8% 20px; }
+        .cohort-section { padding: 50px 8% 20px; }
         .cohort-title { 
-            text-align: center; font-family: 'Libre Baskerville', serif; 
-            font-size: 20px; color: var(--primary-green); 
-            margin-bottom: 40px; text-transform: uppercase; letter-spacing: 3px;
+            text-align: center; font-family: 'Montserrat', sans-serif; 
+            font-size: 18px; color: var(--primary-green); 
+            margin-bottom: 40px; text-transform: uppercase; letter-spacing: 4px; font-weight: 700;
         }
         
-        .grid { 
-            column-count: 4; column-gap: 35px; display: block; 
-        }
+        .grid { column-count: 4; column-gap: 35px; display: block; }
         @media (max-width: 1200px) { .grid { column-count: 3; } }
         @media (max-width: 800px) { .grid { column-count: 2; } }
         @media (max-width: 500px) { .grid { column-count: 1; } }
 
-        /* --- CARDS --- */
+        /* --- CARDS (SOFT GEOMETRY) --- */
         .scholar-card { 
             display: inline-block; width: 100%; margin-bottom: 45px; break-inside: avoid;
-            background: #fff; padding: 50px 20px 30px; border: 1px solid #e6dfd1; 
+            background: #fff; padding: 50px 20px 30px; 
+            border: 1px solid #eeeae0; border-radius: 12px; /* Rounded Corporate Corners */
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02); transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             box-sizing: border-box;
         }
+        /* Soft Washi Tape */
         .scholar-card::before {
-            content: ""; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 22px; background: var(--tape-color); border-left: 1px dashed rgba(0,0,0,0.05); border-right: 1px dashed rgba(0,0,0,0.05); z-index: 5;
+            content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 20px; background: var(--tape-color); border-radius: 2px; z-index: 5;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .aura { position: absolute; top: 40px; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: radial-gradient(circle, rgba(184, 157, 93, 0.12) 0%, transparent 70%); pointer-events: none; }
-        .star-badge { position: absolute; top: 15px; right: 15px; font-size: 12px; color: var(--gold); }
-        .break-badge { position: absolute; top: 12px; left: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fff; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; z-index: 10; }
+        .aura { position: absolute; top: 40px; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: radial-gradient(circle, rgba(184, 157, 93, 0.1) 0%, transparent 70%); pointer-events: none; }
+        .star-badge { position: absolute; top: 15px; right: 18px; font-size: 14px; color: var(--gold); }
+        .break-badge { position: absolute; top: 15px; left: 18px; font-size: 10px; font-weight: 700; color: var(--gold); background: #fff; padding: 3px 10px; border-radius: 20px; border: 1px solid #eeeae0; z-index: 10; }
         
-        .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.1rem; margin-top: 15px; display: block; }
-        footer { text-align: center; padding: 60px 20px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
+        .name { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--primary-green); font-size: 1.05rem; margin-top: 15px; display: block; }
+        #scholarSearch { width: 220px; padding: 10px 20px; border: 1px solid #eeeae0; font-size: 11px; outline: none; border-radius: 30px; font-family: 'Inter', sans-serif; transition: 0.3s; }
+        #scholarSearch:focus { border-color: var(--gold); width: 260px; }
+
+        footer { text-align: center; padding: 60px 20px; background: #faf8f5; border-top: 1px solid #eeeae0; }
     </style>
 </head>
 <body>
@@ -126,19 +140,19 @@
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search scholars..." onkeyup="searchScholars()" style="width:220px; padding:8px; border:1px solid #e6dfd1; font-size:10px; outline:none; border-radius: 20px;">
+    <input type="text" id="scholarSearch" placeholder="Search by name or school..." onkeyup="searchScholars()">
 </div>
 
 <div id="grainGardenContainer">
     <div id="gardenBed"><div style="position:absolute; top:5px; right:5px; font-size:16px;">☀️</div></div>
-    <div style="font-size: 16px; font-weight: 700; color: var(--gold);" id="totalBreaks">0</div>
-    <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px;">Total Grains</div>
+    <div style="font-size: 16px; font-weight: 800; color: var(--gold); font-family: 'Montserrat';" id="totalBreaks">0</div>
+    <div style="font-size: 7px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Grains</div>
 </div>
 
 <div id="gallery"></div>
 
 <footer>
-    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 11px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;">Update Profile</a>
+    <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--gold); font-size: 10px; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-family: 'Montserrat';">Update Profile</a>
 </footer>
 
 <script>
@@ -180,7 +194,7 @@
             const g = document.createElement('span');
             g.className = 'garden-item'; g.innerHTML = '🌾';
             g.style.left = Math.random() * 90 + "%";
-            g.style.fontSize = (12 + Math.random() * 10) + "px";
+            g.style.fontSize = (14 + Math.random() * 8) + "px";
             bed.appendChild(g);
         }
 
@@ -203,49 +217,5 @@
             bItems.forEach((item, index) => {
                 const isNational = item.accolade.toLowerCase().includes("national");
                 grid.innerHTML += `
-                    <div class="scholar-card" style="transition-delay: ${(index % 10) * 0.1}s">
-                        ${isNational ? '<div class="aura"></div><div class="star-badge">✦</div>' : ''}
-                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks}x 🌾</div>` : ''}
-                        <div style="font-size:22px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
-                        <span class="name">${item.name}</span>
-                        <span style="font-size:8px; color:#aaa; text-transform:uppercase; font-weight:600;">${item.institution}</span>
-                        <div style="font-size:9px; color:#777; font-style:italic; margin-top:12px; border-top:1px solid #f9f6f0; padding-top:8px;">${item.accolade}</div>
-                    </div>`;
-            });
-            section.appendChild(grid);
-            gal.appendChild(section);
-        });
-
-        const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
-        document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
-
-        const maxB = Math.max(...allData.map(x => x.breaks));
-        leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
-        if(leaders.length) startLeaderCycle();
-    }
-
-    function startLeaderCycle() {
-        const el = document.getElementById('leaderName');
-        const update = () => {
-            el.classList.add('fade-hidden');
-            setTimeout(() => {
-                lIdx = (lIdx + 1) % leaders.length;
-                el.innerText = `Currently Leading: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Grains)`;
-                el.classList.remove('fade-hidden');
-            }, 1000);
-        };
-        update();
-        setInterval(update, 5000);
-    }
-
-    function searchScholars() {
-        const t = document.getElementById('scholarSearch').value.toLowerCase();
-        document.querySelectorAll('.scholar-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(t) ? 'inline-block' : 'none';
-        });
-    }
-
-    loadGallery();
-</script>
-</body>
-</html>
+                    <div class="scholar-card" style="transition-delay: ${(index % 10) * 0.05}s">
+                        ${isNational ? '<div class="aura"></div><div class="
