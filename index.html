@@ -25,13 +25,13 @@
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* --- ENHANCED HEADER --- */
+        /* --- HEADER --- */
         header { 
-            padding: 60px 20px;
+            padding: 50px 20px;
             background: #fff;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 1px solid #e6dfd1;
-            border-top: 6px solid var(--primary-green); /* Prestige accent */
+            border-top: 6px solid var(--primary-green);
         }
 
         .header-title {
@@ -39,21 +39,29 @@
             font-size: 2.8rem;
             color: var(--dark-green);
             margin: 5px 0;
-            letter-spacing: -1px;
             font-weight: 700;
         }
 
-        #topHarvesterCycle { min-height: 30px; margin-bottom: 10px; }
+        #topHarvesterCycle { min-height: 30px; margin-bottom: 5px; }
         #leaderName { 
             font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 13px; color: var(--gold);
             transition: all 1s ease; display: block;
         }
         .fade-hidden { opacity: 0; transform: translateY(5px); }
 
-        .population-box { margin-top: 20px; text-align: center; }
-        .goal-bar-bg { width: 250px; height: 3px; background: #eee; border-radius: 10px; margin: 8px auto; overflow: hidden; }
+        .population-box { margin-top: 15px; text-align: center; }
+        .goal-bar-bg { width: 220px; height: 4px; background: #f0f0f0; border-radius: 10px; margin: 8px auto; overflow: hidden; }
         #goalProgress { background: var(--primary-green); width: 0%; height: 100%; transition: 2s ease; }
-        .counter-text { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #aaa; font-weight: 600; }
+        .counter-text { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #aaa; font-weight: 700; }
+
+        /* --- STICKY NAV --- */
+        .sticky-controls { 
+            position: sticky; top: 0; z-index: 200; 
+            background: rgba(252,250,247,0.95); backdrop-filter: blur(10px);
+            padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center;
+        }
+        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; cursor: pointer; color: #999; text-decoration: none; font-weight: 600; margin: 0 3px;}
+        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
 
         /* --- GARDEN --- */
         #grainGardenContainer {
@@ -69,29 +77,29 @@
         .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
         @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
-        /* --- STICKY NAV --- */
-        .sticky-controls { 
-            position: sticky; top: 0; z-index: 200; 
-            background: rgba(252,250,247,0.95); backdrop-filter: blur(10px);
-            padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center;
+        /* --- MASONRY GRID --- */
+        .cohort-section { padding: 60px 8% 20px; }
+        .cohort-title { 
+            text-align: center; font-family: 'Libre Baskerville', serif; 
+            font-size: 20px; color: var(--primary-green); 
+            margin-bottom: 40px; text-transform: uppercase; letter-spacing: 3px;
         }
-        #batchNav { margin-bottom: 10px; }
-        .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; cursor: pointer; color: #999; text-decoration: none; font-weight: 600; margin: 0 3px;}
-        .nav-btn:hover { border-color: var(--gold); color: var(--gold); }
-
-        /* --- GRID & CARDS --- */
-        .grid { column-count: 4; column-gap: 35px; padding: 30px 8% 60px; display: block; }
+        
+        .grid { 
+            column-count: 4; column-gap: 35px; display: block; 
+        }
         @media (max-width: 1200px) { .grid { column-count: 3; } }
         @media (max-width: 800px) { .grid { column-count: 2; } }
         @media (max-width: 500px) { .grid { column-count: 1; } }
 
+        /* --- CARDS --- */
         .scholar-card { 
             display: inline-block; width: 100%; margin-bottom: 45px; break-inside: avoid;
             background: #fff; padding: 50px 20px 30px; border: 1px solid #e6dfd1; 
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.02); transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-sizing: border-box;
         }
-        /* Tape */
         .scholar-card::before {
             content: ""; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
             width: 70px; height: 22px; background: var(--tape-color); border-left: 1px dashed rgba(0,0,0,0.05); border-right: 1px dashed rgba(0,0,0,0.05); z-index: 5;
@@ -99,18 +107,16 @@
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
         .aura { position: absolute; top: 40px; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: radial-gradient(circle, rgba(184, 157, 93, 0.12) 0%, transparent 70%); pointer-events: none; }
         .star-badge { position: absolute; top: 15px; right: 15px; font-size: 12px; color: var(--gold); }
-        .scholar-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .break-badge { position: absolute; top: 12px; left: 12px; font-size: 9px; font-weight: 700; color: var(--gold); background: #fff; padding: 2px 8px; border-radius: 10px; border: 1px solid #f2ede4; z-index: 10; }
+        
         .name { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary-green); font-size: 1.1rem; margin-top: 15px; display: block; }
-
         footer { text-align: center; padding: 60px 20px; background: #f2ede4; border-top: 1px solid #e6dfd1; }
     </style>
 </head>
 <body>
 
 <header>
-    <div id="topHarvesterCycle">
-        <span id="leaderName">Gathering the harvest...</span>
-    </div>
+    <div id="topHarvesterCycle"><span id="leaderName">Gathering the harvest...</span></div>
     <h1 class="header-title">The Scholars Gallery</h1>
     <div class="population-box">
         <div class="counter-text">Population: <span id="countDisplay">0</span> / 100</div>
@@ -120,13 +126,11 @@
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search scholars..." onkeyup="searchScholars()" style="width:200px; padding:8px; border:1px solid #e6dfd1; font-size:10px; outline:none;">
+    <input type="text" id="scholarSearch" placeholder="Search scholars..." onkeyup="searchScholars()" style="width:220px; padding:8px; border:1px solid #e6dfd1; font-size:10px; outline:none; border-radius: 20px;">
 </div>
 
 <div id="grainGardenContainer">
-    <div id="gardenBed">
-        <div style="position:absolute; top:5px; right:5px; font-size:16px;">☀️</div>
-    </div>
+    <div id="gardenBed"><div style="position:absolute; top:5px; right:5px; font-size:16px;">☀️</div></div>
     <div style="font-size: 16px; font-weight: 700; color: var(--gold);" id="totalBreaks">0</div>
     <div style="font-size: 6px; text-transform: uppercase; color: #999; letter-spacing: 1px;">Total Grains</div>
 </div>
@@ -153,16 +157,12 @@
                 const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : "";
                 if (!c[0]) return null;
                 return { 
-                    name: clean(c[0]), 
-                    batchNum: clean(c[1]), 
-                    accolade: clean(c[2]), 
-                    batchName: clean(c[3]), 
-                    institution: clean(c[5]), 
-                    breaks: parseInt(clean(c[6])) || 0 
+                    name: clean(c[0]), batchNum: clean(c[1]), accolade: clean(c[2]), 
+                    batchName: clean(c[3]), institution: clean(c[5]), breaks: parseInt(clean(c[6])) || 0 
                 };
             }).filter(i => i !== null);
             render();
-        } catch (e) { console.error("Error loading data:", e); }
+        } catch (e) { console.error(e); }
     }
 
     function render() {
@@ -171,25 +171,19 @@
         const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; 
         
-        // Counter & Progress
-        const count = allData.length;
-        document.getElementById('countDisplay').innerText = count;
-        document.getElementById('goalProgress').style.width = Math.min(count, 100) + "%";
-        
+        document.getElementById('countDisplay').innerText = allData.length;
+        document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
-        // Populate Garden
         for(let i=0; i < Math.min(totalBreaks, 20); i++) {
             const g = document.createElement('span');
             g.className = 'garden-item'; g.innerHTML = '🌾';
             g.style.left = Math.random() * 90 + "%";
             g.style.fontSize = (12 + Math.random() * 10) + "px";
-            g.style.animationDelay = Math.random() * 2 + "s";
             bed.appendChild(g);
         }
 
-        // Grouping by Batch
         const batches = [...new Set(allData.map(i => i.batchNum))].sort((a,b) => a-b);
         batches.forEach(bNum => {
             const bItems = allData.filter(i => i.batchNum === bNum);
@@ -197,7 +191,11 @@
             const bID = `batch-${bNum}`;
 
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bName}</a>`;
-            gal.insertAdjacentHTML('beforeend', `<div id="${bID}" style="text-align:center; padding:80px 0 20px; font-family:'Libre Baskerville'; font-size:18px; color:var(--primary-green); opacity:0.7;">— ${bName} —</div>`);
+            
+            const section = document.createElement('div');
+            section.className = 'cohort-section';
+            section.id = bID;
+            section.innerHTML = `<div class="cohort-title">— ${bName} —</div>`;
             
             const grid = document.createElement('div');
             grid.className = 'grid';
@@ -207,20 +205,20 @@
                 grid.innerHTML += `
                     <div class="scholar-card" style="transition-delay: ${(index % 10) * 0.1}s">
                         ${isNational ? '<div class="aura"></div><div class="star-badge">✦</div>' : ''}
-                        <div style="font-size:22px; position:relative; z-index:2;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks}x 🌾</div>` : ''}
+                        <div style="font-size:22px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
-                        <span style="font-size:8px; color:#aaa; text-transform:uppercase; letter-spacing:1px; font-weight:600;">${item.institution}</span>
-                        <div style="font-size:9px; color:#777; font-style:italic; margin-top:15px; border-top:1px solid #f9f6f0; padding-top:10px;">${item.accolade}</div>
+                        <span style="font-size:8px; color:#aaa; text-transform:uppercase; font-weight:600;">${item.institution}</span>
+                        <div style="font-size:9px; color:#777; font-style:italic; margin-top:12px; border-top:1px solid #f9f6f0; padding-top:8px;">${item.accolade}</div>
                     </div>`;
             });
-            gal.appendChild(grid);
+            section.appendChild(grid);
+            gal.appendChild(section);
         });
 
-        // Setup Observer
         const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
         document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
 
-        // Setup Carousel
         const maxB = Math.max(...allData.map(x => x.breaks));
         leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
         if(leaders.length) startLeaderCycle();
