@@ -14,7 +14,6 @@
             --text-main: #444;
             --gold: #b89d5d;
             --major-blue: #5d8ab8;
-            --sky-blue: #e0f2f1;
         }
 
         body::before {
@@ -38,11 +37,23 @@
         }
         .header-content { position: fixed; top: 150px; text-align: center; z-index: 1; }
         
+        /* ULTRA-SMOOTH CAROUSEL */
         #topHarvesterCycle {
-            background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
-            padding: 10px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
-            font-size: 11px; font-weight: 700; margin-bottom: 20px;
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            padding: 12px 30px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 25px; min-width: 280px; height: 45px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden;
         }
+
+        #leaderName { 
+            font-size: 11px; font-weight: 700; 
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1; transform: translateY(0);
+            will-change: opacity, transform;
+        }
+
+        #leaderName.fade-out { opacity: 0; transform: translateY(5px); }
 
         .goal-container { width: 280px; margin: 15px auto; }
         .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
@@ -59,14 +70,8 @@
             background: linear-gradient(to bottom, #87CEEB 0%, #fff 70%, #d7ccc8 100%);
             border-radius: 12px; margin-bottom: 8px; border: 1px solid #eee;
         }
-        .sun {
-            position: absolute; top: 10px; right: 10px; font-size: 20px;
-            animation: pulse 4s ease-in-out infinite;
-        }
-        .cloud {
-            position: absolute; font-size: 15px; opacity: 0.6;
-            animation: floatCloud 20s linear infinite;
-        }
+        .sun { position: absolute; top: 10px; right: 10px; font-size: 20px; animation: pulse 4s ease-in-out infinite; }
+        .cloud { position: absolute; font-size: 15px; opacity: 0.6; animation: floatCloud 20s linear infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
         @keyframes floatCloud { from { left: -30px; } to { left: 150px; } }
 
@@ -118,8 +123,8 @@
 <header>
     <div class="header-content" id="parallaxHeader">
         <div id="topHarvesterCycle">
-            <span id="leaderName">Cultivating...</span>
-            <div style="font-size: 7px; opacity: 0.6; text-transform: uppercase; margin-top: 4px;">Top Harvesters</div>
+            <span id="leaderName">Cultivating Excellence...</span>
+            <div style="font-size: 7px; opacity: 0.6; text-transform: uppercase; margin-top: 4px; letter-spacing: 1px;">Top Speakers</div>
         </div>
         <h1 style="font-family: 'Playfair Display', serif; font-size: 3rem; margin: 0; letter-spacing: -1px;">Scholars Gallery</h1>
         <div class="goal-container">
@@ -150,6 +155,7 @@
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
     let allData = [];
     let leaders = [];
+    let lIdx = 0;
 
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
@@ -169,15 +175,16 @@
         const csv = await res.text();
         const lines = csv.split('\n').slice(1);
         allData = lines.map(line => {
-            const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            const c = line.split(/,(?=(?:double quote|[^"])*$)/); // Simple CSV split
+            const clean = (val) => val ? val.replace(/"/g, '').trim() : "";
             return c[0] ? { 
-                name: c[0].replace(/"/g, ''), 
-                batchNum: c[1].replace(/"/g, ''), 
-                accolade: c[2]?.replace(/"/g, '') || "", 
-                batchName: c[3]?.replace(/"/g, '') || "", 
-                cohort: c[4]?.replace(/"/g, '') || "Unassigned", 
-                institution: c[5]?.replace(/"/g, '') || "", 
-                breaks: parseInt(c[6]?.replace(/"/g, '')) || 0 
+                name: clean(c[0]), 
+                batchNum: clean(c[1]), 
+                accolade: clean(c[2]), 
+                batchName: clean(c[3]), 
+                cohort: clean(c[4]), 
+                institution: clean(c[5]), 
+                breaks: parseInt(clean(c[6])) || 0 
             } : null;
         }).filter(i => i);
         render();
@@ -189,14 +196,12 @@
         const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; 
         
-        // Clear previous grains but keep sun/clouds
         document.querySelectorAll('.garden-grain').forEach(g => g.remove());
         
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // Fill Garden Grains
         for(let i=0; i < totalBreaks; i++) {
             const g = document.createElement('span');
             g.className = 'garden-grain';
@@ -228,7 +233,7 @@
                 grid.className = 'grid';
                 
                 bItems.filter(i => i.cohort === cName).forEach(item => {
-                    const isMajor = item.accolade.trim().length > 0;
+                    const isMajor = item.accolade.length > 0;
                     const ringSize = 35 + (item.breaks * 4);
                     grid.innerHTML += `
                         <div class="scholar-card">
@@ -256,18 +261,23 @@
         startLeaderCycle();
     }
 
-    let lIdx = 0;
     function startLeaderCycle() {
         if(!leaders.length) return;
         const el = document.getElementById('leaderName');
+        
+        // Initial name
+        el.innerText = `${leaders[0].name} (${leaders[0].breaks}x)`;
+        
         setInterval(() => {
-            el.style.opacity = 0;
+            el.classList.add('fade-out');
+            
             setTimeout(() => {
                 lIdx = (lIdx + 1) % leaders.length;
                 el.innerText = `${leaders[lIdx].name} (${leaders[lIdx].breaks}x)`;
-                el.style.opacity = 1;
-            }, 500);
-        }, 4000);
+                el.classList.remove('fade-out');
+            }, 800); // Halfway through the interval for the switch
+            
+        }, 4500);
     }
 
     function searchScholars() {
