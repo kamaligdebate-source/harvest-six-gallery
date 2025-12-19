@@ -211,35 +211,47 @@
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // PERFORMANCE CAP: 30 items
-        const visualItemCount = Math.min(totalBreaks, 30); 
+        // PERFORMANCE CAP: 30 grains
+        const visualGrainCount = Math.min(totalBreaks, 30); 
 
-        for(let i=0; i < visualItemCount; i++) {
+        // 1. GENERATE GRAINS (ONLY 🌾)
+        for(let i=0; i < visualGrainCount; i++) {
             const g = document.createElement('span');
             g.className = 'garden-item';
+            g.innerHTML = '🌾';
             
-            // ECOSYSTEM VARIETY: Plants + Animals
-            const flora = ['🌾', '🌾', '🌿', '🌱', '🌻', '🍃'];
-            const fauna = ['🦋', '🐞', '🐌', '🐝'];
-            const isAnimal = Math.random() > 0.85; // 15% chance for an animal
-            
-            g.innerHTML = isAnimal ? fauna[Math.floor(Math.random()*fauna.length)] : flora[Math.floor(Math.random()*flora.length)];
-            
-            // HORIZONTAL & VERTICAL POSITIONING
             g.style.left = Math.random() * 90 + "%";
-            const depthFactor = Math.random(); // 0 (back) to 1 (front)
+            const depthFactor = Math.random(); // 0 to 1
             
-            // LAYERING: Lower depth = further back = higher bottom position
-            g.style.bottom = ((1 - depthFactor) * 10) + "px";
-            g.style.zIndex = Math.floor(depthFactor * 10);
+            // Perspective: Higher bottom = further back
+            g.style.bottom = ((1 - depthFactor) * 12) + "px";
+            g.style.zIndex = Math.floor(depthFactor * 10) + 1; // Grains always above base
             
-            // HEIGHT VARIATION
-            const size = isAnimal ? (8 + Math.random()*4) : (10 + Math.random()*14);
-            g.style.fontSize = size + "px";
+            // Height variation for grains
+            g.style.fontSize = (12 + Math.random() * 14) + "px";
             
             g.style.animationDelay = Math.random() * 3 + "s";
-            g.style.opacity = 0.7 + (depthFactor * 0.3); // Items in front are more opaque
+            g.style.opacity = 0.7 + (depthFactor * 0.3);
             bed.appendChild(g);
+        }
+
+        // 2. GENERATE MINI-FAUNA (Small decorations)
+        const fauna = ['🦋', '🐞', '🐌', '🐝'];
+        for(let i=0; i < 5; i++) {
+            const a = document.createElement('span');
+            a.className = 'garden-item';
+            a.innerHTML = fauna[Math.floor(Math.random() * fauna.length)];
+            
+            a.style.left = Math.random() * 90 + "%";
+            const depth = Math.random();
+            a.style.bottom = ((1 - depth) * 15) + "px";
+            a.style.zIndex = Math.floor(depth * 10);
+            
+            // Small scale for animals
+            a.style.fontSize = (6 + Math.random() * 3) + "px";
+            a.style.animationDelay = Math.random() * 5 + "s";
+            a.style.opacity = "0.8";
+            bed.appendChild(a);
         }
 
         const batches = [...new Set(allData.map(i => i.batchNum))].sort((a,b) => a-b);
