@@ -9,7 +9,7 @@
     
     <style>
         :root {
-            --primary-green: #5d6d4f; /* Earthier Sage */
+            --primary-green: #5d6d4f; 
             --dark-green: #4a573e;
             --text-main: #4a453e;
             --gold: #b89d5d;
@@ -27,7 +27,6 @@
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
-        /* PARALLAX HEADER */
         header { 
             height: 450px;
             background: radial-gradient(circle at center, #8da080 0%, var(--dark-green) 100%);
@@ -47,7 +46,6 @@
             font-size: 11px; font-weight: 700; 
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 1; transform: translateY(0);
-            will-change: opacity, transform;
         }
         #leaderName.fade-out { opacity: 0; transform: translateY(5px); }
 
@@ -55,7 +53,7 @@
         .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
 
-        /* ENHANCED GRAIN GARDEN */
+        /* MINI ECOSYSTEM GARDEN */
         #grainGardenContainer {
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
             background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
@@ -71,20 +69,19 @@
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
         @keyframes floatCloud { from { left: -40px; } to { left: 160px; } }
 
-        .garden-grain {
-            position: absolute; font-size: 12px; bottom: -2px;
+        .garden-item {
+            position: absolute; bottom: -2px;
             animation: sway 3s ease-in-out infinite alternate;
             transform-origin: bottom;
+            display: inline-block;
         }
-        @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
+        @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
-        /* NAVIGATION & CONTROLS */
         .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(252,250,247,0.95); padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center; }
         #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
         .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
 
-        /* GRID & ROOTS */
         .cohort-group { position: relative; padding-top: 40px; }
         .root-svg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -208,25 +205,40 @@
         const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; 
         
-        document.querySelectorAll('.garden-grain').forEach(g => g.remove());
+        document.querySelectorAll('.garden-item').forEach(g => g.remove());
         
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // PERFORMANCE FIX: We cap the number of emoji elements at 40
-        // even if there are 1000 total breaks.
-        const visualGrainCount = Math.min(totalBreaks, 40); 
+        // PERFORMANCE CAP: 30 items
+        const visualItemCount = Math.min(totalBreaks, 30); 
 
-        for(let i=0; i < visualGrainCount; i++) {
+        for(let i=0; i < visualItemCount; i++) {
             const g = document.createElement('span');
-            g.className = 'garden-grain';
-            g.innerHTML = '🌾';
-            g.style.left = Math.random() * 92 + "%";
-            g.style.bottom = (Math.random() * 10 - 5) + "px";
+            g.className = 'garden-item';
+            
+            // ECOSYSTEM VARIETY: Plants + Animals
+            const flora = ['🌾', '🌾', '🌿', '🌱', '🌻', '🍃'];
+            const fauna = ['🦋', '🐞', '🐌', '🐝'];
+            const isAnimal = Math.random() > 0.85; // 15% chance for an animal
+            
+            g.innerHTML = isAnimal ? fauna[Math.floor(Math.random()*fauna.length)] : flora[Math.floor(Math.random()*flora.length)];
+            
+            // HORIZONTAL & VERTICAL POSITIONING
+            g.style.left = Math.random() * 90 + "%";
+            const depthFactor = Math.random(); // 0 (back) to 1 (front)
+            
+            // LAYERING: Lower depth = further back = higher bottom position
+            g.style.bottom = ((1 - depthFactor) * 10) + "px";
+            g.style.zIndex = Math.floor(depthFactor * 10);
+            
+            // HEIGHT VARIATION
+            const size = isAnimal ? (8 + Math.random()*4) : (10 + Math.random()*14);
+            g.style.fontSize = size + "px";
+            
             g.style.animationDelay = Math.random() * 3 + "s";
-            g.style.fontSize = (8 + Math.random() * 6) + "px";
-            g.style.opacity = 0.5 + Math.random() * 0.5;
+            g.style.opacity = 0.7 + (depthFactor * 0.3); // Items in front are more opaque
             bed.appendChild(g);
         }
 
