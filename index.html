@@ -24,9 +24,11 @@
             color: var(--text-main); 
             scroll-behavior: smooth; 
             overflow-x: hidden; 
+            /* Organic Texture */
             background-image: url("https://www.transparenttextures.com/patterns/sandpaper.png");
         }
 
+        /* PARALLAX HEADER */
         header { 
             height: 450px;
             background: radial-gradient(circle at center, #8da080 0%, var(--dark-green) 100%);
@@ -53,7 +55,7 @@
         .goal-bar-bg { width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
         #goalProgress { background: #fff; width: 0%; height: 100%; transition: 1.5s ease; }
 
-        /* CLICKABLE GARDEN WIDGET */
+        /* CLICKABLE MINI ECOSYSTEM GARDEN */
         #gardenLink {
             text-decoration: none;
             color: inherit;
@@ -61,18 +63,14 @@
             display: block;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #gardenLink:hover {
-            transform: scale(1.05) translateY(-5px);
-        }
+        #gardenLink:hover { transform: scale(1.05) translateY(-5px); }
+
         #grainGardenContainer {
             background: #fff; border: 1px solid #e6dfd1; padding: 10px; border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 140px; text-align: center;
             cursor: pointer;
         }
-        #gardenLink:hover #grainGardenContainer {
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-            border-color: var(--gold);
-        }
+        #gardenLink:hover #grainGardenContainer { border-color: var(--gold); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
 
         #gardenBed {
             height: 90px; position: relative; overflow: hidden; 
@@ -92,11 +90,13 @@
         }
         @keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
+        /* STICKY CONTROLS */
         .sticky-controls { position: sticky; top: 0; z-index: 200; background: rgba(252,250,247,0.95); padding: 15px 0; border-bottom: 1px solid #e6dfd1; text-align: center; }
         #batchNav { margin-bottom: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .nav-btn { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 5px 12px; border: 1px solid #e6dfd1; border-radius: 20px; cursor: pointer; color: #999; text-decoration: none; font-weight: 700;}
         .nav-btn:hover { border-color: var(--gold); color: var(--gold); background: #fff; }
 
+        /* SCHOLAR CARDS */
         .cohort-group { position: relative; padding-top: 40px; }
         .root-svg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -114,7 +114,7 @@
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
         .scholar-card:hover { 
-            transform: translateY(-8px) rotate(1deg);
+            transform: translateY(-8px) rotate(1deg); /* Slight tilt for organic feel */
             border-color: var(--gold); 
             box-shadow: 0 15px 35px rgba(184, 157, 93, 0.12); 
         }
@@ -154,7 +154,7 @@
     <input type="text" id="scholarSearch" placeholder="Search the field..." onkeyup="searchScholars()" style="width:220px; padding:10px 25px; border-radius:30px; border:1px solid #e6dfd1; font-size:10px; outline:none; background: #fff;">
 </div>
 
-<a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank" id="gardenLink">
+<a href="garden-registry.html" id="gardenLink">
     <div id="grainGardenContainer">
         <div id="gardenBed">
             <div class="sun">☀️</div>
@@ -179,6 +179,7 @@
     let leaders = [];
     let lIdx = 0;
 
+    // Parallax Effect
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         document.getElementById('parallaxHeader').style.transform = `translateY(${scrolled * 0.45}px)`;
@@ -228,10 +229,10 @@
         document.getElementById('totalBreaks').innerText = totalBreaks;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // PERFORMANCE CAP: 30 grains
+        // PERFORMANCE CAP: 30 visual items total
         const visualGrainCount = Math.min(totalBreaks, 30); 
 
-        // 1. GENERATE GRAINS (ONLY 🌾)
+        // 1. GENERATE GRAINS (Achivement based)
         for(let i=0; i < visualGrainCount; i++) {
             const g = document.createElement('span');
             g.className = 'garden-item';
@@ -241,13 +242,13 @@
             const depthFactor = Math.random(); 
             g.style.bottom = ((1 - depthFactor) * 12) + "px";
             g.style.zIndex = Math.floor(depthFactor * 10) + 1; 
-            g.style.fontSize = (12 + Math.random() * 14) + "px";
+            g.style.fontSize = (12 + Math.random() * 14) + "px"; // Height Variation
             g.style.animationDelay = Math.random() * 3 + "s";
             g.style.opacity = 0.7 + (depthFactor * 0.3);
             bed.appendChild(g);
         }
 
-        // 2. GENERATE MINI-FAUNA (Smaller animals)
+        // 2. GENERATE ECOSYSTEM FAUNA (Smaller animals)
         const fauna = ['🦋', '🐞', '🐌', '🐝'];
         for(let i=0; i < 5; i++) {
             const a = document.createElement('span');
@@ -257,9 +258,7 @@
             const depth = Math.random();
             a.style.bottom = ((1 - depth) * 15) + "px";
             a.style.zIndex = Math.floor(depth * 10);
-            
-            // SMALLER ANIMALS as requested
-            a.style.fontSize = (6 + Math.random() * 3) + "px";
+            a.style.fontSize = (6 + Math.random() * 3) + "px"; // Small animals
             a.style.animationDelay = Math.random() * 5 + "s";
             a.style.opacity = "0.8";
             bed.appendChild(a);
