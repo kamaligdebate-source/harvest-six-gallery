@@ -31,7 +31,7 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER AREA --- */
         header { 
             padding: 80px 20px 40px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -91,7 +91,7 @@
         @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 550px) { .grid { grid-template-columns: 1fr; } }
 
-        /* --- SCHOLAR CARDS --- */
+        /* --- CARDS --- */
         .scholar-card { 
             display: flex; flex-direction: column; background: white; padding: 45px 25px 30px; border-radius: 30px;
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
@@ -109,6 +109,7 @@
         .break-badge { 
             position: absolute; top: 18px; left: 22px; font-size: 10px; font-weight: 700; 
             color: var(--harvest-green); background: #f4f7f0; padding: 4px 12px; border-radius: 20px; 
+            cursor: pointer; z-index: 20;
         }
 
         .save-card-btn {
@@ -117,20 +118,26 @@
         }
         .scholar-card:hover .save-card-btn { opacity: 1; }
 
-        /* HARVEST LOG PERMANENT LIST */
-        .harvest-log-container {
-            text-align: left; margin-top: 15px; padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
+        /* HARVEST LOG (HIDDEN DROPDOWN) */
+        .harvest-dropdown {
+            position: absolute; top: 35px; left: 0; width: 240px;
+            background: white; border-radius: 15px; padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #eee;
+            text-align: left; z-index: 100;
+            opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: 0.3s ease; pointer-events: none;
+            max-height: 200px; overflow-y: auto;
         }
-        .log-title { 
-            font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; 
-            color: var(--harvest-green); margin-bottom: 8px; display: block; letter-spacing: 0.5px;
+        .break-badge:hover .harvest-dropdown,
+        .break-badge.is-active .harvest-dropdown { 
+            opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
         }
+
+        .dropdown-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; display: block; }
         .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #666; line-height: 1.5; }
         .tournament-list li { margin-bottom: 5px; padding-left: 15px; position: relative; }
         .tournament-list li::before { content: "•"; position: absolute; left: 0; color: #ccc; }
         
-        /* GOLDEN GRAIN LOGIC */
         .tournament-list li.golden-grain { color: var(--gold); font-weight: 700; }
         .tournament-list li.golden-grain::before { content: "⭐"; color: var(--gold); font-size: 8px; left: -2px; }
 
@@ -139,6 +146,15 @@
         .accolade-box { font-size: 11px; color: #777; margin-top: auto; padding-top: 12px; font-style: italic; }
 
         footer { text-align: center; padding: 80px 20px; }
+
+        /* STYLE FOR SAVED IMAGE ONLY */
+        .scholar-card.export-mode { padding-bottom: 60px !important; }
+        .scholar-card.export-mode .harvest-dropdown { 
+            position: static !important; opacity: 1 !important; visibility: visible !important; 
+            box-shadow: none !important; border: none !important; border-top: 1px solid #f0f0f0 !important;
+            border-radius: 0 !important; width: 100% !important; padding: 15px 0 0 0 !important;
+            margin-top: 15px !important; transform: none !important;
+        }
     </style>
 </head>
 <body>
@@ -172,7 +188,6 @@
 </footer>
 
 <script>
-    // ADVANCED PARSER: Handles newlines and commas inside quoted cells
     function parseFullCSV(data) {
         const result = [];
         let row = [''];
@@ -204,17 +219,13 @@
             const res = await fetch(sheetUrl);
             const rawCsv = await res.text();
             const allRows = parseFullCSV(rawCsv.trim()).slice(1);
-            
             allData = allRows.map(c => {
                 if (!c[0]) return null;
-                return { 
-                    name: c[0].trim(), batchNum: c[1].trim(), accolade: c[2].trim(), 
-                    batchName: c[3].trim(), institution: c[5].trim(), 
-                    breaks: parseInt(c[6]) || 0, tournaments: c[7] ? c[7].trim() : "" 
-                };
+                return { name: c[0].trim(), batchNum: c[1].trim(), accolade: c[2].trim(), batchName: c[3].trim(), institution: c[5].trim(), breaks: parseInt(c[6]) || 0, tournaments: c[7] ? c[7].trim() : "" };
             }).filter(i => i !== null);
             render();
-        } catch (e) { console.error("Data Load Error:", e); }
+            document.body.addEventListener('click', () => document.querySelectorAll('.break-badge').forEach(b => b.classList.remove('is-active')));
+        } catch (e) { console.error(e); }
     }
 
     function render() {
@@ -229,10 +240,8 @@
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
         for(let i=0; i < Math.floor(totalBreaks / 5); i++) {
-            const g = document.createElement('span');
-            g.className = 'garden-item'; g.innerHTML = '🌾';
-            g.style.left = Math.random() * 85 + "%";
-            g.style.fontSize = (15 + Math.random() * 10) + "px";
+            const g = document.createElement('span'); g.className = 'garden-item'; g.innerHTML = '🌾';
+            g.style.left = Math.random() * 85 + "%"; g.style.fontSize = (15 + Math.random() * 10) + "px";
             bed.appendChild(g);
         }
 
@@ -251,13 +260,10 @@
                 let tourneyItems = "";
                 if (item.tournaments) {
                     const rawList = item.tournaments.split(/\r?\n|,/).filter(t => t.trim() !== "");
-                    // Golden Grain (asterisks) Priority Sort
                     const golden = rawList.filter(t => t.trim().startsWith('*') && t.trim().endsWith('*'));
                     const regular = rawList.filter(t => !(t.trim().startsWith('*') && t.trim().endsWith('*')));
-                    
                     tourneyItems = [...golden, ...regular].map(t => {
-                        const raw = t.trim();
-                        const isGold = raw.startsWith('*') && raw.endsWith('*');
+                        const raw = t.trim(); const isGold = raw.startsWith('*') && raw.endsWith('*');
                         return `<li class="${isGold ? 'golden-grain' : ''}">${raw.replace(/\*/g, '')}</li>`;
                     }).join('');
                 }
@@ -265,13 +271,14 @@
                 const card = document.createElement('div');
                 card.className = 'scholar-card';
                 card.innerHTML = `
-                    ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks</div>` : ''}
+                    ${item.breaks > 0 ? `<div class="break-badge" onclick="event.stopPropagation(); this.classList.toggle('is-active');">${item.breaks} Breaks 
+                        <div class="harvest-dropdown"><span class="dropdown-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
+                    </div>` : ''}
                     <div class="org-tag">Harvest Six</div>
                     <div style="font-size:32px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                     <span class="name">${item.name}</span>
                     <span class="inst">${item.institution}</span>
                     <div class="accolade-box">${item.accolade}</div>
-                    ${tourneyItems ? `<div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>` : ''}
                     <div class="save-card-btn" onclick="downloadCard(this.parentElement, '${item.name}')" title="Save Card">💾</div>
                 `;
                 grid.appendChild(card);
@@ -291,11 +298,15 @@
     async function downloadCard(element, name) {
         const btn = element.querySelector('.save-card-btn');
         btn.style.display = 'none';
+        element.classList.add('export-mode'); // Forces the dropdown to look like a list in the image
+        
         const canvas = await html2canvas(element, { backgroundColor: "#ffffff", scale: 2, logging: false, useCORS: true });
         const link = document.createElement('a');
         link.download = `HarvestSix_${name.replace(/\s+/g, '_')}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
+        
+        element.classList.remove('export-mode');
         btn.style.display = 'block';
     }
 
