@@ -28,54 +28,24 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER AREA --- */
+        /* --- HEADER --- */
         header { 
             padding: 80px 20px 40px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative;
-            text-align: center;
+            position: relative; text-align: center;
         }
-
         header::before {
             content: ""; position: absolute; z-index: -1;
             background: var(--blob-color); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
             width: 350px; height: 350px; top: -80px; left: -120px;
         }
-
-        .header-subtitle {
-            font-family: 'Fredoka', sans-serif;
-            font-size: 1.1rem;
-            color: var(--dark-olive);
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .header-title {
-            font-family: 'Fredoka', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 3.8rem);
-            color: var(--harvest-green);
-            margin: 0;
-            font-weight: 700;
-        }
+        .header-subtitle { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; color: var(--dark-olive); opacity: 0.8; margin-bottom: 5px; }
+        .header-title { font-family: 'Fredoka', sans-serif; font-size: clamp(2.5rem, 8vw, 3.8rem); color: var(--harvest-green); margin: 0; font-weight: 700; }
 
         /* --- CAROUSEL --- */
-        #topHarvesterCycle { 
-            margin-top: 25px; 
-            min-height: 24px;
-        }
-        #leaderName { 
-            font-weight: 700; font-size: 13px; color: var(--harvest-green);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 1;
-        }
+        #topHarvesterCycle { margin-top: 25px; min-height: 24px; }
+        #leaderName { font-weight: 700; font-size: 13px; color: var(--harvest-green); text-transform: uppercase; letter-spacing: 1.5px; transition: opacity 1.2s; }
         .fade-out { opacity: 0 !important; }
-
-        /* --- COUNTER --- */
-        .population-box { margin-top: 25px; }
-        .goal-bar-bg { width: 260px; height: 8px; background: rgba(0,0,0,0.06); border-radius: 20px; margin: 10px auto; overflow: hidden; }
-        #goalProgress { background: var(--harvest-green); width: 0%; height: 100%; border-radius: 20px; transition: 2s ease; }
-        .counter-text { font-size: 11px; font-weight: 700; color: var(--dark-olive); text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- STICKY NAV --- */
         .sticky-controls { 
@@ -90,73 +60,57 @@
             transition: 0.3s; display: inline-block;
         }
         .nav-btn:hover { background: var(--harvest-green); color: white; }
-        
         #scholarSearch { 
             margin-top: 15px; width: 250px; padding: 12px 25px; 
             border: 2px solid rgba(109, 140, 84, 0.2); border-radius: 50px; 
             font-family: 'Quicksand', sans-serif; outline: none; background: #fcfcf7;
-            transition: 0.3s ease;
         }
-        #scholarSearch:focus { border-color: var(--harvest-green); width: 300px; box-shadow: 0 5px 15px rgba(109,140,84,0.1); }
 
-        /* --- GARDEN --- */
-        #grainGardenContainer {
-            position: fixed; bottom: 25px; left: 25px; z-index: 1000;
-            background: white; border-radius: 25px; padding: 15px;
-            box-shadow: 0 15px 35px rgba(90, 102, 80, 0.15); width: 130px; text-align: center;
-        }
-        #gardenBed { height: 75px; position: relative; overflow: hidden; border-radius: 15px; background: #f9f9f0; margin-bottom: 8px; border: 1px solid #eeeae0; }
-        .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
-        @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
-
-        /* --- ALIGNED GRID SYSTEM --- */
+        /* --- ALIGNED GRID --- */
         .cohort-section { padding: 40px 8% 20px; }
         .cohort-title { font-family: 'Fredoka', sans-serif; font-size: 22px; color: var(--harvest-green); text-align: center; margin-bottom: 40px; }
-        
-        .grid { 
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 columns */
-            gap: 30px;
-        }
-
-        /* Responsive grid adjustments */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
         @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 550px) { .grid { grid-template-columns: 1fr; } }
 
-        /* --- SCHOLAR CARDS --- */
+        /* --- CARDS --- */
         .scholar-card { 
-            display: flex;
-            flex-direction: column;
-            background: white; padding: 50px 20px 30px; border-radius: 30px;
-            text-align: center; position: relative; 
-            opacity: 0; transform: translateY(20px);
-            box-shadow: 0 8px 20px rgba(90, 102, 80, 0.05); 
-            transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
-            box-sizing: border-box;
-            height: 100%; /* Makes all cards in a row equal height */
+            display: flex; flex-direction: column; background: white; padding: 50px 20px 30px; border-radius: 30px;
+            text-align: center; position: relative; opacity: 0; transform: translateY(20px);
+            box-shadow: 0 8px 20px rgba(90, 102, 80, 0.05); transition: 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+            height: 100%; box-sizing: border-box;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .scholar-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(90, 102, 80, 0.1); }
-
-        .scholar-card::before {
-            content: ""; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            width: 75px; height: 25px; background: rgba(109, 140, 84, 0.18); border-radius: 4px; z-index: 5;
-        }
 
         .break-badge { 
             position: absolute; top: 18px; left: 22px; font-size: 10px; font-weight: 700; 
             color: var(--harvest-green); background: #f4f7f0; padding: 4px 12px; border-radius: 20px; 
+            display: flex; align-items: center; gap: 5px; cursor: default;
         }
-        
-        .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.2rem; margin-top: 15px; display: block; }
-        .inst { font-size: 10px; color: #99a38f; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 15px; }
-        
-        .accolade-box { 
-            font-size: 11px; color: #777; line-height: 1.6; 
-            margin-top: auto; /* Pushes accolades to the bottom of the card */
-            border-top: 1px solid #f8f8f8; padding-top: 12px; font-style: italic; 
+
+        /* --- BREAKS DROPDOWN --- */
+        .harvest-info-icon { font-size: 12px; cursor: pointer; color: #b0c0a0; transition: 0.3s; }
+        .harvest-info-icon:hover { color: var(--harvest-green); }
+
+        .harvest-dropdown {
+            position: absolute; top: 45px; left: 22px; width: 200px;
+            background: white; border-radius: 15px; padding: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee;
+            text-align: left; z-index: 100;
+            opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: 0.3s ease; pointer-events: none;
         }
+        .break-badge:hover .harvest-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .dropdown-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); margin-bottom: 8px; display: block; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #666; line-height: 1.4; }
+        .tournament-list li { margin-bottom: 5px; padding-left: 12px; position: relative; }
+        .tournament-list li::before { content: "•"; position: absolute; left: 0; color: var(--harvest-green); }
+
+        .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.2rem; margin-top: 15px; }
+        .inst { font-size: 10px; color: #99a38f; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; }
+        .accolade-box { font-size: 11px; color: #777; margin-top: auto; border-top: 1px solid #f8f8f8; padding-top: 12px; font-style: italic; }
 
         footer { text-align: center; padding: 80px 20px; }
     </style>
@@ -166,22 +120,12 @@
 <header>
     <div class="header-subtitle">Kamalig Debate Mentorship Program</div>
     <h1 class="header-title">Harvest Six</h1>
-    <div id="topHarvesterCycle"><span id="leaderName">Loading Harvest...</span></div>
-    <div class="population-box">
-        <div class="counter-text">Mentorship Population: <span id="countDisplay">0</span> / 100</div>
-        <div class="goal-bar-bg"><div id="goalProgress"></div></div>
-    </div>
+    <div id="topHarvesterCycle"><span id="leaderName">Loading...</span></div>
 </header>
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search for a scholar or school..." onkeyup="searchScholars()">
-</div>
-
-<div id="grainGardenContainer">
-    <div id="gardenBed"><div style="position:absolute; top:5px; right:8px; font-size:20px;">☀️</div></div>
-    <div style="font-size: 18px; font-weight: 700; color: var(--harvest-green); font-family: 'Fredoka';" id="totalBreaks">0</div>
-    <div style="font-size: 8px; text-transform: uppercase; color: #999; letter-spacing: 1px; font-weight: 700;">Total Breaks</div>
+    <input type="text" id="scholarSearch" placeholder="Search name or school..." onkeyup="searchScholars()">
 </div>
 
 <div id="gallery"></div>
@@ -207,7 +151,9 @@
                 if (!c[0]) return null;
                 return { 
                     name: clean(c[0]), batchNum: clean(c[1]), accolade: clean(c[2]), 
-                    batchName: clean(c[3]), institution: clean(c[5]), breaks: parseInt(clean(c[6])) || 0 
+                    batchName: clean(c[3]), institution: clean(c[5]), 
+                    breaks: parseInt(clean(c[6])) || 0,
+                    tournaments: clean(c[7]) // Column H (index 7)
                 };
             }).filter(i => i !== null);
             render();
@@ -217,21 +163,7 @@
     function render() {
         const gal = document.getElementById('gallery');
         const nav = document.getElementById('batchNav');
-        const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; 
-        
-        document.getElementById('countDisplay').innerText = allData.length;
-        document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
-        const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
-        document.getElementById('totalBreaks').innerText = totalBreaks;
-
-        for(let i=0; i < Math.min(totalBreaks, 15); i++) {
-            const g = document.createElement('span');
-            g.className = 'garden-item'; g.innerHTML = '🌾';
-            g.style.left = Math.random() * 85 + "%";
-            g.style.fontSize = (15 + Math.random() * 10) + "px";
-            bed.appendChild(g);
-        }
 
         const batches = [...new Set(allData.map(i => i.batchNum))].sort((a,b) => a-b);
         batches.forEach(bNum => {
@@ -240,17 +172,31 @@
             const bID = `batch-${bNum}`;
 
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bName}</a>`;
-            
             const section = document.createElement('div');
-            section.className = 'cohort-section';
-            section.id = bID;
+            section.className = 'cohort-section'; section.id = bID;
             section.innerHTML = `<div class="cohort-title">🌾 ${bName} 🌾</div><div class="grid"></div>`;
             const grid = section.querySelector('.grid');
             
             bItems.forEach((item) => {
+                // Prepare tournament list for dropdown
+                let tournamentHtml = "";
+                if (item.tournaments) {
+                    const tList = item.tournaments.split(',').map(t => `<li>${t.trim()}</li>`).join('');
+                    tournamentHtml = `
+                        <div class="harvest-dropdown">
+                            <span class="dropdown-title">Harvest Log</span>
+                            <ul class="tournament-list">${tList}</ul>
+                        </div>
+                        <span class="harvest-info-icon">📋</span>
+                    `;
+                }
+
                 grid.innerHTML += `
                     <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks</div>` : ''}
+                        ${item.breaks > 0 ? `
+                            <div class="break-badge">
+                                ${item.breaks} Breaks ${tournamentHtml}
+                            </div>` : ''}
                         <div style="font-size:32px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
                         <span class="inst">${item.institution}</span>
