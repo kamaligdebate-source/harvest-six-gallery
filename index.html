@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
         :root {
             --harvest-green: #6d8c54; 
@@ -29,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER --- */
         header { 
             padding: 80px 20px 40px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -40,7 +41,6 @@
             background: var(--blob-color); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
             width: 350px; height: 350px; top: -80px; left: -120px;
         }
-        .header-subtitle { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; color: var(--dark-olive); opacity: 0.8; margin-bottom: 5px; }
         .header-title { font-family: 'Fredoka', sans-serif; font-size: clamp(2.5rem, 8vw, 3.8rem); color: var(--harvest-green); margin: 0; font-weight: 700; }
 
         #topHarvesterCycle { margin-top: 25px; min-height: 24px; }
@@ -52,7 +52,6 @@
         #goalProgress { background: var(--harvest-green); width: 0%; height: 100%; border-radius: 20px; transition: 2s ease; }
         .counter-text { font-size: 11px; font-weight: 700; color: var(--dark-olive); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- STICKY CONTROLS --- */
         .sticky-controls { 
             position: sticky; top: 0; z-index: 200; 
             background: rgba(229, 228, 197, 0.92); backdrop-filter: blur(12px);
@@ -66,17 +65,8 @@
         }
         
         .filter-group { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; padding: 0 20px; }
-        
-        #scholarSearch, #tourneyFilter { 
-            padding: 12px 25px; 
-            border: 2px solid rgba(109, 140, 84, 0.2); border-radius: 50px; 
-            font-family: 'Quicksand', sans-serif; outline: none; background: #fcfcf7;
-            transition: 0.3s ease;
-        }
-        #scholarSearch { width: 250px; }
-        #tourneyFilter { width: 220px; color: var(--text-main); cursor: pointer; }
+        #scholarSearch, #tourneyFilter { padding: 12px 25px; border: 2px solid rgba(109, 140, 84, 0.2); border-radius: 50px; font-family: 'Quicksand', sans-serif; background: #fcfcf7; }
 
-        /* --- GARDEN --- */
         #grainGardenContainer {
             position: fixed; bottom: 25px; left: 25px; z-index: 1000;
             background: white; border-radius: 25px; padding: 15px;
@@ -86,7 +76,6 @@
         .garden-item { position: absolute; bottom: -2px; transform-origin: bottom; animation: sway 3s ease-in-out infinite alternate; }
         @keyframes sway { from { transform: rotate(-8deg); } to { transform: rotate(8deg); } }
 
-        /* --- GRID --- */
         .cohort-section { padding: 40px 8% 20px; }
         .cohort-title { font-family: 'Fredoka', sans-serif; font-size: 22px; color: var(--harvest-green); text-align: center; margin-bottom: 40px; }
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
@@ -106,8 +95,14 @@
         .break-badge { 
             position: absolute; top: 18px; left: 22px; font-size: 10px; font-weight: 700; 
             color: var(--harvest-green); background: #f4f7f0; padding: 4px 12px; border-radius: 20px; 
-            display: flex; align-items: center; gap: 5px; cursor: help; z-index: 10;
+            display: flex; align-items: center; gap: 5px; cursor: pointer; z-index: 10;
         }
+
+        .save-card-btn {
+            position: absolute; bottom: 15px; right: 20px; font-size: 14px;
+            cursor: pointer; opacity: 0.4; transition: 0.3s;
+        }
+        .scholar-card:hover .save-card-btn { opacity: 1; }
 
         .harvest-dropdown {
             position: absolute; top: 35px; left: 0; width: 240px;
@@ -118,14 +113,16 @@
             transition: 0.3s ease; pointer-events: none;
             max-height: 200px; overflow-y: auto;
         }
-        .break-badge:hover .harvest-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .break-badge:hover .harvest-dropdown,
+        .break-badge.is-active .harvest-dropdown { 
+            opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+        }
 
         .dropdown-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; display: block; }
         .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #666; line-height: 1.4; }
         .tournament-list li { margin-bottom: 6px; padding-left: 15px; position: relative; }
         .tournament-list li::before { content: "•"; position: absolute; left: 0; color: var(--harvest-green); font-weight: bold; }
-
-        /* GOLDEN GRAIN STYLING */
         .tournament-list li.golden-grain { color: var(--gold); font-weight: 700; }
         .tournament-list li.golden-grain::before { content: "⭐"; font-size: 8px; left: -2px; }
 
@@ -198,44 +195,22 @@
             const res = await fetch(sheetUrl);
             const csvText = await res.text();
             const dataRows = parseCSV(csvText.trim()).slice(1);
-            
             allData = dataRows.map(c => {
                 if (!c[0] || c[0].trim() === "") return null;
-                return { 
-                    name: c[0].trim(), 
-                    batchNum: c[1].trim(), 
-                    accolade: c[2].trim(), 
-                    batchName: c[3].trim(), 
-                    institution: c[5].trim(), 
-                    breaks: parseInt(c[6]) || 0,
-                    tournaments: c[7] ? c[7].trim() : ""
-                };
+                return { name: c[0].trim(), batchNum: c[1].trim(), accolade: c[2].trim(), batchName: c[3].trim(), institution: c[5].trim(), breaks: parseInt(c[6]) || 0, tournaments: c[7] ? c[7].trim() : "" };
             }).filter(i => i !== null);
-            
             populateTourneyFilter();
             render();
-        } catch (e) { console.error("Error:", e); }
+            initMobileEvents();
+        } catch (e) { console.error(e); }
     }
 
     function populateTourneyFilter() {
         const filter = document.getElementById('tourneyFilter');
+        filter.innerHTML = '<option value="">All Tournaments</option>';
         let tourneys = [];
-        allData.forEach(item => {
-            if(item.tournaments) {
-                const parts = item.tournaments.split(/\r?\n|,/);
-                parts.forEach(p => {
-                    const clean = p.replace(/\*/g, '').trim();
-                    if(clean) tourneys.push(clean);
-                });
-            }
-        });
-        const unique = [...new Set(tourneys)].sort();
-        unique.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t.toLowerCase();
-            opt.innerText = t;
-            filter.appendChild(opt);
-        });
+        allData.forEach(item => { if(item.tournaments) { item.tournaments.split(/\r?\n|,/).forEach(p => { const clean = p.replace(/\*/g, '').trim(); if(clean) tourneys.push(clean); }); } });
+        [...new Set(tourneys)].sort().forEach(t => { const opt = document.createElement('option'); opt.value = t.toLowerCase(); opt.innerText = t; filter.appendChild(opt); });
     }
 
     function render() {
@@ -246,12 +221,10 @@
 
         document.getElementById('countDisplay').innerText = allData.length;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
-
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
-        const grainCount = Math.floor(totalBreaks / 5);
-        for(let i=0; i < grainCount; i++) {
+        for(let i=0; i < Math.floor(totalBreaks / 5); i++) {
             const g = document.createElement('span');
             g.className = 'garden-item'; g.innerHTML = '🌾';
             g.style.left = Math.random() * 85 + "%";
@@ -264,7 +237,6 @@
             const bItems = allData.filter(i => i.batchNum === bNum);
             const bName = bItems[0].batchName || `Batch ${bNum}`;
             const bID = `batch-${bNum}`;
-
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bName}</a>`;
             const section = document.createElement('div');
             section.className = 'cohort-section'; section.id = bID;
@@ -274,33 +246,25 @@
             bItems.forEach((item) => {
                 let tourneyHtml = "";
                 if (item.tournaments) {
-                    const listItems = item.tournaments.split(/\r?\n|,/)
-                        .filter(t => t.trim() !== "")
-                        .map(t => {
-                            const raw = t.trim();
-                            const isGolden = raw.startsWith('*') && raw.endsWith('*');
-                            const displayName = raw.replace(/\*/g, '');
-                            return `<li class="${isGolden ? 'golden-grain' : ''}">${displayName}</li>`;
-                        })
-                        .join('');
-                    
-                    tourneyHtml = `
-                        <div class="harvest-dropdown">
-                            <span class="dropdown-title">Harvest Log</span>
-                            <ul class="tournament-list">${listItems}</ul>
-                        </div>
-                        <span>📋</span>
-                    `;
+                    const listItems = item.tournaments.split(/\r?\n|,/).filter(t => t.trim() !== "").map(t => {
+                        const raw = t.trim();
+                        const isGolden = raw.startsWith('*') && raw.endsWith('*');
+                        return `<li class="${isGolden ? 'golden-grain' : ''}">${raw.replace(/\*/g, '')}</li>`;
+                    }).join('');
+                    tourneyHtml = `<div class="harvest-dropdown"><span class="dropdown-title">Harvest Log</span><ul class="tournament-list">${listItems}</ul></div><span>📋</span>`;
                 }
 
-                grid.innerHTML += `
-                    <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks ${tourneyHtml}</div>` : ''}
-                        <div style="font-size:32px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
-                        <span class="name">${item.name}</span>
-                        <span class="inst">${item.institution}</span>
-                        <div class="accolade-box">${item.accolade}</div>
-                    </div>`;
+                const card = document.createElement('div');
+                card.className = 'scholar-card';
+                card.innerHTML = `
+                    ${item.breaks > 0 ? `<div class="break-badge" onclick="event.stopPropagation(); this.classList.toggle('is-active');">${item.breaks} Breaks ${tourneyHtml}</div>` : ''}
+                    <div style="font-size:32px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                    <span class="name">${item.name}</span>
+                    <span class="inst">${item.institution}</span>
+                    <div class="accolade-box">${item.accolade}</div>
+                    <div class="save-card-btn" onclick="downloadCard(this.parentElement, '${item.name}')" title="Save as Image">💾</div>
+                `;
+                grid.appendChild(card);
             });
             gal.appendChild(section);
         });
@@ -309,10 +273,35 @@
             const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
             document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
         }, 100);
-
         const maxB = Math.max(...allData.map(x => x.breaks));
         leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
         if(leaders.length) startLeaderCycle();
+    }
+
+    async function downloadCard(element, name) {
+        // Prepare card for clean capture (hide UI elements briefly)
+        const btn = element.querySelector('.save-card-btn');
+        btn.style.display = 'none';
+        
+        const canvas = await html2canvas(element, {
+            backgroundColor: "#ffffff",
+            scale: 2, // High resolution
+            logging: false,
+            useCORS: true
+        });
+        
+        const link = document.createElement('a');
+        link.download = `HarvestSix_${name.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        
+        btn.style.display = 'block';
+    }
+
+    function initMobileEvents() {
+        document.body.addEventListener('click', () => {
+            document.querySelectorAll('.break-badge').forEach(b => b.classList.remove('is-active'));
+        });
     }
 
     function startLeaderCycle() {
@@ -332,21 +321,14 @@
     function filterGallery() {
         const searchT = document.getElementById('scholarSearch').value.toLowerCase();
         const tourneyT = document.getElementById('tourneyFilter').value.toLowerCase();
-        
         document.querySelectorAll('.scholar-card').forEach(c => {
             const text = c.innerText.toLowerCase();
             const matchesSearch = text.includes(searchT);
-            
-            // Check if card contains the specific tournament (cleaning asterisks in card text)
             const matchesTourney = tourneyT === "" || text.replace(/\*/g, '').includes(tourneyT);
-            
             c.style.display = (matchesSearch && matchesTourney) ? 'flex' : 'none';
         });
-
-        // Hide empty batch titles
         document.querySelectorAll('.cohort-section').forEach(section => {
-            const hasVisible = Array.from(section.querySelectorAll('.scholar-card')).some(card => card.style.display !== 'none');
-            section.style.display = hasVisible ? 'block' : 'none';
+            section.style.display = Array.from(section.querySelectorAll('.scholar-card')).some(card => card.style.display !== 'none') ? 'block' : 'none';
         });
     }
 
