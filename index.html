@@ -101,9 +101,10 @@
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
 
         .org-tag {
-            font-family: 'Fredoka', sans-serif; font-size: 10px; font-weight: 700;
+            display: none; /* HIDDEN ON WEBSITE */
+            font-family: 'Fredoka', sans-serif; font-size: 11px; font-weight: 700;
             color: var(--harvest-green); text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 10px; opacity: 0.7;
+            margin-bottom: 12px; opacity: 0.8;
         }
 
         .break-badge { 
@@ -114,11 +115,11 @@
 
         .save-card-btn {
             position: absolute; bottom: 15px; right: 20px; font-size: 14px;
-            cursor: pointer; opacity: 0.3; transition: 0.3s;
+            cursor: pointer; opacity: 0.3; transition: 0.3s; z-index: 20;
         }
         .scholar-card:hover .save-card-btn { opacity: 1; }
 
-        /* HARVEST LOG (HIDDEN DROPDOWN) */
+        /* HARVEST LOG (HIDDEN ON WEBSITE) */
         .harvest-dropdown {
             position: absolute; top: 35px; left: 0; width: 240px;
             background: white; border-radius: 15px; padding: 15px;
@@ -147,13 +148,16 @@
 
         footer { text-align: center; padding: 80px 20px; }
 
-        /* STYLE FOR SAVED IMAGE ONLY */
-        .scholar-card.export-mode { padding-bottom: 60px !important; }
+        /* STYLE OVERRIDES FOR SAVED IMAGE ONLY */
+        .scholar-card.export-mode { padding-bottom: 50px !important; }
+        .scholar-card.export-mode .org-tag { display: block !important; } /* SHOW BRANDING IN SAVED IMAGE */
         .scholar-card.export-mode .harvest-dropdown { 
-            position: static !important; opacity: 1 !important; visibility: visible !important; 
+            position: relative !important; top: 0 !important; left: 0 !important;
+            opacity: 1 !important; visibility: visible !important; 
             box-shadow: none !important; border: none !important; border-top: 1px solid #f0f0f0 !important;
             border-radius: 0 !important; width: 100% !important; padding: 15px 0 0 0 !important;
             margin-top: 15px !important; transform: none !important;
+            max-height: none !important; overflow: visible !important;
         }
     </style>
 </head>
@@ -271,10 +275,10 @@
                 const card = document.createElement('div');
                 card.className = 'scholar-card';
                 card.innerHTML = `
+                    <div class="org-tag">Harvest Six</div>
                     ${item.breaks > 0 ? `<div class="break-badge" onclick="event.stopPropagation(); this.classList.toggle('is-active');">${item.breaks} Breaks 
                         <div class="harvest-dropdown"><span class="dropdown-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
                     </div>` : ''}
-                    <div class="org-tag">Harvest Six</div>
                     <div style="font-size:32px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                     <span class="name">${item.name}</span>
                     <span class="inst">${item.institution}</span>
@@ -297,17 +301,27 @@
 
     async function downloadCard(element, name) {
         const btn = element.querySelector('.save-card-btn');
-        btn.style.display = 'none';
-        element.classList.add('export-mode'); // Forces the dropdown to look like a list in the image
+        btn.style.opacity = '0';
+        element.classList.add('export-mode'); 
         
-        const canvas = await html2canvas(element, { backgroundColor: "#ffffff", scale: 2, logging: false, useCORS: true });
+        // Wait for styles to apply before capture
+        await new Promise(r => setTimeout(r, 100));
+
+        const canvas = await html2canvas(element, { 
+            backgroundColor: "#ffffff", 
+            scale: 2, 
+            logging: false, 
+            useCORS: true,
+            windowScrollY: 0
+        });
+
         const link = document.createElement('a');
         link.download = `HarvestSix_${name.replace(/\s+/g, '_')}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
         
         element.classList.remove('export-mode');
-        btn.style.display = 'block';
+        btn.style.opacity = '';
     }
 
     function startLeaderCycle() {
