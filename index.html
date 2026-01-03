@@ -28,25 +28,18 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER --- */
         header { 
             padding: 80px 20px 40px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; text-align: center;
         }
-        header::before {
-            content: ""; position: absolute; z-index: -1;
-            background: var(--blob-color); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            width: 350px; height: 350px; top: -80px; left: -120px;
-        }
-        .header-subtitle { font-family: 'Fredoka', sans-serif; font-size: 1.1rem; color: var(--dark-olive); opacity: 0.8; margin-bottom: 5px; }
+
         .header-title { font-family: 'Fredoka', sans-serif; font-size: clamp(2.5rem, 8vw, 3.8rem); color: var(--harvest-green); margin: 0; font-weight: 700; }
 
         #topHarvesterCycle { margin-top: 25px; min-height: 24px; }
         #leaderName { font-weight: 700; font-size: 13px; color: var(--harvest-green); text-transform: uppercase; letter-spacing: 1.5px; transition: opacity 1.2s; }
         .fade-out { opacity: 0 !important; }
 
-        /* --- STICKY CONTROLS --- */
         .sticky-controls { 
             position: sticky; top: 0; z-index: 200; 
             background: rgba(229, 228, 197, 0.92); backdrop-filter: blur(12px);
@@ -58,29 +51,21 @@
             cursor: pointer; color: var(--harvest-green); text-decoration: none; font-weight: 600; margin: 0 4px;
             transition: 0.3s; display: inline-block;
         }
-        .nav-btn:hover { background: var(--harvest-green); color: white; }
         
         #scholarSearch { 
             margin-top: 15px; width: 250px; padding: 12px 25px; 
             border: 2px solid rgba(109, 140, 84, 0.2); border-radius: 50px; 
             font-family: 'Quicksand', sans-serif; outline: none; background: #fcfcf7;
-            transition: 0.3s ease;
         }
 
-        /* --- GRID --- */
         .cohort-section { padding: 40px 8% 20px; }
         .cohort-title { font-family: 'Fredoka', sans-serif; font-size: 22px; color: var(--harvest-green); text-align: center; margin-bottom: 40px; }
         
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 30px; 
-        }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
         @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 550px) { .grid { grid-template-columns: 1fr; } }
 
-        /* --- SCHOLAR CARDS --- */
         .scholar-card { 
             display: flex; flex-direction: column; background: white; padding: 50px 20px 30px; border-radius: 30px;
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
@@ -88,39 +73,33 @@
             height: 100%; box-sizing: border-box;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .scholar-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(90, 102, 80, 0.1); }
-
-        /* Washi Tape Accent */
-        .scholar-card::before {
-            content: ""; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            width: 75px; height: 25px; background: rgba(109, 140, 84, 0.18); border-radius: 4px; z-index: 5;
-        }
 
         .break-badge { 
             position: absolute; top: 18px; left: 22px; font-size: 10px; font-weight: 700; 
             color: var(--harvest-green); background: #f4f7f0; padding: 4px 12px; border-radius: 20px; 
-            display: flex; align-items: center; gap: 5px; cursor: help;
+            display: flex; align-items: center; gap: 5px; cursor: help; z-index: 10;
         }
 
-        /* --- DROPDOWN LOGIC --- */
+        /* --- HOVER DROPDOWN --- */
         .harvest-dropdown {
-            position: absolute; top: 35px; left: 0; width: 220px;
+            position: absolute; top: 35px; left: 0; width: 230px;
             background: white; border-radius: 15px; padding: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid #eee;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #eee;
             text-align: left; z-index: 100;
             opacity: 0; visibility: hidden; transform: translateY(-10px);
             transition: 0.3s ease; pointer-events: none;
+            max-height: 200px; overflow-y: auto;
         }
         .break-badge:hover .harvest-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 
         .dropdown-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; display: block; }
         .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #666; line-height: 1.4; }
-        .tournament-list li { margin-bottom: 5px; padding-left: 12px; position: relative; }
-        .tournament-list li::before { content: "•"; position: absolute; left: 0; color: var(--harvest-green); }
+        .tournament-list li { margin-bottom: 6px; padding-left: 12px; position: relative; }
+        .tournament-list li::before { content: "•"; position: absolute; left: 0; color: var(--harvest-green); font-weight: bold; }
 
         .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.15rem; margin-top: 15px; }
-        .inst { font-size: 10px; color: #99a38f; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; letter-spacing: 0.5px; }
-        .accolade-box { font-size: 11px; color: #777; margin-top: auto; border-top: 1px solid #f8f8f8; padding-top: 12px; font-style: italic; line-height: 1.5; }
+        .inst { font-size: 10px; color: #99a38f; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; }
+        .accolade-box { font-size: 11px; color: #777; margin-top: auto; border-top: 1px solid #f8f8f8; padding-top: 12px; font-style: italic; }
 
         footer { text-align: center; padding: 80px 20px; }
     </style>
@@ -145,15 +124,21 @@
 </footer>
 
 <script>
-    // SMART CSV PARSER: Handles commas inside quotes correctly
-    function parseCSVLine(text) {
-        let values = [''], i = 0, inQuotes = false;
-        for (let char of text) {
-            if (char === '"') { inQuotes = !inQuotes; }
-            else if (char === ',' && !inQuotes) { values[++i] = ''; }
-            else { values[i] += char; }
+    // PROFESSIONAL CSV PARSER: Handles multi-line cells within quotes
+    function parseCSV(str) {
+        const arr = []; let quote = false;
+        for (let row = col = c = 0; c < str.length; c++) {
+            let cc = str[c], nc = str[c+1];
+            arr[row] = arr[row] || []; arr[row][col] = arr[row][col] || '';
+            if (cc == '"' && quote && nc == '"') { arr[row][col] += cc; ++c; continue; }
+            if (cc == '"') { quote = !quote; continue; }
+            if (cc == ',' && !quote) { ++col; continue; }
+            if (cc == '\r' && nc == '\n' && !quote) { ++row; col = 0; ++c; continue; }
+            if (cc == '\n' && !quote) { ++row; col = 0; continue; }
+            if (cc == '\r' && !quote) { ++row; col = 0; continue; }
+            arr[row][col] += cc;
         }
-        return values;
+        return arr;
     }
 
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
@@ -164,24 +149,23 @@
     async function loadGallery() {
         try {
             const res = await fetch(sheetUrl);
-            const csv = await res.text();
-            const lines = csv.split('\n').filter(l => l.trim() !== "").slice(1);
+            const csvText = await res.text();
+            const dataRows = parseCSV(csvText.trim()).slice(1);
             
-            allData = lines.map(line => {
-                const c = parseCSVLine(line.trim());
-                if (!c[0]) return null;
+            allData = dataRows.map(c => {
+                if (!c[0] || c[0].trim() === "") return null;
                 return { 
-                    name: c[0], 
-                    batchNum: c[1], 
-                    accolade: c[2], 
-                    batchName: c[3], 
-                    institution: c[5], 
+                    name: c[0].trim(), 
+                    batchNum: c[1].trim(), 
+                    accolade: c[2].trim(), 
+                    batchName: c[3].trim(), 
+                    institution: c[5].trim(), 
                     breaks: parseInt(c[6]) || 0,
-                    tournaments: c[7] // Column H
+                    tournaments: c[7] ? c[7].trim() : ""
                 };
             }).filter(i => i !== null);
             render();
-        } catch (e) { console.error("Data Error:", e); }
+        } catch (e) { console.error("Error:", e); }
     }
 
     function render() {
@@ -204,11 +188,15 @@
             bItems.forEach((item) => {
                 let tourneyHtml = "";
                 if (item.tournaments) {
-                    const list = item.tournaments.split(',').map(t => `<li>${t.trim()}</li>`).join('');
+                    const listItems = item.tournaments.split(/\r?\n|,/)
+                        .filter(t => t.trim() !== "")
+                        .map(t => `<li>${t.trim()}</li>`)
+                        .join('');
+                    
                     tourneyHtml = `
                         <div class="harvest-dropdown">
                             <span class="dropdown-title">Harvest Log</span>
-                            <ul class="tournament-list">${list}</ul>
+                            <ul class="tournament-list">${listItems}</ul>
                         </div>
                         <span>📋</span>
                     `;
@@ -216,10 +204,7 @@
 
                 grid.innerHTML += `
                     <div class="scholar-card">
-                        ${item.breaks > 0 ? `
-                            <div class="break-badge">
-                                ${item.breaks} Breaks ${tourneyHtml}
-                            </div>` : ''}
+                        ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks ${tourneyHtml}</div>` : ''}
                         <div style="font-size:32px; margin-bottom:10px;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
                         <span class="inst">${item.institution}</span>
@@ -229,17 +214,14 @@
             gal.appendChild(section);
         });
 
-        // Trigger Animations
         setTimeout(() => {
             const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
             document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
         }, 100);
 
-        // Leader Carousel
         const maxB = Math.max(...allData.map(x => x.breaks));
         leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
         if(leaders.length) startLeaderCycle();
-        else document.getElementById('leaderName').innerText = "Cultivating Growth";
     }
 
     function startLeaderCycle() {
@@ -248,12 +230,12 @@
             el.classList.add('fade-out');
             setTimeout(() => {
                 lIdx = (lIdx + 1) % leaders.length;
-                el.innerText = `Top Harvester: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Breaks)`;
+                el.innerText = `Top Harvest: ${leaders[lIdx].name} (${leaders[lIdx].breaks} Breaks)`;
                 el.classList.remove('fade-out');
             }, 1200); 
         };
         setInterval(cycle, 5500);
-        el.innerText = `Top Harvester: ${leaders[0].name} (${leaders[0].breaks} Breaks)`;
+        el.innerText = `Top Harvest: ${leaders[0].name} (${leaders[0].breaks} Breaks)`;
     }
 
     function searchScholars() {
