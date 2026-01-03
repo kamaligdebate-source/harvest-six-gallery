@@ -17,6 +17,7 @@
             --cream-bg: #e5e4c5; 
             --text-main: #5a6650;
             --blob-color: rgba(109, 140, 84, 0.12);
+            --gold: #b8860b;
         }
 
         body { 
@@ -46,7 +47,6 @@
         #leaderName { font-weight: 700; font-size: 13px; color: var(--harvest-green); text-transform: uppercase; letter-spacing: 1.5px; transition: opacity 1.2s; }
         .fade-out { opacity: 0 !important; }
 
-        /* --- POPULATION COUNTER --- */
         .population-box { margin-top: 25px; }
         .goal-bar-bg { width: 260px; height: 8px; background: rgba(0,0,0,0.06); border-radius: 20px; margin: 10px auto; overflow: hidden; }
         #goalProgress { background: var(--harvest-green); width: 0%; height: 100%; border-radius: 20px; transition: 2s ease; }
@@ -65,12 +65,16 @@
             transition: 0.3s; display: inline-block;
         }
         
-        #scholarSearch { 
-            margin-top: 15px; width: 250px; padding: 12px 25px; 
+        .filter-group { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; padding: 0 20px; }
+        
+        #scholarSearch, #tourneyFilter { 
+            padding: 12px 25px; 
             border: 2px solid rgba(109, 140, 84, 0.2); border-radius: 50px; 
             font-family: 'Quicksand', sans-serif; outline: none; background: #fcfcf7;
             transition: 0.3s ease;
         }
+        #scholarSearch { width: 250px; }
+        #tourneyFilter { width: 220px; color: var(--text-main); cursor: pointer; }
 
         /* --- GARDEN --- */
         #grainGardenContainer {
@@ -85,7 +89,6 @@
         /* --- GRID --- */
         .cohort-section { padding: 40px 8% 20px; }
         .cohort-title { font-family: 'Fredoka', sans-serif; font-size: 22px; color: var(--harvest-green); text-align: center; margin-bottom: 40px; }
-        
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
         @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
         @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
@@ -107,7 +110,7 @@
         }
 
         .harvest-dropdown {
-            position: absolute; top: 35px; left: 0; width: 230px;
+            position: absolute; top: 35px; left: 0; width: 240px;
             background: white; border-radius: 15px; padding: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #eee;
             text-align: left; z-index: 100;
@@ -119,8 +122,12 @@
 
         .dropdown-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; margin-bottom: 8px; display: block; }
         .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #666; line-height: 1.4; }
-        .tournament-list li { margin-bottom: 6px; padding-left: 12px; position: relative; }
+        .tournament-list li { margin-bottom: 6px; padding-left: 15px; position: relative; }
         .tournament-list li::before { content: "•"; position: absolute; left: 0; color: var(--harvest-green); font-weight: bold; }
+
+        /* GOLDEN GRAIN STYLING */
+        .tournament-list li.golden-grain { color: var(--gold); font-weight: 700; }
+        .tournament-list li.golden-grain::before { content: "⭐"; font-size: 8px; left: -2px; }
 
         .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.15rem; margin-top: 15px; }
         .inst { font-size: 10px; color: #99a38f; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; }
@@ -144,7 +151,12 @@
 
 <div class="sticky-controls">
     <div id="batchNav"></div>
-    <input type="text" id="scholarSearch" placeholder="Search name or school..." onkeyup="searchScholars()">
+    <div class="filter-group">
+        <input type="text" id="scholarSearch" placeholder="Search name or school..." onkeyup="filterGallery()">
+        <select id="tourneyFilter" onchange="filterGallery()">
+            <option value="">All Tournaments</option>
+        </select>
+    </div>
 </div>
 
 <div id="grainGardenContainer">
@@ -160,7 +172,6 @@
 </footer>
 
 <script>
-    // PROFESSIONAL CSV PARSER
     function parseCSV(str) {
         const arr = []; let quote = false;
         for (let row = col = c = 0; c < str.length; c++) {
@@ -200,8 +211,31 @@
                     tournaments: c[7] ? c[7].trim() : ""
                 };
             }).filter(i => i !== null);
+            
+            populateTourneyFilter();
             render();
         } catch (e) { console.error("Error:", e); }
+    }
+
+    function populateTourneyFilter() {
+        const filter = document.getElementById('tourneyFilter');
+        let tourneys = [];
+        allData.forEach(item => {
+            if(item.tournaments) {
+                const parts = item.tournaments.split(/\r?\n|,/);
+                parts.forEach(p => {
+                    const clean = p.replace(/\*/g, '').trim();
+                    if(clean) tourneys.push(clean);
+                });
+            }
+        });
+        const unique = [...new Set(tourneys)].sort();
+        unique.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.toLowerCase();
+            opt.innerText = t;
+            filter.appendChild(opt);
+        });
     }
 
     function render() {
@@ -210,15 +244,12 @@
         const bed = document.getElementById('gardenBed');
         gal.innerHTML = ""; nav.innerHTML = ""; bed.innerHTML = '<div style="position:absolute; top:5px; right:8px; font-size:20px;">☀️</div>';
 
-        // Update Population Counter
         document.getElementById('countDisplay').innerText = allData.length;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        // Calculate Total Breaks & Populate Garden
         const totalBreaks = allData.reduce((s, i) => s + i.breaks, 0);
         document.getElementById('totalBreaks').innerText = totalBreaks;
 
-        // 1 Grain per 5 Breaks
         const grainCount = Math.floor(totalBreaks / 5);
         for(let i=0; i < grainCount; i++) {
             const g = document.createElement('span');
@@ -245,7 +276,12 @@
                 if (item.tournaments) {
                     const listItems = item.tournaments.split(/\r?\n|,/)
                         .filter(t => t.trim() !== "")
-                        .map(t => `<li>${t.trim()}</li>`)
+                        .map(t => {
+                            const raw = t.trim();
+                            const isGolden = raw.startsWith('*') && raw.endsWith('*');
+                            const displayName = raw.replace(/\*/g, '');
+                            return `<li class="${isGolden ? 'golden-grain' : ''}">${displayName}</li>`;
+                        })
                         .join('');
                     
                     tourneyHtml = `
@@ -293,10 +329,24 @@
         el.innerText = `Top Harvest: ${leaders[0].name} (${leaders[0].breaks} Breaks)`;
     }
 
-    function searchScholars() {
-        const t = document.getElementById('scholarSearch').value.toLowerCase();
+    function filterGallery() {
+        const searchT = document.getElementById('scholarSearch').value.toLowerCase();
+        const tourneyT = document.getElementById('tourneyFilter').value.toLowerCase();
+        
         document.querySelectorAll('.scholar-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(t) ? 'flex' : 'none';
+            const text = c.innerText.toLowerCase();
+            const matchesSearch = text.includes(searchT);
+            
+            // Check if card contains the specific tournament (cleaning asterisks in card text)
+            const matchesTourney = tourneyT === "" || text.replace(/\*/g, '').includes(tourneyT);
+            
+            c.style.display = (matchesSearch && matchesTourney) ? 'flex' : 'none';
+        });
+
+        // Hide empty batch titles
+        document.querySelectorAll('.cohort-section').forEach(section => {
+            const hasVisible = Array.from(section.querySelectorAll('.scholar-card')).some(card => card.style.display !== 'none');
+            section.style.display = hasVisible ? 'block' : 'none';
         });
     }
 
