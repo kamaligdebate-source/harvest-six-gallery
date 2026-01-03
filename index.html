@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         :root {
             --harvest-green: #6d8c54; 
@@ -100,22 +98,13 @@
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
 
-        /* Branding used for Image Save Only */
-        .export-branding { display: none; font-family: 'Fredoka', sans-serif; font-size: 16px; color: var(--harvest-green); font-weight: 700; margin-bottom: 20px; text-transform: uppercase; }
-
         .break-badge { 
             position: absolute; top: 18px; left: 22px; font-size: 10px; font-weight: 700; 
             color: var(--harvest-green); background: #f4f7f0; padding: 4px 12px; border-radius: 20px; 
             cursor: pointer; z-index: 20;
         }
 
-        .save-card-btn {
-            position: absolute; bottom: 15px; right: 20px; font-size: 14px;
-            cursor: pointer; opacity: 0.3; transition: 0.3s; z-index: 20;
-        }
-        .scholar-card:hover .save-card-btn { opacity: 1; }
-
-        /* HARVEST LOG (DROPDOWN ON WEB) */
+        /* HARVEST LOG (DROPDOWN) */
         .harvest-log-container {
             position: absolute; top: 35px; left: 0; width: 240px;
             background: white; border-radius: 15px; padding: 15px;
@@ -257,7 +246,6 @@
                 const card = document.createElement('div');
                 card.className = 'scholar-card';
                 card.innerHTML = `
-                    <div class="export-branding">Harvest Six</div>
                     ${item.breaks > 0 ? `<div class="break-badge" onclick="event.stopPropagation(); this.classList.toggle('is-active');">${item.breaks} Breaks 
                         <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
                     </div>` : ''}
@@ -265,7 +253,6 @@
                     <span class="name">${item.name}</span>
                     <span class="inst">${item.institution}</span>
                     <div class="accolade-box">${item.accolade}</div>
-                    <div class="save-card-btn" onclick="downloadCard(this.parentElement, '${item.name}')" title="Save Card">💾</div>
                 `;
                 grid.appendChild(card);
             });
@@ -279,57 +266,6 @@
         const maxB = Math.max(...allData.map(x => x.breaks));
         leaders = allData.filter(s => s.breaks === maxB && maxB > 0);
         if(leaders.length) startLeaderCycle();
-    }
-
-    async function downloadCard(element, name) {
-        // Simple and robust export logic
-        const options = {
-            backgroundColor: "#ffffff",
-            scale: 2,
-            logging: false,
-            useCORS: true,
-            onclone: (clonedDoc) => {
-                // Find the specific card in the cloned document
-                const clonedCard = clonedDoc.querySelector('.scholar-card');
-                const log = clonedCard.querySelector('.harvest-log-container');
-                const branding = clonedCard.querySelector('.export-branding');
-                const saveBtn = clonedCard.querySelector('.save-card-btn');
-                const badge = clonedCard.querySelector('.break-badge');
-
-                // 1. Force styles for the image capture
-                if (saveBtn) saveBtn.style.display = 'none';
-                if (branding) branding.style.display = 'block';
-                clonedCard.style.padding = '50px';
-                clonedCard.style.transform = 'none';
-                clonedCard.style.opacity = '1';
-
-                // 2. Unfold the tournament log below the card content
-                if (log) {
-                    log.style.position = 'static';
-                    log.style.opacity = '1';
-                    log.style.visibility = 'visible';
-                    log.style.boxShadow = 'none';
-                    log.style.border = 'none';
-                    log.style.borderTop = '1px solid #f0f0f0';
-                    log.style.marginTop = '30px';
-                    log.style.paddingTop = '20px';
-                    log.style.maxHeight = 'none';
-                }
-                
-                // 3. Move the badge to a static position in the image
-                if (badge) {
-                    badge.style.position = 'static';
-                    badge.style.display = 'inline-block';
-                    badge.style.marginBottom = '20px';
-                }
-            }
-        };
-
-        const canvas = await html2canvas(element, options);
-        const link = document.createElement('a');
-        link.download = `HarvestSix_${name.replace(/\s+/g, '_')}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
     }
 
     function startLeaderCycle() {
