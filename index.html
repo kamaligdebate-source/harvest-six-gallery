@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         :root {
             --harvest-green: #6d8c54; 
@@ -20,6 +18,8 @@
             --text-main: #5a6650;
             --blob-color: rgba(109, 140, 84, 0.08);
             --gold: #b8860b;
+            --regional-blue: #4682b4;
+            --champ-red: #a63d40;
             --paper-shadow: 0 10px 30px rgba(90, 102, 80, 0.08);
         }
 
@@ -114,7 +114,7 @@
 
         .scholar-card { 
             display: flex; flex-direction: column; background: white; padding: 55px 30px 35px; 
-            border-radius: 35px 25px 40px 30px; /* Organic radii */
+            border-radius: 35px 25px 40px 30px;
             text-align: center; position: relative; opacity: 0; transform: translateY(30px);
             box-shadow: var(--paper-shadow); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
             height: 100%; box-sizing: border-box;
@@ -122,12 +122,6 @@
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
         .scholar-card:hover { transform: translateY(-8px) rotate(0.5deg); box-shadow: 0 20px 40px rgba(90, 102, 80, 0.12); }
 
-        /* Branding used for Image Save Only */
-        .card-branding {
-            display: none; font-family: 'Fredoka', sans-serif; font-size: 16px; color: var(--harvest-green); font-weight: 700; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 3px;
-        }
-
-        /* Hand-placed Washi Tape */
         .scholar-card::before {
             content: ""; position: absolute; top: -10px; left: 50%; transform: translateX(-50%) rotate(-2deg);
             width: 85px; height: 28px; background: rgba(109, 140, 84, 0.15); 
@@ -151,34 +145,30 @@
         }
         .break-badge:hover .harvest-log-container { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
 
-        /* Custom Scrollbar */
-        .harvest-log-container::-webkit-scrollbar { width: 4px; }
-        .harvest-log-container::-webkit-scrollbar-track { background: transparent; }
-        .harvest-log-container::-webkit-scrollbar-thumb { background: var(--harvest-green); border-radius: 10px; opacity: 0.3; }
-
         .log-title { font-family: 'Fredoka', sans-serif; font-size: 11px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #f8f8f8; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 1px; }
         .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #6e7a63; line-height: 1.6; }
-        .tournament-list li { margin-bottom: 8px; padding-left: 18px; position: relative; }
+        .tournament-list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
+        
+        /* New Prestigious Tier Styles */
         .tournament-list li::before { content: "•"; position: absolute; left: 0; color: #cbd6c2; font-size: 14px; line-height: 1; }
         
-        .tournament-list li.golden-grain { color: var(--gold); font-weight: 700; }
-        .tournament-list li.golden-grain::before { content: "⭐"; color: var(--gold); font-size: 9px; left: -2px; }
+        /* Tier 1: Championship (***) */
+        .tournament-list li.prestige-championship { color: var(--champ-red); font-weight: 700; }
+        .tournament-list li.prestige-championship::before { content: "🏆"; font-size: 10px; left: -2px; color: var(--champ-red); }
+
+        /* Tier 2: National (**) */
+        .tournament-list li.prestige-national { color: var(--gold); font-weight: 700; }
+        .tournament-list li.prestige-national::before { content: "⭐"; font-size: 10px; left: -2px; color: var(--gold); }
+
+        /* Tier 3: Regional (*) */
+        .tournament-list li.prestige-regional { color: var(--regional-blue); font-weight: 600; }
+        .tournament-list li.prestige-regional::before { content: "📍"; font-size: 10px; left: -2px; color: var(--regional-blue); }
 
         .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.25rem; margin-top: 5px; }
         .inst { font-size: 10px; color: #9da892; text-transform: uppercase; font-weight: 700; margin-bottom: 18px; display: block; letter-spacing: 0.5px; }
         .accolade-box { font-size: 11.5px; color: #7a8570; margin-top: auto; padding-top: 15px; font-style: italic; border-top: 1px solid #fbfbf7; }
 
         footer { text-align: center; padding: 100px 20px; opacity: 0.6; }
-
-        /* --- EXPORT STYLE --- */
-        .scholar-card.export-mode { padding: 50px !important; width: 480px !important; border: 1px solid #eee !important; box-shadow: none !important; }
-        .scholar-card.export-mode .card-branding { display: block !important; }
-        .scholar-card.export-mode .harvest-log-container { 
-            position: static !important; opacity: 1 !important; visibility: visible !important; 
-            box-shadow: none !important; border: none !important; border-top: 1px solid #f4f4f0 !important;
-            border-radius: 0 !important; width: 100% !important; padding: 25px 0 0 0 !important;
-            margin-top: 30px !important; transform: none !important; overflow: visible !important;
-        }
     </style>
 </head>
 <body>
@@ -284,18 +274,31 @@
                 let tourneyItems = "";
                 if (item.tournaments) {
                     const rawList = item.tournaments.split(/\r?\n|,/).filter(t => t.trim() !== "");
-                    const golden = rawList.filter(t => t.trim().startsWith('*') && t.trim().endsWith('*'));
-                    const regular = rawList.filter(t => !(t.trim().startsWith('*') && t.trim().endsWith('*')));
-                    tourneyItems = [...golden, ...regular].map(t => {
-                        const raw = t.trim(); const isGold = raw.startsWith('*') && raw.endsWith('*');
-                        return `<li class="${isGold ? 'golden-grain' : ''}">${raw.replace(/\*/g, '')}</li>`;
+                    
+                    // NEW PRESTIGE LOGIC
+                    tourneyItems = rawList.map(t => {
+                        const raw = t.trim();
+                        let prestigeClass = "";
+                        let cleanName = raw;
+
+                        if (raw.startsWith('***') && raw.endsWith('***')) {
+                            prestigeClass = "prestige-championship";
+                            cleanName = raw.substring(3, raw.length - 3);
+                        } else if (raw.startsWith('**') && raw.endsWith('**')) {
+                            prestigeClass = "prestige-national";
+                            cleanName = raw.substring(2, raw.length - 2);
+                        } else if (raw.startsWith('*') && raw.endsWith('*')) {
+                            prestigeClass = "prestige-regional";
+                            cleanName = raw.substring(1, raw.length - 1);
+                        }
+
+                        return `<li class="${prestigeClass}">${cleanName}</li>`;
                     }).join('');
                 }
 
                 const card = document.createElement('div');
                 card.className = 'scholar-card';
                 card.innerHTML = `
-                    <div class="card-branding">Harvest Six</div>
                     ${item.breaks > 0 ? `<div class="break-badge">${item.breaks} Breaks 
                         <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
                     </div>` : ''}
