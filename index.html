@@ -88,8 +88,8 @@
         }
         #gardenCanvas { width: 100%; height: 60px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
 
-        .cohort-section { padding: 60px 10% 40px; overflow: visible; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; overflow: visible; }
+        .cohort-section { padding: 60px 10% 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; }
 
         .scholar-card { 
             display: flex; flex-direction: column; background: var(--card-paper); 
@@ -97,51 +97,39 @@
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
             box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
             height: 100%; box-sizing: border-box; 
-            /* CRITICAL FIX: Ensure cards don't cut off the popup */
+            /* REMOVE OVERFLOW HIDDEN */
             overflow: visible !important; 
-            z-index: 1;
-        }
-        
-        /* Bring card to front when hovering so its log is on top of other cards */
-        .scholar-card:hover { z-index: 10; }
-
-        .scholar-card::after {
-            content: ""; position: absolute; bottom: -15px; right: -15px;
-            width: 120px; height: 120px; opacity: 0.04; pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 Q60 40 90 50 Q60 60 50 90 Q40 60 10 50 Q40 40 50 10' fill='%234a4a40'/%3E%3C/svg%3E");
-            background-size: contain; background-repeat: no-repeat;
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
 
         .break-badge { 
             position: absolute; top: 20px; left: 20px; font-size: 10px; font-weight: 700; 
             color: #fff; background: var(--harvest-green); padding: 5px 14px; 
-            cursor: pointer; z-index: 20; letter-spacing: 1px;
+            cursor: pointer; z-index: 50; letter-spacing: 1px;
         }
 
-        /* CRITICAL FIX: The Log Container */
+        /* UPDATED LOG CONTAINER: Infinite growth */
         .harvest-log-container {
             position: absolute; 
-            top: 40px; 
+            top: 35px; 
             left: 0; 
-            width: 280px;      /* Fixed but safe width */
-            background: #fff; 
+            width: 260px;
+            min-height: 50px;
+            height: auto;      /* Let it grow as long as needed */
+            max-height: 400px; /* Optional: adds scroll if too long */
+            overflow-y: auto;  /* Scroll within the box if 400px+ */
+            background: #ffffff; 
             padding: 20px; 
             border: 1px solid #ddd;
             text-align: left; 
-            z-index: 9999;     /* Ensure it is above everything */
+            z-index: 9999; 
             opacity: 0; 
             visibility: hidden;
             transition: 0.3s ease; 
             pointer-events: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            /* Handle long names */
-            white-space: normal;
-            word-wrap: break-word;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        /* Detect if it's near the right edge and flip it in JS, 
-           but for now, let's make it more robust */
         .break-badge:hover .harvest-log-container,
         .break-badge.is-active .harvest-log-container { 
             opacity: 1; 
@@ -150,9 +138,9 @@
         }
 
         .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
-        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #777; line-height: 1.6; }
-        .tournament-list li { border-bottom: 1px solid #f9f9f9; padding: 8px 0; display: flex; align-items: flex-start; position: relative; padding-left: 22px; }
-        .tournament-list li::before { position: absolute; left: 0; font-size: 11px; top: 8px; }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #555; line-height: 1.5; }
+        .tournament-list li { border-bottom: 1px solid #f0f0f0; padding: 8px 0; display: flex; align-items: flex-start; position: relative; padding-left: 25px; }
+        .tournament-list li::before { position: absolute; left: 0; font-size: 12px; top: 8px; }
 
         .li-kamalig { color: var(--harvest-green) !important; font-weight: 700; }
         .li-kamalig::before { content: "🌾"; }
@@ -331,7 +319,7 @@
 
                 grid.innerHTML += `
                     <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge" onclick="event.stopPropagation(); this.classList.toggle('is-active');">${item.breaks} Breaks 
+                        ${item.breaks > 0 ? `<div class="break-badge" onmouseenter="adjustLogPos(this)" onclick="event.stopPropagation(); this.classList.toggle('is-active'); adjustLogPos(this);">${item.breaks} Breaks 
                             <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
                         </div>` : ''}
                         <div style="font-size:32px; margin-bottom:15px; opacity:0.8;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
@@ -348,19 +336,32 @@
         
         leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)) && s.breaks > 0);
         if(leaders.length) startLeaderCycle();
+    }
 
-        // LOG SMART ALIGNMENT (Detects if popup hits screen edge)
-        document.querySelectorAll('.break-badge').forEach(badge => {
-            badge.addEventListener('mouseenter', function() {
-                const log = this.querySelector('.harvest-log-container');
-                if(!log) return;
-                const rect = log.getBoundingClientRect();
-                if (rect.right > window.innerWidth) {
-                    log.style.left = 'auto';
-                    log.style.right = '0';
-                }
-            });
-        });
+    // NEW: Smart positioning function
+    function adjustLogPos(badge) {
+        const log = badge.querySelector('.harvest-log-container');
+        if(!log) return;
+        
+        // Reset defaults
+        log.style.left = "0";
+        log.style.right = "auto";
+        log.style.top = "35px";
+        log.style.bottom = "auto";
+
+        const rect = log.getBoundingClientRect();
+        
+        // If it goes off the right edge, align to right
+        if (rect.right > window.innerWidth) {
+            log.style.left = "auto";
+            log.style.right = "0";
+        }
+        
+        // If it goes off the bottom edge, open upwards
+        if (rect.bottom > window.innerHeight) {
+            log.style.top = "auto";
+            log.style.bottom = "35px";
+        }
     }
 
     let searchTimer;
