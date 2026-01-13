@@ -88,8 +88,8 @@
         }
         #gardenCanvas { width: 100%; height: 60px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
 
-        .cohort-section { padding: 60px 10% 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; }
+        .cohort-section { padding: 60px 10% 40px; overflow: visible; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; overflow: visible; }
 
         .scholar-card { 
             display: flex; flex-direction: column; background: var(--card-paper); 
@@ -97,9 +97,14 @@
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
             box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
             height: 100%; box-sizing: border-box; 
-            /* FIXED: Changed from hidden to visible so log is not cut off */
-            overflow: visible; 
+            /* CRITICAL FIX: Ensure cards don't cut off the popup */
+            overflow: visible !important; 
+            z-index: 1;
         }
+        
+        /* Bring card to front when hovering so its log is on top of other cards */
+        .scholar-card:hover { z-index: 10; }
+
         .scholar-card::after {
             content: ""; position: absolute; bottom: -15px; right: -15px;
             width: 120px; height: 120px; opacity: 0.04; pointer-events: none;
@@ -114,34 +119,39 @@
             cursor: pointer; z-index: 20; letter-spacing: 1px;
         }
 
-        /* FIXED: Added dynamic width and better wrapping */
+        /* CRITICAL FIX: The Log Container */
         .harvest-log-container {
-            position: absolute; top: 40px; left: 0; 
-            width: max-content;
-            min-width: 220px;
-            max-width: 300px;
-            background: #fff; padding: 20px; border: 1px solid #ddd;
-            text-align: left; z-index: 1000; opacity: 0; visibility: hidden;
-            transition: 0.3s ease; pointer-events: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: absolute; 
+            top: 40px; 
+            left: 0; 
+            width: 280px;      /* Fixed but safe width */
+            background: #fff; 
+            padding: 20px; 
+            border: 1px solid #ddd;
+            text-align: left; 
+            z-index: 9999;     /* Ensure it is above everything */
+            opacity: 0; 
+            visibility: hidden;
+            transition: 0.3s ease; 
+            pointer-events: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            /* Handle long names */
             white-space: normal;
             word-wrap: break-word;
         }
+
+        /* Detect if it's near the right edge and flip it in JS, 
+           but for now, let's make it more robust */
         .break-badge:hover .harvest-log-container,
-        .break-badge.is-active .harvest-log-container { opacity: 1; visibility: visible; pointer-events: auto; }
+        .break-badge.is-active .harvest-log-container { 
+            opacity: 1; 
+            visibility: visible; 
+            pointer-events: auto; 
+        }
 
         .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
-        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #777; line-height: 1.4; }
-        
-        /* FIXED: Better alignment for long tournament names */
-        .tournament-list li { 
-            border-bottom: 1px solid #f9f9f9; 
-            padding: 8px 0; 
-            display: flex; 
-            align-items: flex-start; 
-            position: relative; 
-            padding-left: 22px; 
-        }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 10.5px; color: #777; line-height: 1.6; }
+        .tournament-list li { border-bottom: 1px solid #f9f9f9; padding: 8px 0; display: flex; align-items: flex-start; position: relative; padding-left: 22px; }
         .tournament-list li::before { position: absolute; left: 0; font-size: 11px; top: 8px; }
 
         .li-kamalig { color: var(--harvest-green) !important; font-weight: 700; }
@@ -338,6 +348,19 @@
         
         leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)) && s.breaks > 0);
         if(leaders.length) startLeaderCycle();
+
+        // LOG SMART ALIGNMENT (Detects if popup hits screen edge)
+        document.querySelectorAll('.break-badge').forEach(badge => {
+            badge.addEventListener('mouseenter', function() {
+                const log = this.querySelector('.harvest-log-container');
+                if(!log) return;
+                const rect = log.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    log.style.left = 'auto';
+                    log.style.right = '0';
+                }
+            });
+        });
     }
 
     let searchTimer;
