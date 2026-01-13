@@ -8,15 +8,16 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --harvest-green: #7d8c6b; 
             --dark-olive: #3d3d35;
             --cream-bg: #f7f5ed; 
-            --card-paper: #ffffff;
-            --text-main: #4a4a40;
+            --paper: #ffffff;
+            --text: #4a4a40;
+            --shadow: rgba(0,0,0,0.06);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,109 +26,134 @@
             font-family: 'Quicksand', sans-serif; 
             background-color: var(--cream-bg); 
             margin: 0; padding: 0; 
-            color: var(--text-main); 
-            line-height: 1.6;
+            color: var(--text); 
+            line-height: 1.5;
             overflow-x: hidden;
         }
 
-        /* Paper texture background */
+        /* Subtle Paper Grain Overlay */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
-            opacity: 0.4; pointer-events: none; z-index: 1;
+            opacity: 0.5; pointer-events: none; z-index: 1;
         }
 
         header { 
-            padding: 80px 20px 30px;
+            padding: 90px 20px 40px;
             text-align: center; position: relative; z-index: 2;
         }
         .header-title { 
             font-family: 'Fredoka', sans-serif; 
-            font-size: clamp(2.5rem, 8vw, 4rem); 
+            font-size: clamp(2.5rem, 6vw, 4.2rem); 
             color: var(--dark-olive); margin: 0; letter-spacing: -1px;
         }
 
-        /* FIXED HEADER DEPTH */
+        /* STICKY NAV - High Z-Index to stay on top */
         .sticky-controls { 
-            position: sticky; top: 0; z-index: 9999; /* Ensure it stays on top of everything */
-            background: rgba(247, 245, 237, 0.9); backdrop-filter: blur(15px);
-            padding: 15px 10px; border-bottom: 1px solid rgba(125, 140, 107, 0.1);
+            position: sticky; top: 0; z-index: 9999;
+            background: rgba(247, 245, 237, 0.92); backdrop-filter: blur(12px);
+            padding: 15px 0; border-bottom: 1px solid rgba(125, 140, 107, 0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
 
-        .nav-container { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .nav-container { 
+            display: flex; justify-content: center; gap: 8px; 
+            flex-wrap: wrap; margin-bottom: 12px; padding: 0 10px;
+        }
         .nav-btn { 
-            font-size: 10px; text-transform: uppercase; font-weight: 700;
+            font-size: 11px; text-transform: uppercase; font-weight: 700;
             padding: 6px 14px; border: 1.5px solid var(--harvest-green);
-            color: var(--harvest-green); text-decoration: none; border-radius: 20px;
-            transition: 0.2s; background: transparent; letter-spacing: 1px;
+            color: var(--harvest-green); text-decoration: none; border-radius: 50px;
+            transition: 0.2s; background: transparent; letter-spacing: 0.5px;
         }
         .nav-btn:hover { background: var(--harvest-green); color: white; }
 
+        .search-container { text-align: center; }
         #scholarSearch { 
-            width: 90%; max-width: 350px; padding: 10px 20px; 
-            border: 1px solid rgba(0,0,0,0.08); border-radius: 25px;
+            width: 90%; max-width: 320px; padding: 12px 20px; 
+            border: 1px solid rgba(0,0,0,0.08); border-radius: 50px;
             font-family: 'Quicksand', sans-serif; outline: none;
-            background: var(--card-paper); font-size: 14px;
+            background: #fff; font-size: 14px; transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        #scholarSearch:focus { border-color: var(--harvest-green); box-shadow: 0 4px 15px rgba(125,140,107,0.15); }
+
+        /* GALLERY LAYOUT */
+        .gallery-container { padding: 40px 5% 100px; max-width: 1300px; margin: 0 auto; position: relative; z-index: 2; }
+        
+        .batch-header {
+            font-family: 'Fredoka', sans-serif; font-size: 24px; color: var(--harvest-green);
+            text-align: center; margin: 60px 0 30px; letter-spacing: 2px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .batch-header::before, .batch-header::after {
+            content: ""; height: 1px; width: 60px; background: var(--harvest-green); opacity: 0.3; margin: 0 15px;
         }
 
-        /* FLOAT GARDEN */
-        #grainGardenContainer {
-            position: fixed; bottom: 20px; left: 20px; z-index: 4000;
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);
-            border-radius: 15px; border: 1px solid rgba(0,0,0,0.05);
-            padding: 10px; width: 140px; text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-        }
-        #gardenCanvas { width: 100%; height: 60px; border-radius: 8px; }
-
-        .cohort-section { padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
         .grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 20px; 
+            gap: 25px; 
+            align-items: stretch; /* Ensures equal height */
         }
 
-        /* SHORT & PRETTY CARDS */
         .scholar-card { 
-            background: var(--card-paper); padding: 30px 20px; border-radius: 12px;
+            background: var(--paper); padding: 35px 25px 30px; border-radius: 12px;
             text-align: center; position: relative; opacity: 0; 
-            transform: translateY(20px); transition: all 0.5s ease-out;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.03);
-            z-index: 10;
+            display: flex; flex-direction: column; justify-content: flex-start;
+            transform: translateY(20px); transition: transform 0.4s ease, opacity 0.6s ease;
+            box-shadow: 0 2px 10px var(--shadow); border: 1px solid rgba(0,0,0,0.02);
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
-        .scholar-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 50; }
+        .scholar-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); z-index: 50; }
 
+        /* DATA ELEMENTS */
         .break-badge { 
-            position: absolute; top: 12px; left: 12px; font-size: 9px; font-weight: 700; 
+            position: absolute; top: 12px; left: 12px; font-size: 10px; font-weight: 700; 
             color: #fff; background: var(--harvest-green); 
-            padding: 4px 10px; border-radius: 6px; cursor: pointer;
+            padding: 4px 12px; border-radius: 6px; cursor: pointer;
+            z-index: 20; letter-spacing: 0.5px;
         }
 
-        /* POPUP LOG */
+        .harvest-icon { font-size: 32px; margin-bottom: 15px; display: block; }
+        .name { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; color: var(--dark-olive); margin: 0 0 8px; line-height: 1.2; }
+        .inst { font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 15px; }
+        .accolade-box { font-size: 12px; color: #777; border-top: 1px solid #f8f8f8; padding-top: 15px; margin-top: auto; font-style: italic; line-height: 1.4; }
+
+        /* HOVER LOG */
         .harvest-log-container {
             position: absolute; top: 35px; left: 0; width: 280px;
-            background: #fff; padding: 20px; border-radius: 10px;
+            background: #fff; padding: 20px; border-radius: 8px;
             border: 1px solid #eee; text-align: left; 
-            z-index: 1000; opacity: 0; visibility: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-            transition: 0.2s; pointer-events: none;
+            z-index: 1000; opacity: 0; visibility: hidden; pointer-events: none;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15); transition: 0.2s;
+            max-height: 300px; overflow-y: auto;
         }
         .break-badge:hover .harvest-log-container { opacity: 1; visibility: visible; pointer-events: auto; }
+        .log-list { list-style: none; padding: 0; margin: 0; font-size: 11px; color: #555; }
+        .log-list li { padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
 
-        .name { font-family: 'Fredoka', sans-serif; font-size: 1.2rem; color: var(--dark-olive); margin: 5px 0; }
-        .inst { font-size: 8px; color: #999; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; display: block; margin-bottom: 15px; }
-        .accolade-box { font-size: 11px; color: #777; border-top: 1px solid #f9f9f9; padding-top: 12px; font-style: italic; }
+        /* FLOATING GARDEN */
+        #grainGardenContainer {
+            position: fixed; bottom: 25px; left: 25px; z-index: 8000;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px);
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.6);
+            padding: 12px; width: 140px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        #grainGardenContainer:hover { transform: scale(1.05); }
+        #gardenCanvas { width: 100%; height: 60px; border-radius: 8px; margin-bottom: 5px; }
 
-        .ver-stamp { position: fixed; bottom: 8px; right: 8px; font-size: 7px; opacity: 0.2; z-index: 9999; }
+        .ver-stamp { position: fixed; bottom: 10px; right: 10px; font-size: 8px; opacity: 0.3; z-index: 9000; }
 
-        /* MOBILE OVERRIDES */
         @media (max-width: 600px) {
-            #grainGardenContainer { bottom: auto; top: 12px; right: 12px; left: auto; width: 85px; padding: 5px; }
-            #gardenCanvas { height: 35px; }
-            #totalBreaks { font-size: 16px !important; }
             .grid { grid-template-columns: 1fr; }
-            .harvest-log-container { width: 240px; left: 0; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+            #grainGardenContainer { bottom: auto; top: 15px; right: 15px; left: auto; width: 90px; padding: 8px; }
+            #gardenCanvas { height: 40px; }
+            #totalBreaks { font-size: 16px !important; }
+            .header-title { font-size: 2.8rem; }
+            .harvest-log-container { left: 0; width: 260px; }
         }
     </style>
 </head>
@@ -135,44 +161,78 @@
 
 <header>
     <h1 class="header-title">Harvest Six</h1>
-    <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: var(--harvest-green); font-weight: 600; margin-top: 5px;">Scholars Gallery</div>
+    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: var(--harvest-green); font-weight: 700; margin-top: 8px;">The Official Archives</div>
 </header>
 
 <div class="sticky-controls">
     <div class="nav-container" id="batchNav"></div>
-    <div style="text-align: center;">
-        <input type="text" id="scholarSearch" placeholder="Search the archives...">
+    <div class="search-container">
+        <input type="text" id="scholarSearch" placeholder="Search scholars or institutions..." onkeyup="filterCards()">
     </div>
 </div>
 
-<div id="gallery"></div>
+<div class="gallery-container" id="gallery"></div>
 
 <div id="grainGardenContainer">
     <canvas id="gardenCanvas"></canvas>
-    <div style="font-size: 18px; font-weight: 700; color: var(--dark-olive); font-family: 'Fredoka';" id="totalBreaks">0</div>
-    <div style="font-size: 7px; text-transform: uppercase; color: var(--harvest-green); letter-spacing: 1px;">Yield</div>
+    <div style="font-size: 20px; font-weight: 700; color: var(--dark-olive); font-family: 'Fredoka'; line-height:1;" id="totalBreaks">0</div>
+    <div style="font-size: 8px; text-transform: uppercase; color: var(--harvest-green); letter-spacing: 1px;">Total Yield</div>
 </div>
 
-<div class="ver-stamp">H6-C12</div>
+<div class="ver-stamp">H6-C14</div>
 
 <script>
     const gardenCanvas = document.getElementById('gardenCanvas');
     const gCtx = gardenCanvas.getContext('2d');
     let grainArray = [];
 
+    // --- ROBUST CSV PARSER (The Fix) ---
+    // This logic ensures that commas/newlines INSIDE quotes are treated as text, not separators.
+    function parseCSV(text) {
+        const rows = [];
+        let currentRow = [];
+        let currentVal = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const nextChar = text[i+1];
+
+            if (char === '"') {
+                if (inQuotes && nextChar === '"') { currentVal += '"'; i++; } // Escaped quote
+                else { inQuotes = !inQuotes; } // Toggle quote mode
+            } else if (char === ',' && !inQuotes) {
+                currentRow.push(currentVal); currentVal = ''; // New Cell
+            } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                if (currentVal || currentRow.length) currentRow.push(currentVal);
+                if (currentRow.length) rows.push(currentRow);
+                currentRow = []; currentVal = '';
+                if (char === '\r' && nextChar === '\n') i++; // Handle Windows line endings
+            } else {
+                currentVal += char;
+            }
+        }
+        if (currentVal || currentRow.length) { currentRow.push(currentVal); rows.push(currentRow); }
+        return rows;
+    }
+
+    // --- ANIMATION ---
     function animate() {
         gCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
-        const sunX = (Date.now() * 0.004) % (gardenCanvas.width + 40) - 20;
+        
+        // Moving Sun
+        const sunX = (Date.now() * 0.005) % (gardenCanvas.width + 50) - 25;
         gCtx.font = '16px serif';
-        gCtx.fillText('☀️', sunX, 18);
+        gCtx.fillText('☀️', sunX, 20);
 
-        gCtx.font = '22px serif';
+        // Swaying Rice
+        gCtx.font = '24px serif';
         grainArray.forEach(g => {
-            const sway = Math.sin(Date.now() * 0.002 + g.offset) * 6;
+            const sway = Math.sin(Date.now() * 0.002 + g.offset) * 8;
             gCtx.save();
             gCtx.translate(g.x, gardenCanvas.height - 5);
             gCtx.rotate(sway * Math.PI / 180);
-            gCtx.fillText('🌾', -11, 0);
+            gCtx.fillText('🌾', -12, 0);
             gCtx.restore();
         });
         requestAnimationFrame(animate);
@@ -180,87 +240,110 @@
 
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTHPJe3Zt0F1OO2gt1igtfKLmt4QdMedmq7qI3wn769I-lpWA0aMZ9I07v1DwJgdCuDz2i3t2wPyfmt/pub?output=csv';
 
-    async function loadData() {
+    async function loadGallery() {
         try {
             const res = await fetch(sheetUrl);
-            const text = await res.text();
-            const rows = text.split('\n').slice(1);
+            const rawCsv = await res.text();
             
-            const data = rows.map(row => {
-                const c = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                return {
-                    name: c[0]?.replace(/"/g, '').trim(),
-                    batch: c[1]?.trim(),
-                    accolade: c[2]?.replace(/"/g, '').trim(),
-                    batchName: c[3]?.trim(),
-                    inst: c[5]?.replace(/"/g, '').trim(),
-                    breaks: parseInt(c[6]) || 0,
-                    tourneys: c[7]?.replace(/"/g, '') || ""
-                };
-            }).filter(d => d.name);
+            // 1. Parse cleanly
+            const rows = parseCSV(rawCsv.trim()).slice(1); // Skip header
 
-            render(data);
-        } catch(e) { console.error(e); }
+            // 2. Map to Object
+            const allData = rows.map(c => {
+                // Safety check for empty rows
+                if (!c[0]) return null;
+                return {
+                    name: c[0].trim(),
+                    batchNum: parseInt(c[1]) || 0, // Force Number for sorting
+                    accolade: c[2] ? c[2].trim() : "",
+                    batchName: c[3] ? c[3].trim() : `Batch ${c[1]}`,
+                    institution: c[5] ? c[5].trim() : "",
+                    breaks: parseInt(c[6]) || 0,
+                    tournaments: c[7] ? c[7].trim() : ""
+                };
+            }).filter(i => i !== null);
+
+            render(allData);
+
+        } catch (e) { console.error("Data Error:", e); }
     }
 
     function render(data) {
         const gal = document.getElementById('gallery');
         const nav = document.getElementById('batchNav');
+        
+        // Total Yield Calculation
         document.getElementById('totalBreaks').innerText = data.reduce((s, i) => s + i.breaks, 0);
 
-        grainArray = Array.from({ length: 10 }, () => ({
-            x: Math.random() * (gardenCanvas.width - 25) + 12,
+        // Populate Garden
+        grainArray = Array.from({ length: 12 }, () => ({
+            x: Math.random() * (gardenCanvas.width - 20) + 10,
             offset: Math.random() * 100
         }));
 
-        const batches = [...new Set(data.map(d => d.batch))].sort();
-        batches.forEach(bNum => {
-            const bItems = data.filter(d => d.batch === bNum);
-            nav.innerHTML += `<a href="#batch-${bNum}" class="nav-btn">${bItems[0].batchName || bNum}</a>`;
-            
-            const section = document.createElement('section');
-            section.className = 'cohort-section';
-            section.id = `batch-${bNum}`;
-            section.innerHTML = `<div class="grid"></div>`;
-            const grid = section.querySelector('.grid');
+        // 3. STRICT SORTING (Sunod-sunod check)
+        // Sort by Batch Number (1, 2, 3...)
+        const uniqueBatches = [...new Set(data.map(i => i.batchNum))].sort((a,b) => a - b);
 
+        uniqueBatches.forEach(bNum => {
+            const bItems = data.filter(i => i.batchNum === bNum);
+            const bName = bItems[0].batchName;
+            
+            // Nav Button
+            nav.innerHTML += `<a href="#batch-${bNum}" class="nav-btn">${bName}</a>`;
+            
+            // Section
+            const section = document.createElement('div');
+            section.id = `batch-${bNum}`;
+            section.innerHTML = `<div class="batch-header">${bName}</div><div class="grid"></div>`;
+            const grid = section.querySelector('.grid');
+            
             bItems.forEach(item => {
-                const tourneyList = item.tourneys.split(/\\n|,/).map(t => {
-                    const clean = t.trim().replace(/(\|\||\*\*\*|\*\*|\*)/g, '');
-                    return t.trim() ? `<li>${clean}</li>` : '';
-                }).join('');
+                // Process Tournaments (handle newlines from CSV safely)
+                let tourneyHTML = "";
+                if (item.tournaments) {
+                    const lines = item.tournaments.split(/\r?\n/).filter(line => line.trim() !== "");
+                    tourneyHTML = lines.map(t => {
+                        const clean = t.replace(/(\|\||\*\*\*|\*\*|\*)/g, '').trim();
+                        return `<li>${clean}</li>`;
+                    }).join('');
+                }
+
+                const icon = item.breaks > 10 ? '🏯' : (item.breaks > 0 ? '🌾' : '🌱');
 
                 grid.innerHTML += `
                     <div class="scholar-card">
                         ${item.breaks > 0 ? `
                         <div class="break-badge">${item.breaks} Breaks
                             <div class="harvest-log-container">
-                                <ul style="list-style:none; padding:0; font-size:11px; color:#666;">${tourneyList}</ul>
+                                <strong style="color:var(--harvest-green); font-size:10px; text-transform:uppercase; display:block; margin-bottom:8px;">Harvest Log</strong>
+                                <ul class="log-list">${tourneyHTML}</ul>
                             </div>
                         </div>` : ''}
-                        <div style="font-size:28px; margin-bottom:8px;">${item.breaks > 10 ? '🏯' : (item.breaks > 0 ? '🌾' : '🌱')}</div>
+                        
+                        <span class="harvest-icon">${icon}</span>
                         <div class="name">${item.name}</div>
-                        <div class="inst">${item.inst}</div>
+                        <div class="inst">${item.institution}</div>
                         <div class="accolade-box">${item.accolade}</div>
                     </div>`;
             });
             gal.appendChild(section);
         });
 
-        const observer = new IntersectionObserver(es => {
-            es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.scholar-card').forEach(c => observer.observe(c));
+        // Scroll Animation
+        const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
+        document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
     }
 
-    document.getElementById('scholarSearch').addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
+    function filterCards() {
+        const t = document.getElementById('scholarSearch').value.toLowerCase();
         document.querySelectorAll('.scholar-card').forEach(c => {
-            c.style.display = c.innerText.toLowerCase().includes(val) ? 'block' : 'none';
+            const visible = c.innerText.toLowerCase().includes(t);
+            c.style.display = visible ? 'flex' : 'none';
         });
-    });
+    }
 
-    animate(); loadData();
+    animate(); loadGallery();
 </script>
 </body>
 </html>
