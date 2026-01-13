@@ -29,8 +29,7 @@
             margin: 0; padding: 0; 
             color: var(--text-main); 
             background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
-            /* This prevents the horizontal scroll but allows vertical popups */
-            overflow-x: hidden; 
+            overflow-x: hidden;
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
@@ -89,19 +88,22 @@
         }
         #gardenCanvas { width: 100%; height: 60px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
 
-        /* ADDED: Extra bottom padding to cohorts so the last row isn't cut off */
-        .cohort-section { padding: 60px 10% 150px; position: relative; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; }
+        .cohort-section { padding: 60px 10% 100px; }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 40px; 
+            /* FORCE VISIBLE */
+            overflow: visible !important; 
+        }
 
         .scholar-card { 
             display: flex; flex-direction: column; background: var(--card-paper); 
             padding: 60px 30px 40px; border-radius: 4px;
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
             box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-            /* REMOVED height: 100% to let it breathe */
-            min-height: 280px;
-            box-sizing: border-box; 
-            /* THE ULTIMATE FIX: This must be visible */
+            /* REMOVED FIXED HEIGHTS */
+            min-height: 250px; 
             overflow: visible !important; 
         }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
@@ -109,28 +111,28 @@
         .break-badge { 
             position: absolute; top: 20px; left: 20px; font-size: 10px; font-weight: 700; 
             color: #fff; background: var(--harvest-green); padding: 5px 14px; 
-            cursor: pointer; z-index: 100; letter-spacing: 1px;
+            cursor: pointer; z-index: 10; letter-spacing: 1px;
         }
 
-        /* UPDATED: Improved container sizing and layering */
+        /* THE HARVEST LOG: COMPLETE REBUILD */
         .harvest-log-container {
             position: absolute; 
-            top: 100%; /* Sits exactly at the bottom of the "4 Breaks" badge */
+            top: 40px; 
             left: 0; 
-            width: 300px;
+            width: 280px;
             background: #ffffff; 
             padding: 20px; 
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             text-align: left; 
-            z-index: 9999 !important; 
+            z-index: 99999 !important; /* Extremely high to beat any card */
             opacity: 0; 
             visibility: hidden;
-            transition: 0.2s ease-out; 
+            transition: 0.2s ease; 
             pointer-events: none;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
-            /* Prevent internal cutting */
-            display: block;
-            height: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+            /* Ensure it is never taller than the screen */
+            max-height: 60vh;
+            overflow-y: auto;
         }
 
         .break-badge:hover .harvest-log-container,
@@ -138,12 +140,11 @@
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto; 
-            transform: translateY(10px);
         }
 
         .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
-        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #555; line-height: 1.6; }
-        .tournament-list li { border-bottom: 1px solid #f2f2f2; padding: 10px 0; display: flex; align-items: flex-start; position: relative; padding-left: 28px; }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #555; line-height: 1.5; }
+        .tournament-list li { border-bottom: 1px solid #f5f5f5; padding: 10px 0; display: flex; align-items: flex-start; position: relative; padding-left: 28px; }
         .tournament-list li::before { position: absolute; left: 0; font-size: 12px; top: 10px; }
 
         .li-kamalig { color: var(--harvest-green) !important; font-weight: 700; }
@@ -316,84 +317,4 @@
                         else if (raw.startsWith('**')) pClass = "li-national";
                         else if (raw.startsWith('*')) pClass = "li-regional";
                         
-                        const clean = raw.replace(/(\|\||\*\*\*|\*\*|\*)/g, '');
-                        return `<li class="${pClass}">${clean}</li>`;
-                    }).join('');
-                }
-
-                grid.innerHTML += `
-                    <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge" onmouseenter="fixLog(this)" onclick="event.stopPropagation(); this.classList.toggle('is-active'); fixLog(this);">${item.breaks} Breaks 
-                            <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
-                        </div>` : ''}
-                        <div style="font-size:32px; margin-bottom:15px; opacity:0.8;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
-                        <span class="name">${item.name}</span>
-                        <span class="inst">${item.institution}</span>
-                        <div class="accolade-box">${item.accolade}</div>
-                    </div>`;
-            });
-            gal.appendChild(section);
-        });
-
-        const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
-        document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
-        
-        leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)) && s.breaks > 0);
-        if(leaders.length) startLeaderCycle();
-    }
-
-    // NEW PORTAL LOGIC: Ensures the log is never cut
-    function fixLog(badge) {
-        const log = badge.querySelector('.harvest-log-container');
-        if (!log) return;
-
-        // Reset
-        log.style.left = "0";
-        log.style.right = "auto";
-        log.style.top = "100%";
-        log.style.bottom = "auto";
-
-        const rect = log.getBoundingClientRect();
-
-        // 1. If it goes off the right edge of screen
-        if (rect.right > window.innerWidth) {
-            log.style.left = "auto";
-            log.style.right = "0";
-        }
-        // 2. If it goes off the bottom of screen, flip it UP
-        if (rect.bottom > window.innerHeight) {
-            log.style.top = "auto";
-            log.style.bottom = "100%";
-        }
-    }
-
-    let searchTimer;
-    function debouncedSearch() {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => {
-            const t = document.getElementById('scholarSearch').value.toLowerCase();
-            document.querySelectorAll('.scholar-card').forEach(c => {
-                c.style.display = c.innerText.toLowerCase().includes(t) ? 'flex' : 'none';
-            });
-        }, 300);
-    }
-
-    function startLeaderCycle() {
-        const el = document.getElementById('leaderName');
-        setInterval(() => {
-            el.classList.add('fade-out');
-            setTimeout(() => {
-                lIdx = (lIdx + 1) % leaders.length;
-                el.innerText = `Top Harvest: ${leaders[lIdx].name}`;
-                el.classList.remove('fade-out');
-            }, 1200); 
-        }, 5500);
-    }
-
-    window.addEventListener('resize', initCanvas);
-    initCanvas();
-    animate();
-    loadGallery();
-</script>
-</body>
-</html>
+                        const clean
