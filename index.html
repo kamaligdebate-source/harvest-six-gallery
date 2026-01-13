@@ -88,12 +88,11 @@
         }
         #gardenCanvas { width: 100%; height: 60px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
 
-        .cohort-section { padding: 60px 10% 100px; }
+        .cohort-section { padding: 60px 10% 120px; }
         .grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
             gap: 40px; 
-            /* FORCE VISIBLE */
             overflow: visible !important; 
         }
 
@@ -102,7 +101,6 @@
             padding: 60px 30px 40px; border-radius: 4px;
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
             box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-            /* REMOVED FIXED HEIGHTS */
             min-height: 250px; 
             overflow: visible !important; 
         }
@@ -111,27 +109,27 @@
         .break-badge { 
             position: absolute; top: 20px; left: 20px; font-size: 10px; font-weight: 700; 
             color: #fff; background: var(--harvest-green); padding: 5px 14px; 
-            cursor: pointer; z-index: 10; letter-spacing: 1px;
+            cursor: pointer; z-index: 500; letter-spacing: 1px;
         }
 
-        /* THE HARVEST LOG: COMPLETE REBUILD */
+        /* LOG BOX - Added red border for visibility until we confirm fix */
         .harvest-log-container {
             position: absolute; 
             top: 40px; 
             left: 0; 
-            width: 280px;
+            width: 320px;
             background: #ffffff; 
-            padding: 20px; 
-            border: 1px solid #ccc;
+            padding: 25px; 
+            border: 2px solid #a63d40; 
             text-align: left; 
-            z-index: 99999 !important; /* Extremely high to beat any card */
+            z-index: 999999 !important; 
             opacity: 0; 
             visibility: hidden;
-            transition: 0.2s ease; 
+            transition: 0.2s ease-out; 
             pointer-events: none;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-            /* Ensure it is never taller than the screen */
-            max-height: 60vh;
+            box-shadow: 10px 10px 40px rgba(0,0,0,0.3);
+            /* Important: max-height and overflow-y to handle massive lists */
+            max-height: 450px;
             overflow-y: auto;
         }
 
@@ -140,25 +138,28 @@
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto; 
+            transform: translateY(5px);
         }
 
-        .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
-        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #555; line-height: 1.5; }
-        .tournament-list li { border-bottom: 1px solid #f5f5f5; padding: 10px 0; display: flex; align-items: flex-start; position: relative; padding-left: 28px; }
-        .tournament-list li::before { position: absolute; left: 0; font-size: 12px; top: 10px; }
+        .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--wax-seal); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #333; line-height: 1.6; }
+        .tournament-list li { border-bottom: 1px solid #f0f0f0; padding: 12px 0; display: flex; align-items: flex-start; position: relative; padding-left: 30px; }
+        .tournament-list li::before { position: absolute; left: 0; font-size: 14px; top: 12px; }
 
-        .li-kamalig { color: var(--harvest-green) !important; font-weight: 700; }
         .li-kamalig::before { content: "🌾"; }
-        .li-champ { color: var(--wax-seal) !important; font-weight: 700; }
         .li-champ::before { content: "🏆"; }
-        .li-national { color: var(--gold) !important; font-weight: 700; }
         .li-national::before { content: "⭐"; }
-        .li-regional { color: var(--regional-blue) !important; font-weight: 600; }
         .li-regional::before { content: "📍"; }
 
         .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.25rem; margin-top: 5px; }
         .inst { font-size: 9px; color: #aaa; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; display: block; letter-spacing: 1.5px; }
         .accolade-box { font-size: 11px; color: #888; margin-top: auto; padding-top: 15px; font-style: italic; border-top: 1px solid #f9f9f9; }
+
+        /* THE SUBTLE STAMP */
+        .ver-stamp { 
+            position: fixed; bottom: 5px; right: 10px; font-size: 8px; 
+            color: var(--dark-olive); opacity: 0.3; z-index: 9999;
+        }
 
         footer { text-align: center; padding: 100px 20px; opacity: 0.4; }
     </style>
@@ -189,7 +190,7 @@
 
 <div id="gallery"></div>
 
-<footer>
+<div class="ver-stamp">H6-C5</div> <footer>
     <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--dark-olive); font-family: 'Fredoka'; font-size: 10px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">Update Scholar Profile</a>
 </footer>
 
@@ -317,4 +318,71 @@
                         else if (raw.startsWith('**')) pClass = "li-national";
                         else if (raw.startsWith('*')) pClass = "li-regional";
                         
-                        const clean
+                        const clean = raw.replace(/(\|\||\*\*\*|\*\*|\*)/g, '');
+                        return `<li class="${pClass}">${clean}</li>`;
+                    }).join('');
+                }
+
+                grid.innerHTML += `
+                    <div class="scholar-card">
+                        ${item.breaks > 0 ? `<div class="break-badge" onmouseenter="forceCheck(this)" onclick="event.stopPropagation(); this.classList.toggle('is-active'); forceCheck(this);">${item.breaks} Breaks 
+                            <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
+                        </div>` : ''}
+                        <div style="font-size:32px; margin-bottom:15px; opacity:0.8;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                        <span class="name">${item.name}</span>
+                        <span class="inst">${item.institution}</span>
+                        <div class="accolade-box">${item.accolade}</div>
+                    </div>`;
+            });
+            gal.appendChild(section);
+        });
+
+        const obs = new IntersectionObserver((es) => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('sprouted') }), {threshold:0.1});
+        document.querySelectorAll('.scholar-card').forEach(c => obs.observe(c));
+        
+        leaders = allData.filter(s => s.breaks === Math.max(...allData.map(x => x.breaks)) && s.breaks > 0);
+        if(leaders.length) startLeaderCycle();
+    }
+
+    function forceCheck(badge) {
+        const log = badge.querySelector('.harvest-log-container');
+        if(!log) return;
+        
+        log.style.left = "0"; log.style.right = "auto";
+        log.style.top = "40px"; log.style.bottom = "auto";
+
+        const rect = log.getBoundingClientRect();
+        if (rect.right > window.innerWidth) { log.style.left = "auto"; log.style.right = "0"; }
+        if (rect.bottom > window.innerHeight) { log.style.top = "auto"; log.style.bottom = "100%"; }
+    }
+
+    let searchTimer;
+    function debouncedSearch() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            const t = document.getElementById('scholarSearch').value.toLowerCase();
+            document.querySelectorAll('.scholar-card').forEach(c => {
+                c.style.display = c.innerText.toLowerCase().includes(t) ? 'flex' : 'none';
+            });
+        }, 300);
+    }
+
+    function startLeaderCycle() {
+        const el = document.getElementById('leaderName');
+        setInterval(() => {
+            el.classList.add('fade-out');
+            setTimeout(() => {
+                lIdx = (lIdx + 1) % leaders.length;
+                el.innerText = `Top Harvest: ${leaders[lIdx].name}`;
+                el.classList.remove('fade-out');
+            }, 1200); 
+        }, 5500);
+    }
+
+    window.addEventListener('resize', initCanvas);
+    initCanvas();
+    animate();
+    loadGallery();
+</script>
+</body>
+</html>
