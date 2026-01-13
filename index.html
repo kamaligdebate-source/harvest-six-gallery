@@ -18,8 +18,6 @@
             --card-paper: #fdfcf5;
             --text-main: #5a5a50;
             --wax-seal: #a63d40;
-            --gold: #b8860b;
-            --regional-blue: #4682b4;
             --banig-pattern: repeating-linear-gradient(45deg, rgba(125, 140, 107, 0.05) 0px, rgba(125, 140, 107, 0.05) 2px, transparent 2px, transparent 4px);
         }
 
@@ -81,55 +79,58 @@
             box-shadow: 4px 4px 0px rgba(0,0,0,0.04);
         }
 
+        /* GARDEN BOX */
         #grainGardenContainer {
             position: fixed; bottom: 30px; left: 30px; z-index: 1000;
-            background: var(--card-paper); border: 1px solid #ddd; padding: 15px; width: 120px; text-align: center;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+            background: var(--card-paper); border: 1px solid #ddd; padding: 15px; width: 140px; text-align: center;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.05); overflow: hidden;
         }
-        #gardenCanvas { width: 100%; height: 60px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
+        #gardenCanvas { width: 100%; height: 80px; background: #f4f3e9; margin-bottom: 10px; border-radius: 4px; }
 
-        .cohort-section { padding: 60px 10% 120px; }
+        .cohort-section { padding: 40px 10% 80px; }
         .grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 40px; 
+            gap: 30px; 
             overflow: visible !important; 
         }
 
         .scholar-card { 
             display: flex; flex-direction: column; background: var(--card-paper); 
-            padding: 60px 30px 40px; border-radius: 4px;
+            padding: 50px 25px 30px; border-radius: 4px;
             text-align: center; position: relative; opacity: 0; transform: translateY(20px);
-            box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: 0.8s cubic-bezier(0.2, 1, 0.3, 1);
-            min-height: 250px; 
+            box-shadow: 1px 1px 12px rgba(0,0,0,0.04); transition: transform 0.3s, opacity 0.8s, z-index 0s;
+            height: auto;
+            min-height: 200px;
             overflow: visible !important; 
+            z-index: 5;
         }
+        /* Card jumps to front when interacted with to prevent clipping behind neighbor */
+        .scholar-card:hover, .scholar-card:focus-within { z-index: 999; transform: translateY(-5px); }
         .scholar-card.sprouted { opacity: 1; transform: translateY(0); }
 
         .break-badge { 
-            position: absolute; top: 20px; left: 20px; font-size: 10px; font-weight: 700; 
-            color: #fff; background: var(--harvest-green); padding: 5px 14px; 
-            cursor: pointer; z-index: 500; letter-spacing: 1px;
+            position: absolute; top: 15px; left: 15px; font-size: 10px; font-weight: 700; 
+            color: #fff; background: var(--harvest-green); padding: 4px 12px; 
+            cursor: pointer; z-index: 10; letter-spacing: 1px;
         }
 
-        /* LOG BOX - Added red border for visibility until we confirm fix */
         .harvest-log-container {
             position: absolute; 
-            top: 40px; 
+            top: 35px; 
             left: 0; 
-            width: 320px;
+            width: 300px;
             background: #ffffff; 
-            padding: 25px; 
-            border: 2px solid #a63d40; 
+            padding: 20px; 
+            border: 1px solid #eee;
             text-align: left; 
-            z-index: 999999 !important; 
+            z-index: 1000; 
             opacity: 0; 
             visibility: hidden;
-            transition: 0.2s ease-out; 
+            transition: 0.2s ease; 
             pointer-events: none;
-            box-shadow: 10px 10px 40px rgba(0,0,0,0.3);
-            /* Important: max-height and overflow-y to handle massive lists */
-            max-height: 450px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            max-height: 350px;
             overflow-y: auto;
         }
 
@@ -138,30 +139,24 @@
             opacity: 1; 
             visibility: visible; 
             pointer-events: auto; 
-            transform: translateY(5px);
         }
 
-        .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--wax-seal); border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: block; letter-spacing: 2px; }
-        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #333; line-height: 1.6; }
-        .tournament-list li { border-bottom: 1px solid #f0f0f0; padding: 12px 0; display: flex; align-items: flex-start; position: relative; padding-left: 30px; }
-        .tournament-list li::before { position: absolute; left: 0; font-size: 14px; top: 12px; }
+        .log-title { font-family: 'Fredoka', sans-serif; font-size: 10px; text-transform: uppercase; color: var(--harvest-green); border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 10px; display: block; letter-spacing: 2px; }
+        .tournament-list { margin: 0; padding: 0; list-style: none; font-size: 11px; color: #555; line-height: 1.5; }
+        .tournament-list li { border-bottom: 1px solid #f8f8f8; padding: 8px 0; display: flex; align-items: flex-start; position: relative; padding-left: 28px; }
+        .tournament-list li::before { position: absolute; left: 0; font-size: 12px; top: 8px; }
 
         .li-kamalig::before { content: "🌾"; }
         .li-champ::before { content: "🏆"; }
         .li-national::before { content: "⭐"; }
         .li-regional::before { content: "📍"; }
 
-        .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.25rem; margin-top: 5px; }
-        .inst { font-size: 9px; color: #aaa; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; display: block; letter-spacing: 1.5px; }
+        .name { font-family: 'Fredoka', sans-serif; font-weight: 600; color: var(--dark-olive); font-size: 1.2rem; margin-top: 10px; }
+        .inst { font-size: 9px; color: #aaa; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; display: block; letter-spacing: 1.5px; }
         .accolade-box { font-size: 11px; color: #888; margin-top: auto; padding-top: 15px; font-style: italic; border-top: 1px solid #f9f9f9; }
 
-        /* THE SUBTLE STAMP */
-        .ver-stamp { 
-            position: fixed; bottom: 5px; right: 10px; font-size: 8px; 
-            color: var(--dark-olive); opacity: 0.3; z-index: 9999;
-        }
-
-        footer { text-align: center; padding: 100px 20px; opacity: 0.4; }
+        .ver-stamp { position: fixed; bottom: 5px; right: 10px; font-size: 8px; color: var(--dark-olive); opacity: 0.2; z-index: 9999; }
+        footer { text-align: center; padding: 80px 20px; opacity: 0.4; }
     </style>
 </head>
 <body>
@@ -189,8 +184,9 @@
 </div>
 
 <div id="gallery"></div>
+<div class="ver-stamp">H6-C8</div>
 
-<div class="ver-stamp">H6-C5</div> <footer>
+<footer>
     <a href="https://forms.gle/EQ8bFb1KJLaew9vX7" target="_blank" style="color: var(--dark-olive); font-family: 'Fredoka'; font-size: 10px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">Update Scholar Profile</a>
 </footer>
 
@@ -227,14 +223,22 @@
             bgCtx.fill();
         });
 
+        // GARDEN ANIMATION (Sun and Breezy Rice)
         gCtx.clearRect(0, 0, gardenCanvas.width, gardenCanvas.height);
-        gCtx.font = '16px serif';
+        
+        // Moving Sun
+        const sunX = (Date.now() * 0.01) % (gardenCanvas.width + 40) - 20;
+        gCtx.font = '20px serif';
+        gCtx.fillText('☀️', sunX, 25);
+
+        // Breezy Rice Stalks
+        gCtx.font = '24px serif';
         grainArray.forEach(g => {
-            const sway = Math.sin(Date.now() * 0.002 + g.offset) * 5;
+            const sway = Math.sin(Date.now() * 0.002 + g.offset) * 8;
             gCtx.save();
-            gCtx.translate(g.x, gardenCanvas.height);
+            gCtx.translate(g.x, gardenCanvas.height - 5);
             gCtx.rotate(sway * Math.PI / 180);
-            gCtx.fillText('🌾', -8, -2);
+            gCtx.fillText('🌾', -12, 0);
             gCtx.restore();
         });
         requestAnimationFrame(animate);
@@ -290,8 +294,9 @@
         document.getElementById('countDisplay').innerText = allData.length;
         document.getElementById('goalProgress').style.width = Math.min(allData.length, 100) + "%";
 
-        grainArray = Array.from({ length: Math.floor(totalBreaks / 5) }, () => ({
-            x: Math.random() * 100 + 10,
+        // Garden density
+        grainArray = Array.from({ length: Math.min(Math.floor(totalBreaks / 4), 12) }, () => ({
+            x: Math.random() * (gardenCanvas.width - 20) + 10,
             offset: Math.random() * 100
         }));
 
@@ -303,7 +308,7 @@
             nav.innerHTML += `<a href="#${bID}" class="nav-btn">${bName}</a>`;
             const section = document.createElement('div');
             section.className = 'cohort-section'; section.id = bID;
-            section.innerHTML = `<div style="font-family:'Fredoka'; font-size:16px; color:var(--dark-olive); letter-spacing:5px; margin-bottom:40px; text-align:center;">— ${bName} —</div><div class="grid"></div>`;
+            section.innerHTML = `<div style="font-family:'Fredoka'; font-size:16px; color:var(--dark-olive); letter-spacing:5px; margin-bottom:30px; text-align:center;">— ${bName} —</div><div class="grid"></div>`;
             const grid = section.querySelector('.grid');
             
             bItems.forEach((item) => {
@@ -325,10 +330,10 @@
 
                 grid.innerHTML += `
                     <div class="scholar-card">
-                        ${item.breaks > 0 ? `<div class="break-badge" onmouseenter="forceCheck(this)" onclick="event.stopPropagation(); this.classList.toggle('is-active'); forceCheck(this);">${item.breaks} Breaks 
+                        ${item.breaks > 0 ? `<div class="break-badge" onmouseenter="fixLayout(this)" onclick="event.stopPropagation(); this.classList.toggle('is-active'); fixLayout(this);">${item.breaks} Breaks 
                             <div class="harvest-log-container"><span class="log-title">Harvest Log</span><ul class="tournament-list">${tourneyItems}</ul></div>
                         </div>` : ''}
-                        <div style="font-size:32px; margin-bottom:15px; opacity:0.8;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
+                        <div style="font-size:28px; margin-bottom:10px; opacity:0.8;">${item.breaks > 0 ? '🌾' : '🌱'}</div>
                         <span class="name">${item.name}</span>
                         <span class="inst">${item.institution}</span>
                         <div class="accolade-box">${item.accolade}</div>
@@ -344,12 +349,12 @@
         if(leaders.length) startLeaderCycle();
     }
 
-    function forceCheck(badge) {
+    function fixLayout(badge) {
         const log = badge.querySelector('.harvest-log-container');
         if(!log) return;
         
         log.style.left = "0"; log.style.right = "auto";
-        log.style.top = "40px"; log.style.bottom = "auto";
+        log.style.top = "35px"; log.style.bottom = "auto";
 
         const rect = log.getBoundingClientRect();
         if (rect.right > window.innerWidth) { log.style.left = "auto"; log.style.right = "0"; }
